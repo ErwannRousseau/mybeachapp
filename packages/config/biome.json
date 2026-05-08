@@ -1,0 +1,95 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.4.14/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on",
+        "useSortedAttributes": "on",
+        "useSortedKeys": "on"
+      }
+    }
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/public",
+      "!**/build",
+      "!**/.expo",
+      "!**/_generated",
+      "!bun.lock",
+      "!**.tsbuildinfo"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 80
+  },
+  "javascript": {
+    "globals": ["React"]
+  },
+  "linter": {
+    "domains": {
+      "project": "recommended",
+      "react": "all",
+      "test": "all"
+    },
+    "enabled": true,
+    "rules": {
+      "correctness": {
+        "noUndeclaredVariables": "error",
+        "noUnusedImports": "warn",
+        "noUnusedVariables": "error",
+        "useExhaustiveDependencies": "warn"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "fix": "safe",
+          "level": "warn",
+          "options": {
+            "attributes": ["className"],
+            "functions": ["cn", "cva"]
+          }
+        }
+      },
+      "recommended": true,
+      "style": {
+        "noInferrableTypes": "error",
+        "noParameterAssign": "error",
+        "noUnusedTemplateLiteral": "error",
+        "noUselessElse": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useNodejsImportProtocol": {
+          "fix": "safe",
+          "level": "warn",
+          "options": {}
+        },
+        "useNumberNamespace": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error"
+      },
+      "suspicious": {
+        "noConsole": {
+          "fix": "none",
+          "level": "warn",
+          "options": {
+            "allow": ["error", "warn", "info"]
+          }
+        },
+        "noEmptyBlockStatements": "error"
+      }
+    }
+  },
+  "vcs": {
+    "clientKind": "git",
+    "defaultBranch": "main",
+    "enabled": true
+  }
+}

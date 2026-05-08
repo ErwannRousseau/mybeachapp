@@ -1,6 +1,6 @@
 {
   "exports": {
-    "./typescript/base": "./typescript/base.json",
+    "./biome": "./biome.json",
     "./typescript/base.json": "./typescript/base.json"
   },
   "name": "@mybeachapp/config",
