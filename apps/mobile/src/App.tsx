@@ -1,4 +1,4 @@
-import { ACTIVITY_CATEGORIES } from "@mybeach/shared";
+import { ACTIVITY_CATEGORIES } from "@mybeachapp/shared";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 export default function App() {

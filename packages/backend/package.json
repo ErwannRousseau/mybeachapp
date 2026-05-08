@@ -1,9 +1,12 @@
 {
   "dependencies": {
-    "@mybeach/shared": "workspace:*",
+    "@mybeachapp/shared": "workspace:*",
     "convex": "^1.28.0"
   },
-  "name": "@mybeach/backend",
+  "devDependencies": {
+    "@mybeachapp/config": "workspace:*"
+  },
+  "name": "@mybeachapp/backend",
   "private": true,
   "scripts": {
     "build": "tsc -p tsconfig.build.json",

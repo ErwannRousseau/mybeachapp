@@ -1,8 +1,9 @@
 {
   "exports": {
-    "./typescript/base": "./typescript/base.json"
+    "./typescript/base": "./typescript/base.json",
+    "./typescript/base.json": "./typescript/base.json"
   },
-  "name": "@mybeach/config",
+  "name": "@mybeachapp/config",
   "private": true,
   "scripts": {
     "build": "mkdir -p dist && cp typescript/base.json dist/tsconfig-base.json",

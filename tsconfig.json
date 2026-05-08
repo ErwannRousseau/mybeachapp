@@ -1,5 +1,5 @@
 {
-  "extends": "./tsconfig.base.json",
+  "extends": "@mybeachapp/config/typescript/base.json",
   "files": [],
   "references": [
     { "path": "./apps/admin" },

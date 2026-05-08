@@ -1,4 +1,7 @@
 {
+  "devDependencies": {
+    "@mybeachapp/config": "workspace:*"
+  },
   "exports": {
     ".": {
       "default": "./src/index.ts",
@@ -21,7 +24,7 @@
       "types": "./dist/validators/index.d.ts"
     }
   },
-  "name": "@mybeach/shared",
+  "name": "@mybeachapp/shared",
   "private": true,
   "scripts": {
     "build": "tsc -p tsconfig.build.json",

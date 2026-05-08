@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
-import { ACTIVITY_CATEGORIES } from "@mybeach/shared";
+import { ACTIVITY_CATEGORIES } from "@mybeachapp/shared";
 
 describe("admin workspace", () => {
   test("can read shared activity categories", () => {

@@ -6,6 +6,6 @@
     "outDir": "dist",
     "rootDir": "src"
   },
-  "extends": "../../tsconfig.base.json",
+  "extends": "@mybeachapp/config/typescript/base.json",
   "include": ["src/**/*.ts"]
 }

@@ -5,6 +5,6 @@
     "composite": true,
     "noEmit": true
   },
-  "extends": "../../tsconfig.base.json",
+  "extends": "./typescript/base.json",
   "include": ["typescript/**/*.ts"]
 }

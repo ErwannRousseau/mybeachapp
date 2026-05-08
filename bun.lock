@@ -5,23 +5,25 @@
     "": {
       "name": "my-beach-app",
       "devDependencies": {
-        "@biomejs/biome": "2.4.14",
+        "@biomejs/biome": "^2.4.14",
+        "@mybeachapp/config": "workspace:*",
         "@types/bun": "^1.3.13",
         "turbo": "^2.6.1",
         "typescript": "^5.9.3",
       },
     },
     "apps/admin": {
-      "name": "@mybeach/admin",
+      "name": "@mybeachapp/admin",
       "version": "0.0.0",
       "dependencies": {
-        "@mybeach/shared": "workspace:*",
+        "@mybeachapp/shared": "workspace:*",
         "@tanstack/react-router": "^1.136.9",
         "convex": "^1.28.0",
         "react": "^19.2.0",
         "react-dom": "^19.2.0",
       },
       "devDependencies": {
+        "@mybeachapp/config": "workspace:*",
         "@types/react": "^19.2.2",
         "@types/react-dom": "^19.2.2",
         "@vitejs/plugin-react": "^5.1.0",
@@ -29,34 +31,41 @@
       },
     },
     "apps/mobile": {
-      "name": "@mybeach/mobile",
+      "name": "@mybeachapp/mobile",
       "version": "0.0.0",
       "dependencies": {
-        "@mybeach/shared": "workspace:*",
+        "@mybeachapp/shared": "workspace:*",
         "convex": "^1.28.0",
         "expo": "^54.0.22",
         "react": "^19.1.0",
         "react-native": "^0.81.5",
       },
       "devDependencies": {
+        "@mybeachapp/config": "workspace:*",
         "@types/react": "^19.2.2",
       },
     },
     "packages/backend": {
-      "name": "@mybeach/backend",
+      "name": "@mybeachapp/backend",
       "version": "0.0.0",
       "dependencies": {
-        "@mybeach/shared": "workspace:*",
+        "@mybeachapp/shared": "workspace:*",
         "convex": "^1.28.0",
+      },
+      "devDependencies": {
+        "@mybeachapp/config": "workspace:*",
       },
     },
     "packages/config": {
-      "name": "@mybeach/config",
+      "name": "@mybeachapp/config",
       "version": "0.0.0",
     },
     "packages/shared": {
-      "name": "@mybeach/shared",
+      "name": "@mybeachapp/shared",
       "version": "0.0.0",
+      "devDependencies": {
+        "@mybeachapp/config": "workspace:*",
+      },
     },
   },
   "packages": {
@@ -400,15 +409,15 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
-    "@mybeach/admin": ["@mybeach/admin@workspace:apps/admin"],
+    "@mybeachapp/admin": ["@mybeachapp/admin@workspace:apps/admin"],
 
-    "@mybeach/backend": ["@mybeach/backend@workspace:packages/backend"],
+    "@mybeachapp/backend": ["@mybeachapp/backend@workspace:packages/backend"],
 
-    "@mybeach/config": ["@mybeach/config@workspace:packages/config"],
+    "@mybeachapp/config": ["@mybeachapp/config@workspace:packages/config"],
 
-    "@mybeach/mobile": ["@mybeach/mobile@workspace:apps/mobile"],
+    "@mybeachapp/mobile": ["@mybeachapp/mobile@workspace:apps/mobile"],
 
-    "@mybeach/shared": ["@mybeach/shared@workspace:packages/shared"],
+    "@mybeachapp/shared": ["@mybeachapp/shared@workspace:packages/shared"],
 
     "@react-native/assets-registry": ["@react-native/assets-registry@0.81.6", "", {}, "sha512-nNlJ7mdXFoq/7LMG3eJIncqjgXkpDJak3xO8Lb4yQmFI3XVI1nupPRjlYRY0ham1gLE0F/AWvKFChsKUfF5lOQ=="],
 
