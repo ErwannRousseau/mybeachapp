@@ -9,5 +9,5 @@ export const getUserByUserId = query({
       .query("users")
       .withIndex("by_user_id", (q) => q.eq("userId", args.userId))
       .unique();
-  }
+  },
 });

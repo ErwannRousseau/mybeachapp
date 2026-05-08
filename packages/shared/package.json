@@ -1,36 +1,37 @@
 {
-  "name": "@mybeach/shared",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./src/index.ts"
+      "default": "./src/index.ts",
+      "types": "./dist/index.d.ts"
     },
     "./constants": {
-      "types": "./dist/constants/index.d.ts",
-      "default": "./src/constants/index.ts"
+      "default": "./src/constants/index.ts",
+      "types": "./dist/constants/index.d.ts"
     },
     "./types": {
-      "types": "./dist/types/index.d.ts",
-      "default": "./src/types/index.ts"
+      "default": "./src/types/index.ts",
+      "types": "./dist/types/index.d.ts"
     },
     "./utils": {
-      "types": "./dist/utils/index.d.ts",
-      "default": "./src/utils/index.ts"
+      "default": "./src/utils/index.ts",
+      "types": "./dist/utils/index.d.ts"
     },
     "./validators": {
-      "types": "./dist/validators/index.d.ts",
-      "default": "./src/validators/index.ts"
+      "default": "./src/validators/index.ts",
+      "types": "./dist/validators/index.d.ts"
     }
   },
+  "name": "@mybeach/shared",
+  "private": true,
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
     "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput",
-    "lint": "eslint .",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "bun test ./src/utils/index.test.ts"
-  }
+    "test": "bun test ./src/utils/index.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "version": "0.0.0"
 }

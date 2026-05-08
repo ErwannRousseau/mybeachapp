@@ -1,22 +1,21 @@
 import {
-  RouterProvider,
   createRootRoute,
   createRoute,
-  createRouter
+  createRouter,
+  RouterProvider,
 } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import { ACTIVITY_CATEGORIES } from "@mybeach/shared";
-
+import { AdminDashboard } from "./AdminDashboard";
 import "./styles.css";
 
 const rootRoute = createRootRoute();
 
 const indexRoute = createRoute({
+  component: AdminDashboard,
   getParentRoute: () => rootRoute,
   path: "/",
-  component: AdminDashboard
 });
 
 const routeTree = rootRoute.addChildren([indexRoute]);
@@ -28,29 +27,6 @@ declare module "@tanstack/react-router" {
   }
 }
 
-function AdminDashboard() {
-  return (
-    <main className="admin-shell">
-      <section>
-        <p className="eyebrow">Back-office MVP</p>
-        <h1>My Beach App Admin</h1>
-        <p>
-          Base Vite + React + TanStack Router prete pour superviser activites,
-          utilisateurs et metriques Convex.
-        </p>
-      </section>
-      <section className="admin-panel" aria-label="Categories MVP">
-        <h2>Categories partagees</h2>
-        <ul>
-          {ACTIVITY_CATEGORIES.map((category) => (
-            <li key={category}>{category}</li>
-          ))}
-        </ul>
-      </section>
-    </main>
-  );
-}
-
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {
@@ -60,5 +36,5 @@ if (!rootElement) {
 createRoot(rootElement).render(
   <StrictMode>
     <RouterProvider router={router} />
-  </StrictMode>
+  </StrictMode>,
 );

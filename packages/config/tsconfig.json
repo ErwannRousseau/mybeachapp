@@ -1,10 +1,10 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
     "allowJs": true,
     "checkJs": true,
+    "composite": true,
     "noEmit": true
   },
-  "include": ["eslint/**/*.mjs"]
+  "extends": "../../tsconfig.base.json",
+  "include": ["typescript/**/*.ts"]
 }

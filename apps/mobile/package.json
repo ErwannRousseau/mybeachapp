@@ -1,8 +1,4 @@
 {
-  "name": "@mybeach/mobile",
-  "version": "0.0.0",
-  "private": true,
-  "main": "expo/AppEntry",
   "dependencies": {
     "@mybeach/shared": "workspace:*",
     "convex": "^1.28.0",
@@ -13,11 +9,16 @@
   "devDependencies": {
     "@types/react": "^19.2.2"
   },
+  "main": "expo/AppEntry",
+  "name": "@mybeach/mobile",
+  "private": true,
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
     "dev": "expo start",
-    "lint": "eslint .",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "bun test ./src/smoke.test.ts"
-  }
+    "test": "bun test ./src/smoke.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "version": "0.0.0"
 }

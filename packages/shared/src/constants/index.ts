@@ -6,14 +6,14 @@ export const ACTIVITY_CATEGORIES = [
   "running",
   "petanque",
   "swimming",
-  "other"
+  "other",
 ] as const;
 
 export const ACTIVITY_STATUSES = [
   "open",
   "full",
   "cancelled",
-  "finished"
+  "finished",
 ] as const;
 
 export const USER_ROLES = ["user", "admin", "super_admin"] as const;

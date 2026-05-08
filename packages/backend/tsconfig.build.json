@@ -1,7 +1,7 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": false
   },
-  "exclude": ["convex/**/*.test.ts"]
+  "exclude": ["convex/**/*.test.ts"],
+  "extends": "./tsconfig.json"
 }

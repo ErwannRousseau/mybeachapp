@@ -39,7 +39,7 @@ apps/
 packages/
   backend/       Convex backend package
   shared/        Shared constants, types, validators, utilities
-  config/        Shared TypeScript and ESLint conventions
+  config/        Shared TypeScript and Biome conventions
 ```
 
 ## Development
@@ -55,7 +55,7 @@ Run workspace tasks through Turbo:
 ```sh
 bun run dev
 bun run build
-bun run lint
+bun run check # check:fix to fix lint and formatting issues
 bun run typecheck
 bun run test
 ```

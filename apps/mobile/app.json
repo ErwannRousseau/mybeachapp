@@ -1,18 +1,18 @@
 {
   "expo": {
-    "name": "My Beach App",
-    "slug": "my-beach-app",
-    "version": "0.1.0",
-    "orientation": "portrait",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": false
-    },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#F8FBFA"
       }
-    }
+    },
+    "ios": {
+      "supportsTablet": false
+    },
+    "name": "My Beach App",
+    "newArchEnabled": true,
+    "orientation": "portrait",
+    "slug": "my-beach-app",
+    "userInterfaceStyle": "light",
+    "version": "0.1.0"
   }
 }

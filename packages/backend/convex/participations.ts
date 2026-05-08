@@ -5,16 +5,16 @@ import { mutation } from "./_generated/server";
 export const joinActivity = mutation({
   args: {
     activityId: v.id("activities"),
-    userId: v.string()
+    userId: v.string(),
   },
   handler: async (ctx, args) => {
     const now = Date.now();
 
     return await ctx.db.insert("participations", {
       activityId: args.activityId,
-      userId: args.userId,
+      joinedAt: now,
       status: "joined",
-      joinedAt: now
+      userId: args.userId,
     });
-  }
+  },
 });

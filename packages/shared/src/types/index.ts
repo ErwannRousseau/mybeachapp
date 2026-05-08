@@ -1,7 +1,7 @@
 import type {
   ACTIVITY_CATEGORIES,
   ACTIVITY_STATUSES,
-  USER_ROLES
+  USER_ROLES,
 } from "../constants";
 
 export type ActivityCategory = (typeof ACTIVITY_CATEGORIES)[number];

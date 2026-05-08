@@ -6,7 +6,7 @@ export function isInsideViewport(
     south: number;
     east: number;
     west: number;
-  }
+  },
 ): boolean {
   return (
     latitude <= viewport.north &&

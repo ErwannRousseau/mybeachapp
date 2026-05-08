@@ -1,17 +1,18 @@
 {
-  "name": "@mybeach/backend",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
   "dependencies": {
     "@mybeach/shared": "workspace:*",
     "convex": "^1.28.0"
   },
+  "name": "@mybeach/backend",
+  "private": true,
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
     "dev": "convex dev",
-    "lint": "eslint .",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "bun test ./convex/locations.test.ts"
-  }
+    "test": "bun test ./convex/locations.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "type": "module",
+  "version": "0.0.0"
 }
