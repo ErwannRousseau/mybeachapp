@@ -1,0 +1,23 @@
+{
+  "name": "@mybeach/mobile",
+  "version": "0.0.0",
+  "private": true,
+  "main": "expo/AppEntry",
+  "dependencies": {
+    "@mybeach/shared": "workspace:*",
+    "convex": "^1.28.0",
+    "expo": "^54.0.22",
+    "react": "^19.1.0",
+    "react-native": "^0.81.5"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.2"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "expo start",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "bun test ./src/smoke.test.ts"
+  }
+}

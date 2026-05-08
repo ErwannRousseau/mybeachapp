@@ -1,0 +1,17 @@
+{
+  "name": "@mybeach/config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./typescript/base": "./typescript/base.json",
+    "./eslint/base": "./eslint/base.mjs"
+  },
+  "scripts": {
+    "build": "mkdir -p dist && cp eslint/base.mjs dist/eslint-base.mjs && cp typescript/base.json dist/tsconfig-base.json",
+    "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "bun test ./eslint/base.test.ts"
+  }
+}

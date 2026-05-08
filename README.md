@@ -19,3 +19,45 @@ The first planned categories are beach volleyball, paddle, surf, yoga, running, 
 ## MVP Limits
 
 My Beach App is not a social network, marketplace, or messaging app. The MVP does not include chat, payments, groups, reputation, or a social feed.
+
+## Technical Stack
+
+The MVP monorepo follows the validated architecture note:
+
+- Mobile: Expo + React Native + TypeScript.
+- Backend: Convex functions, database, realtime, and file storage.
+- Admin: Vite + React + TanStack Router.
+- Tooling: Bun Workspaces + Turborepo.
+- Shared code: TypeScript package for types, constants, validators, and utilities.
+
+## Repository Structure
+
+```txt
+apps/
+  mobile/        Expo React Native app
+  admin/         Vite React admin app
+packages/
+  backend/       Convex backend package
+  shared/        Shared constants, types, validators, utilities
+  config/        Shared TypeScript and ESLint conventions
+```
+
+## Development
+
+Install dependencies:
+
+```sh
+bun install
+```
+
+Run workspace tasks through Turbo:
+
+```sh
+bun run dev
+bun run build
+bun run lint
+bun run typecheck
+bun run test
+```
+
+Package scripts own the actual work; root scripts only delegate to `turbo run`.

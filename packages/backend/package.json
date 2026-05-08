@@ -1,0 +1,17 @@
+{
+  "name": "@mybeach/backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@mybeach/shared": "workspace:*",
+    "convex": "^1.28.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "convex dev",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "bun test ./convex/locations.test.ts"
+  }
+}

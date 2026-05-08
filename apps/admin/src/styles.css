@@ -1,0 +1,29 @@
+:root {
+  color: #062a3b;
+  background: #f8fbfa;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.admin-shell {
+  display: grid;
+  gap: 24px;
+  min-height: 100vh;
+  padding: 40px;
+}
+
+.eyebrow {
+  color: #0077b6;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.admin-panel {
+  border: 1px solid #d8e8ec;
+  border-radius: 8px;
+  padding: 20px;
+}

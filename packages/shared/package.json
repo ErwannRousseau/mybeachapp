@@ -1,0 +1,36 @@
+{
+  "name": "@mybeach/shared",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./constants": {
+      "types": "./dist/constants/index.d.ts",
+      "default": "./src/constants/index.ts"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./src/types/index.ts"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "default": "./src/utils/index.ts"
+    },
+    "./validators": {
+      "types": "./dist/validators/index.d.ts",
+      "default": "./src/validators/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "bun test ./src/utils/index.test.ts"
+  }
+}
