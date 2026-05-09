@@ -1,25 +1,12 @@
-import {
-  createRootRoute,
-  createRoute,
-  createRouter,
-  RouterProvider,
-} from "@tanstack/react-router";
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import ReactDOM from "react-dom/client";
+import { routeTree } from "./routeTree.gen";
 
-import { AdminDashboard } from "./AdminDashboard";
-import "./styles.css";
-
-const rootRoute = createRootRoute();
-
-const indexRoute = createRoute({
-  component: AdminDashboard,
-  getParentRoute: () => rootRoute,
-  path: "/",
+const router = createRouter({
+  defaultPreload: "intent",
+  routeTree,
+  scrollRestoration: true,
 });
-
-const routeTree = rootRoute.addChildren([indexRoute]);
-const router = createRouter({ routeTree });
 
 declare module "@tanstack/react-router" {
   interface Register {
@@ -27,14 +14,13 @@ declare module "@tanstack/react-router" {
   }
 }
 
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById("app");
 
 if (!rootElement) {
-  throw new Error("Root element #root introuvable");
+  throw new Error("Root element #app was not found");
 }
 
-createRoot(rootElement).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
-);
+if (!rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(<RouterProvider router={router} />);
+}

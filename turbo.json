@@ -5,16 +5,16 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", "build/**", ".expo/**", "*.tsbuildinfo"]
     },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
     "check": {
       "dependsOn": ["^build"]
     },
     "check:fix": {
       "dependsOn": ["^build"],
       "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
     },
     "test": {
       "dependsOn": ["^build"],
