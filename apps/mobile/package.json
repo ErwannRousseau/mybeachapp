@@ -27,7 +27,8 @@
     "@babel/core": "^7.20.0",
     "@mybeachapp/config": "workspace:*",
     "@types/react": "~19.2.10",
-    "typescript": "~5.9.2"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "main": "index.js",
   "name": "@mybeachapp/mobile",
@@ -40,9 +41,10 @@
     "dev": "expo start",
     "ios": "expo start --ios",
     "start": "expo start",
-    "test": "bun test ./src/smoke.test.ts",
+    "test": "vitest run --config vitest.config.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "web": "expo start --web"
   },
+  "type": "module",
   "version": "0.0.0"
 }

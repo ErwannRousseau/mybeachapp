@@ -4,7 +4,8 @@
     "@mybeachapp/config": "workspace:*",
     "@types/bun": "^1.3.13",
     "turbo": "^2.6.1",
-    "typescript": "^5.9.3"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   },
   "name": "my-beach-app",
   "packageManager": "bun@1.3.13",
@@ -17,8 +18,14 @@
     "test": "turbo run test",
     "typecheck": "turbo run typecheck"
   },
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "workspaces": {
+    "catalog": {
+      "typescript": "6.0.3",
+      "vitest": "^4.1.5"
+    },
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ]
+  }
 }

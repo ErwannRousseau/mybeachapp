@@ -1,7 +1,7 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 
 describe("mobile workspace", () => {
-  test("runs Bun smoke tests", () => {
+  test("runs Vitest smoke tests", () => {
     expect(true).toBe(true);
   });
 });

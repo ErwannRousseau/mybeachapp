@@ -6,5 +6,5 @@
     "noEmit": true
   },
   "extends": "./typescript/base.json",
-  "include": ["typescript/**/*.ts"]
+  "include": ["typescript/**/*.ts", "vitest/**/*.ts", "vitest.config.ts"]
 }
