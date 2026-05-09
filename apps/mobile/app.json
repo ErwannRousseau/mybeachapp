@@ -2,17 +2,37 @@
   "expo": {
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#F8FBFA"
+        "backgroundColor": "#ffffff",
+        "foregroundImage": "./assets/adaptive-icon.png"
       }
     },
-    "ios": {
-      "supportsTablet": false
+    "assetBundlePatterns": ["**/*"],
+    "experiments": {
+      "tsconfigPaths": true,
+      "typedRoutes": true
     },
-    "name": "My Beach App",
+    "icon": "./assets/icon.png",
+    "ios": {
+      "supportsTablet": true
+    },
+    "name": "mobile",
     "newArchEnabled": true,
     "orientation": "portrait",
-    "slug": "my-beach-app",
-    "userInterfaceStyle": "light",
-    "version": "0.1.0"
+    "platforms": ["ios", "android"],
+    "plugins": ["expo-router", "expo-web-browser"],
+    "scheme": "mobile",
+    "slug": "mobile",
+    "splash": {
+      "backgroundColor": "#ffffff",
+      "image": "./assets/splash.png",
+      "resizeMode": "contain"
+    },
+    "userInterfaceStyle": "automatic",
+    "version": "1.0.0",
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png",
+      "output": "static"
+    }
   }
 }

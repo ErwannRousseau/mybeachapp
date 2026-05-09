@@ -1,3 +1,25 @@
 {
-  "extends": ["@mybeachapp/config/biome"]
+  "extends": ["@mybeachapp/config/biome"],
+  "overrides": [
+    {
+      "includes": ["app/+html.tsx"],
+      "linter": {
+        "rules": {
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/**/_layout.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useComponentExportOnlyModules": "off"
+          }
+        }
+      }
+    }
+  ]
 }

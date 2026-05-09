@@ -16,7 +16,7 @@
     "check": "biome check .",
     "check:fix": "biome check --write .",
     "dev": "convex dev",
-    "test": "vitest",
+    "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "type": "module",

@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "composite": true,
-    "outDir": "dist",
-    "rootDir": "src",
-    "types": ["bun", "react"]
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
-  "extends": "@mybeachapp/config/typescript/base.json",
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "extends": "expo/tsconfig.base",
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }
