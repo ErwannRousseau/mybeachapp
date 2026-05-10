@@ -16,11 +16,8 @@
       "!**/dist",
       "!**/public",
       "!**/build",
-      "!**/.expo",
-      "!**/_generated",
       "!bun.lock",
-      "!**/*.tsbuildinfo",
-      "!**/routeTree.gen.ts"
+      "!**/*.tsbuildinfo"
     ]
   },
   "formatter": {

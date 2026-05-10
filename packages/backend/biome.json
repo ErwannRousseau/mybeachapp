@@ -1,3 +1,6 @@
 {
-  "extends": ["@mybeachapp/config/biome"]
+  "extends": ["@mybeachapp/config/biome"],
+  "files": {
+    "includes": ["!**/_generated"]
+  }
 }

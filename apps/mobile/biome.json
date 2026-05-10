@@ -1,5 +1,8 @@
 {
   "extends": ["@mybeachapp/config/biome"],
+  "files": {
+    "includes": ["!**/.expo", "!**/android", "!**/expo-env.d.ts", "!**/ios"]
+  },
   "overrides": [
     {
       "includes": ["app/+html.tsx"],
