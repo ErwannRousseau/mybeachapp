@@ -17,7 +17,7 @@
     "check": "biome check .",
     "check:fix": "biome check --write .",
     "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput",
-    "test": "vitest run --config vitest.config.ts",
+    "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "type": "module",

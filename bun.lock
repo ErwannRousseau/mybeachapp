@@ -90,6 +90,7 @@
       },
       "devDependencies": {
         "@mybeachapp/config": "workspace:*",
+        "typescript": "catalog:",
         "vitest": "catalog:",
       },
     },

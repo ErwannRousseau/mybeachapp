@@ -7,17 +7,18 @@
   },
   "devDependencies": {
     "@mybeachapp/config": "workspace:*",
+    "typescript": "catalog:",
     "vitest": "catalog:"
   },
   "name": "@mybeachapp/backend",
   "private": true,
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "convex codegen --dry-run --typecheck enable",
     "check": "biome check .",
     "check:fix": "biome check --write .",
     "dev": "convex dev",
-    "test": "vitest run --config vitest.config.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "test": "vitest run",
+    "typecheck": "bun run build"
   },
   "type": "module",
   "version": "0.0.0"
