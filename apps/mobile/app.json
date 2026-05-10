@@ -4,7 +4,8 @@
       "adaptiveIcon": {
         "backgroundColor": "#ffffff",
         "foregroundImage": "./assets/adaptive-icon.png"
-      }
+      },
+      "package": "com.anonymous.mobile"
     },
     "assetBundlePatterns": ["**/*"],
     "experiments": {
@@ -13,10 +14,10 @@
     },
     "icon": "./assets/icon.png",
     "ios": {
+      "bundleIdentifier": "com.anonymous.mobile",
       "supportsTablet": true
     },
     "name": "mobile",
-    "newArchEnabled": true,
     "orientation": "portrait",
     "platforms": ["ios", "android"],
     "plugins": ["expo-router", "expo-web-browser"],
