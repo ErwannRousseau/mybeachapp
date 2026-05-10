@@ -42,7 +42,7 @@
     "ios": "expo start --ios",
     "start": "expo start",
     "test": "vitest run",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc --noEmit",
     "web": "expo start --web"
   },
   "type": "module",

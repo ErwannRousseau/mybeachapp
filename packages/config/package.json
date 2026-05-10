@@ -16,9 +16,9 @@
     "build": "tsc -p tsconfig.build.json && mkdir -p dist && cp typescript/base.json dist/tsconfig-base.json",
     "check": "biome check .",
     "check:fix": "biome check --write .",
-    "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "dev": "tsc   --watch --preserveWatchOutput",
     "test": "vitest run",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "type": "module",
   "version": "0.0.0"
