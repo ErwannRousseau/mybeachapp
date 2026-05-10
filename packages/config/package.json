@@ -1,0 +1,25 @@
+{
+  "devDependencies": {
+    "vitest": "catalog:"
+  },
+  "exports": {
+    "./biome": "./biome.json",
+    "./typescript/base.json": "./typescript/base.json",
+    "./vitest/base": {
+      "default": "./dist/vitest/base.js",
+      "types": "./dist/vitest/base.d.ts"
+    }
+  },
+  "name": "@mybeachapp/config",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && mkdir -p dist && cp typescript/base.json dist/tsconfig-base.json",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "dev": "tsc   --watch --preserveWatchOutput",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "type": "module",
+  "version": "0.0.0"
+}

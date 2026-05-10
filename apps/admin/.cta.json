@@ -1,0 +1,16 @@
+{
+  "addOnOptions": {},
+  "chosenAddOns": ["biome"],
+  "envVarValues": {},
+  "framework": "react",
+  "git": false,
+  "includeExamples": false,
+  "install": true,
+  "mode": "file-router",
+  "packageManager": "bun",
+  "projectName": "admin",
+  "routerOnly": true,
+  "tailwind": true,
+  "typescript": true,
+  "version": 1
+}

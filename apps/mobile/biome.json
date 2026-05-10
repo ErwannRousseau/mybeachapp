@@ -1,0 +1,28 @@
+{
+  "extends": ["@mybeachapp/config/biome"],
+  "files": {
+    "includes": ["!**/.expo", "!**/android", "!**/expo-env.d.ts", "!**/ios"]
+  },
+  "overrides": [
+    {
+      "includes": ["app/+html.tsx"],
+      "linter": {
+        "rules": {
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/**/_layout.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useComponentExportOnlyModules": "off"
+          }
+        }
+      }
+    }
+  ]
+}

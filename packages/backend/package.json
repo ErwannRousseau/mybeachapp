@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "@edge-runtime/vm": "^5.0.0",
+    "@mybeachapp/shared": "workspace:*",
+    "convex": "^1.28.0",
+    "convex-test": "^0.0.51"
+  },
+  "devDependencies": {
+    "@mybeachapp/config": "workspace:*",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "name": "@mybeachapp/backend",
+  "private": true,
+  "scripts": {
+    "build": "convex codegen --dry-run --typecheck enable",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "dev": "convex dev",
+    "test": "vitest run",
+    "typecheck": "bun run build"
+  },
+  "type": "module",
+  "version": "0.0.0"
+}

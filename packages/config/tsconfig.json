@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "composite": true,
+    "noEmit": true
+  },
+  "extends": "./typescript/base.json",
+  "include": ["typescript/**/*.ts", "vitest/**/*.ts", "vitest.config.ts"]
+}

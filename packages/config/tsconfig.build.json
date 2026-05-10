@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": false,
+    "outDir": "dist",
+    "rootDir": "."
+  },
+  "exclude": ["**/*.test.ts"],
+  "extends": "./tsconfig.json",
+  "include": ["vitest/**/*.ts"]
+}

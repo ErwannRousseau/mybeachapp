@@ -1,0 +1,11 @@
+{
+  "extends": "@mybeachapp/config/typescript/base.json",
+  "files": [],
+  "references": [
+    { "path": "./apps/admin" },
+    { "path": "./apps/mobile" },
+    { "path": "./packages/backend" },
+    { "path": "./packages/shared" },
+    { "path": "./packages/config" }
+  ]
+}
