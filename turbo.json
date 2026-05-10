@@ -1,5 +1,11 @@
 {
   "$schema": "./node_modules/turbo/schema.json",
+  "globalPassThroughEnv": [
+    "CONVEX_DEPLOY_KEY",
+    "CONVEX_DEPLOYMENT",
+    "CONVEX_SITE_URL",
+    "CONVEX_URL"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
