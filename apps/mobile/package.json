@@ -45,6 +45,5 @@
     "typecheck": "tsc --noEmit",
     "web": "expo start --web"
   },
-  "type": "module",
   "version": "0.0.0"
 }
