@@ -3,13 +3,16 @@ import { describe, expect, test } from "vitest";
 import { createMobileEnv } from "./env";
 
 describe("createMobileEnv", () => {
-  test("uses safe defaults without public environment", () => {
-    expect(createMobileEnv({})).toEqual({
-      appEnv: "development",
-      authEnabled: false,
-      convexUrl: undefined,
-      mapProvider: "placeholder",
-    });
+  test("throws when Convex URL is missing", () => {
+    expect(() => createMobileEnv({})).toThrow();
+  });
+
+  test("throws when Convex URL is invalid", () => {
+    expect(() =>
+      createMobileEnv({
+        EXPO_PUBLIC_CONVEX_URL: "not-a-url",
+      }),
+    ).toThrow();
   });
 
   test("normalizes supported public values", () => {
@@ -25,6 +28,19 @@ describe("createMobileEnv", () => {
       authEnabled: true,
       convexUrl: "https://beach.convex.cloud/",
       mapProvider: "apple",
+    });
+  });
+
+  test("uses safe defaults for optional public values", () => {
+    expect(
+      createMobileEnv({
+        EXPO_PUBLIC_CONVEX_URL: "https://beach.convex.cloud",
+      }),
+    ).toEqual({
+      appEnv: "development",
+      authEnabled: false,
+      convexUrl: "https://beach.convex.cloud/",
+      mapProvider: "placeholder",
     });
   });
 });

@@ -9,21 +9,19 @@ type MapProvider = (typeof mapProviderValues)[number];
 type MobileEnv = {
   appEnv: AppEnv;
   authEnabled: boolean;
-  convexUrl?: string;
+  convexUrl: string;
   mapProvider: MapProvider;
 };
 
 type EnvSource = Record<string, string | undefined>;
 
-const publicUrlSchema = z
-  .preprocess(
-    (value) => (value === "" ? undefined : value),
-    z
-      .url()
-      .transform((value) => new URL(value).toString())
-      .optional(),
-  )
-  .catch(undefined);
+const publicUrlSchema = z.preprocess(
+  (value) => (value === "" ? undefined : value),
+  z
+    .url()
+    .transform((value) => new URL(value).toString())
+    .refine((value) => value.length > 0, "convex_url_required"),
+);
 
 const mobileEnvSchema = z.object({
   appEnv: z.enum(appEnvValues).catch("development"),
@@ -44,4 +42,6 @@ export function createMobileEnv(source: EnvSource): MobileEnv {
   });
 }
 
-export const mobileEnv = createMobileEnv(process.env);
+export function getMobileEnv(): MobileEnv {
+  return createMobileEnv(process.env);
+}

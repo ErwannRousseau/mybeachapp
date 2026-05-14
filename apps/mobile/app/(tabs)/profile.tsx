@@ -3,9 +3,11 @@ import { ScrollView, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 
 import { PrimaryButton } from "@/components/PrimaryButton";
-import { mobileEnv } from "@/src/config/env";
+import { getMobileEnv } from "@/src/config/env";
 
 export default function ProfileScreen() {
+  const mobileEnv = getMobileEnv();
+
   return (
     <>
       <Stack.Screen options={{ title: "Profil" }} />
