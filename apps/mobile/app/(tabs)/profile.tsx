@@ -1,11 +1,19 @@
-import { Link, Stack } from "expo-router";
+import { useAuthActions, useConvexAuth } from "@convex-dev/auth/react";
+import { Link, router, Stack } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 
 import { PrimaryButton } from "@/components/PrimaryButton";
-import { env } from "@/src/config/env";
 
 export default function ProfileScreen() {
+  const { isAuthenticated, isLoading } = useConvexAuth();
+  const { signOut } = useAuthActions();
+
+  async function handleSignOut() {
+    await signOut();
+    router.replace("/sign-in");
+  }
+
   return (
     <>
       <Stack.Screen options={{ title: "Profil" }} />
@@ -15,16 +23,27 @@ export default function ProfileScreen() {
       >
         <View style={styles.card}>
           <Text selectable style={styles.title}>
-            Profil invité
+            {isAuthenticated ? "Profil connecté" : "Profil invité"}
           </Text>
           <Text selectable style={styles.body}>
-            Prêt pour brancher l’authentification. Mode actuel:
-            {env.authEnabled ? " activé" : " désactivé"}.
+            {isLoading
+              ? "Vérification de la session en cours."
+              : isAuthenticated
+                ? "Ta session Convex Auth est active."
+                : "Connecte-toi pour créer et rejoindre des activités."}
           </Text>
         </View>
-        <Link asChild href="/sign-in">
-          <PrimaryButton label="Se connecter" variant="secondary" />
-        </Link>
+        {isAuthenticated ? (
+          <PrimaryButton
+            label="Se déconnecter"
+            onPress={() => void handleSignOut()}
+            variant="secondary"
+          />
+        ) : (
+          <Link asChild href="/sign-in">
+            <PrimaryButton label="Se connecter" variant="secondary" />
+          </Link>
+        )}
       </ScrollView>
     </>
   );

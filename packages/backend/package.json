@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@auth/core": "0.37.0",
+    "@convex-dev/auth": "^0.0.92",
     "@edge-runtime/vm": "^5.0.0",
     "@mybeachapp/shared": "workspace:*",
     "convex": "^1.28.0",

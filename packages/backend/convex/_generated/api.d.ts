@@ -10,7 +10,9 @@
 
 import type * as activities from "../activities.js";
 import type * as admin from "../admin.js";
+import type * as auth from "../auth.js";
 import type * as files from "../files.js";
+import type * as http from "../http.js";
 import type * as lib_validators from "../lib/validators.js";
 import type * as locations from "../locations.js";
 import type * as participations from "../participations.js";
@@ -25,7 +27,9 @@ import type {
 declare const fullApi: ApiFromModules<{
   activities: typeof activities;
   admin: typeof admin;
+  auth: typeof auth;
   files: typeof files;
+  http: typeof http;
   "lib/validators": typeof lib_validators;
   locations: typeof locations;
   participations: typeof participations;

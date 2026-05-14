@@ -25,13 +25,11 @@ describe("createMobileEnv", () => {
     expect(
       createMobileEnv({
         EXPO_PUBLIC_APP_ENV: "production",
-        EXPO_PUBLIC_AUTH_ENABLED: "true",
         EXPO_PUBLIC_CONVEX_URL: "https://beach.convex.cloud",
         EXPO_PUBLIC_MAP_PROVIDER: "apple",
       }),
     ).toEqual({
       appEnv: "production",
-      authEnabled: true,
       convexUrl: "https://beach.convex.cloud/",
       mapProvider: "apple",
     });
@@ -44,7 +42,6 @@ describe("createMobileEnv", () => {
       }),
     ).toEqual({
       appEnv: "development",
-      authEnabled: false,
       convexUrl: "https://beach.convex.cloud/",
       mapProvider: "placeholder",
     });

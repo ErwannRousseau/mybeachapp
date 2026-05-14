@@ -7,6 +7,14 @@
     "vitest": "catalog:"
   },
   "exports": {
+    "./auth/schemas": {
+      "types": "./dist/auth/schemas.d.ts",
+      "default": "./src/auth/schemas.ts"
+    },
+    "./auth/types": {
+      "types": "./dist/auth/types.d.ts",
+      "default": "./src/auth/types.ts"
+    },
     "./activities/constants": {
       "types": "./dist/activities/constants.d.ts",
       "default": "./src/activities/constants.ts"

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@convex-dev/auth": "^0.0.92",
     "@expo/vector-icons": "^15.0.2",
     "@mybeachapp/shared": "workspace:*",
     "@react-navigation/native": "^7.1.6",
@@ -9,6 +10,7 @@
     "expo-font": "~55.0.7",
     "expo-linking": "~55.0.15",
     "expo-router": "~55.0.14",
+    "expo-secure-store": "~55.0.14",
     "expo-status-bar": "~55.0.6",
     "expo-system-ui": "~55.0.18",
     "expo-web-browser": "~55.0.16",

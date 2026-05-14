@@ -1,3 +1,4 @@
+import { authTables } from "@convex-dev/auth/server";
 import {
   ACTIVITY_CATEGORIES,
   ACTIVITY_STATUSES,
@@ -10,6 +11,8 @@ import { v } from "convex/values";
 import { literalUnion } from "./lib/validators";
 
 export default defineSchema({
+  ...authTables,
+
   activities: defineTable({
     addressLabel: v.string(),
     category: literalUnion(ACTIVITY_CATEGORIES),
@@ -46,7 +49,7 @@ export default defineSchema({
     .index("by_user", ["userId"])
     .index("by_activity_user", ["activityId", "userId"]),
 
-  users: defineTable({
+  userProfiles: defineTable({
     avatarStorageId: v.optional(v.id("_storage")),
     createdAt: v.number(),
     email: v.optional(v.string()),

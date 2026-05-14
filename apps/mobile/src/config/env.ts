@@ -8,7 +8,6 @@ type MapProvider = (typeof mapProviderValues)[number];
 
 type MobileEnv = {
   appEnv: AppEnv;
-  authEnabled: boolean;
   convexUrl: string;
   mapProvider: MapProvider;
 };
@@ -25,10 +24,6 @@ const publicUrlSchema = z.preprocess(
 
 const mobileEnvSchema = z.object({
   appEnv: z.enum(appEnvValues).catch("development"),
-  authEnabled: z
-    .string()
-    .transform((value) => value === "1" || value === "true")
-    .catch(false),
   convexUrl: publicUrlSchema,
   mapProvider: z.enum(mapProviderValues).catch("placeholder"),
 }) satisfies z.ZodType<MobileEnv>;
@@ -36,7 +31,6 @@ const mobileEnvSchema = z.object({
 export function createMobileEnv(source: EnvSource): MobileEnv {
   return mobileEnvSchema.parse({
     appEnv: source.EXPO_PUBLIC_APP_ENV,
-    authEnabled: source.EXPO_PUBLIC_AUTH_ENABLED,
     convexUrl: source.EXPO_PUBLIC_CONVEX_URL,
     mapProvider: source.EXPO_PUBLIC_MAP_PROVIDER,
   });
