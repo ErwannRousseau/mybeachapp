@@ -26,9 +26,7 @@ Applies to `apps/mobile`.
 
 ## Validation and Contracts
 
-- Use Zod for runtime validation by default, including app-local config such as public environment variables.
 - Use shared Zod schemas/validators from `@mybeachapp/shared/<feature>/...` when validating business input.
-- Put reusable or cross-package validation helpers in `packages/shared`; keep purely app-local validation in `apps/mobile`.
 - Translate stable category/status/message keys in the mobile app; do not localize shared constants.
 
 ## Verification

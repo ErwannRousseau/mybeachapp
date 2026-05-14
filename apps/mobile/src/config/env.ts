@@ -1,7 +1,10 @@
 import { z } from "zod";
 
-type AppEnv = "development" | "preview" | "production";
-type MapProvider = "apple" | "google" | "placeholder";
+const appEnvValues = ["development", "preview", "production"] as const;
+const mapProviderValues = ["apple", "google", "placeholder"] as const;
+
+type AppEnv = (typeof appEnvValues)[number];
+type MapProvider = (typeof mapProviderValues)[number];
 
 type MobileEnv = {
   appEnv: AppEnv;
@@ -23,13 +26,13 @@ const publicUrlSchema = z
   .catch(undefined);
 
 const mobileEnvSchema = z.object({
-  appEnv: z.enum(["development", "preview", "production"]).catch("development"),
+  appEnv: z.enum(appEnvValues).catch("development"),
   authEnabled: z
     .string()
     .transform((value) => value === "1" || value === "true")
     .catch(false),
   convexUrl: publicUrlSchema,
-  mapProvider: z.enum(["apple", "google", "placeholder"]).catch("placeholder"),
+  mapProvider: z.enum(mapProviderValues).catch("placeholder"),
 }) satisfies z.ZodType<MobileEnv>;
 
 export function createMobileEnv(source: EnvSource): MobileEnv {
