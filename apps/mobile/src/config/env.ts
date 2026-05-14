@@ -42,6 +42,4 @@ export function createMobileEnv(source: EnvSource): MobileEnv {
   });
 }
 
-export function getMobileEnv(): MobileEnv {
-  return createMobileEnv(process.env);
-}
+export const env = createMobileEnv(process.env);

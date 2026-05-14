@@ -3,11 +3,9 @@ import { ScrollView, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 
 import { PrimaryButton } from "@/components/PrimaryButton";
-import { getMobileEnv } from "@/src/config/env";
+import { env } from "@/src/config/env";
 
 export default function ProfileScreen() {
-  const mobileEnv = getMobileEnv();
-
   return (
     <>
       <Stack.Screen options={{ title: "Profil" }} />
@@ -21,7 +19,7 @@ export default function ProfileScreen() {
           </Text>
           <Text selectable style={styles.body}>
             Prêt pour brancher l’authentification. Mode actuel:
-            {mobileEnv.authEnabled ? " activé" : " désactivé"}.
+            {env.authEnabled ? " activé" : " désactivé"}.
           </Text>
         </View>
         <Link asChild href="/sign-in">

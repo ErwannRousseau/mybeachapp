@@ -4,12 +4,10 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 
 import { PrimaryButton } from "@/components/PrimaryButton";
-import { getMobileEnv } from "@/src/config/env";
+import { env } from "@/src/config/env";
 import { activityCategoryLabels } from "@/src/features/activities/activity-copy";
 
 export default function Home() {
-  const mobileEnv = getMobileEnv();
-
   return (
     <>
       <Stack.Screen options={{ title: "Carte" }} />
@@ -33,7 +31,7 @@ export default function Home() {
               Convex prêt
             </Text>
             <Text selectable style={styles.statusBadge}>
-              Carte: {mobileEnv.mapProvider}
+              Carte: {env.mapProvider}
             </Text>
           </View>
         </View>

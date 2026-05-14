@@ -1,8 +1,14 @@
 import { describe, expect, test } from "vitest";
 
-import { createMobileEnv } from "./env";
+process.env.EXPO_PUBLIC_CONVEX_URL = "https://beach.convex.cloud";
+
+const { createMobileEnv, env } = await import("./env");
 
 describe("createMobileEnv", () => {
+  test("exposes parsed process env", () => {
+    expect(env.convexUrl).toBe("https://beach.convex.cloud/");
+  });
+
   test("throws when Convex URL is missing", () => {
     expect(() => createMobileEnv({})).toThrow();
   });
