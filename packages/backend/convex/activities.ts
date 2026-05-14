@@ -1,4 +1,4 @@
-import { ACTIVITY_CATEGORIES } from "@mybeachapp/shared/constants";
+import { ACTIVITY_CATEGORIES } from "@mybeachapp/shared/activities/constants";
 import { v } from "convex/values";
 
 import { mutation, query } from "./_generated/server";

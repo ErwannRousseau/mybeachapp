@@ -1,28 +1,63 @@
 {
+  "dependencies": {
+    "zod": "catalog:"
+  },
   "devDependencies": {
     "@mybeachapp/config": "workspace:*",
     "vitest": "catalog:"
   },
   "exports": {
-    ".": {
-      "default": "./src/index.ts",
-      "types": "./dist/index.d.ts"
+    "./activities/constants": {
+      "types": "./dist/activities/constants.d.ts",
+      "default": "./src/activities/constants.ts"
     },
-    "./constants": {
-      "default": "./src/constants/index.ts",
-      "types": "./dist/constants/index.d.ts"
+    "./activities/schemas": {
+      "types": "./dist/activities/schemas.d.ts",
+      "default": "./src/activities/schemas.ts"
     },
-    "./types": {
-      "default": "./src/types/index.ts",
-      "types": "./dist/types/index.d.ts"
+    "./activities/types": {
+      "types": "./dist/activities/types.d.ts",
+      "default": "./src/activities/types.ts"
+    },
+    "./activities/validators": {
+      "types": "./dist/activities/validators.d.ts",
+      "default": "./src/activities/validators.ts"
+    },
+    "./participations/constants": {
+      "types": "./dist/participations/constants.d.ts",
+      "default": "./src/participations/constants.ts"
+    },
+    "./participations/schemas": {
+      "types": "./dist/participations/schemas.d.ts",
+      "default": "./src/participations/schemas.ts"
+    },
+    "./participations/types": {
+      "types": "./dist/participations/types.d.ts",
+      "default": "./src/participations/types.ts"
+    },
+    "./participations/validators": {
+      "types": "./dist/participations/validators.d.ts",
+      "default": "./src/participations/validators.ts"
+    },
+    "./users/constants": {
+      "types": "./dist/users/constants.d.ts",
+      "default": "./src/users/constants.ts"
+    },
+    "./users/schemas": {
+      "types": "./dist/users/schemas.d.ts",
+      "default": "./src/users/schemas.ts"
+    },
+    "./users/types": {
+      "types": "./dist/users/types.d.ts",
+      "default": "./src/users/types.ts"
+    },
+    "./users/validators": {
+      "types": "./dist/users/validators.d.ts",
+      "default": "./src/users/validators.ts"
     },
     "./utils": {
-      "default": "./src/utils/index.ts",
-      "types": "./dist/utils/index.d.ts"
-    },
-    "./validators": {
-      "default": "./src/validators/index.ts",
-      "types": "./dist/validators/index.d.ts"
+      "types": "./dist/utils/index.d.ts",
+      "default": "./src/utils/index.ts"
     }
   },
   "name": "@mybeachapp/shared",
@@ -36,6 +71,5 @@
     "typecheck": "tsc --noEmit"
   },
   "type": "module",
-  "types": "./dist/index.d.ts",
   "version": "0.0.0"
 }

@@ -1,10 +1,9 @@
 import {
   ACTIVITY_CATEGORIES,
   ACTIVITY_STATUSES,
-  PARTICIPATION_STATUSES,
-  USER_ROLES,
-  USER_STATUSES,
-} from "@mybeachapp/shared/constants";
+} from "@mybeachapp/shared/activities/constants";
+import { PARTICIPATION_STATUSES } from "@mybeachapp/shared/participations/constants";
+import { USER_ROLES, USER_STATUSES } from "@mybeachapp/shared/users/constants";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 

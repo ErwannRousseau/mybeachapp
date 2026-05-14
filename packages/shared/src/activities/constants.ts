@@ -1,11 +1,11 @@
 export const ACTIVITY_CATEGORIES = [
-  "beach_volley",
-  "paddle",
-  "surf",
-  "yoga",
-  "running",
-  "petanque",
-  "swimming",
+  "ball_sport",
+  "water_sport",
+  "racket_sport",
+  "fitness_wellness",
+  "walking_running",
+  "beach_games",
+  "social",
   "other",
 ] as const;
 
@@ -15,12 +15,6 @@ export const ACTIVITY_STATUSES = [
   "cancelled",
   "finished",
 ] as const;
-
-export const PARTICIPATION_STATUSES = ["joined", "cancelled"] as const;
-
-export const USER_ROLES = ["user", "admin", "super_admin"] as const;
-
-export const USER_STATUSES = ["active", "disabled"] as const;
 
 export const ACTIVITY_MIN_PARTICIPANTS = 2;
 export const ACTIVITY_MAX_PARTICIPANTS = 30;

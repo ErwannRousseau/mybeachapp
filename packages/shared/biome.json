@@ -1,3 +1,15 @@
 {
-  "extends": ["@mybeachapp/config/biome"]
+  "extends": ["@mybeachapp/config/biome"],
+  "overrides": [
+    {
+      "assist": {
+        "actions": {
+          "source": {
+            "useSortedKeys": "off"
+          }
+        }
+      },
+      "includes": ["package.json"]
+    }
+  ]
 }

@@ -1,21 +1,18 @@
 import { describe, expect, test } from "vitest";
 
-import type { CreateActivityInput } from "../types";
+import type { CreateActivityInput } from "./types";
 import {
   isActivityCategory,
   isActivityStatus,
-  isParticipationStatus,
-  isUserRole,
-  isUserStatus,
   isValidLatitude,
   isValidLongitude,
   isValidMaxParticipants,
   validateCreateActivityInput,
-} from ".";
+} from "./validators";
 
-describe("enum guards", () => {
+describe("activity validators", () => {
   test("activity category guard", () => {
-    expect(isActivityCategory("beach_volley")).toBe(true);
+    expect(isActivityCategory("ball_sport")).toBe(true);
     expect(isActivityCategory("chess")).toBe(false);
   });
 
@@ -24,23 +21,6 @@ describe("enum guards", () => {
     expect(isActivityStatus("draft")).toBe(false);
   });
 
-  test("participation status guard", () => {
-    expect(isParticipationStatus("joined")).toBe(true);
-    expect(isParticipationStatus("pending")).toBe(false);
-  });
-
-  test("user role guard", () => {
-    expect(isUserRole("super_admin")).toBe(true);
-    expect(isUserRole("guest")).toBe(false);
-  });
-
-  test("user status guard", () => {
-    expect(isUserStatus("active")).toBe(true);
-    expect(isUserStatus("banned")).toBe(false);
-  });
-});
-
-describe("numeric validators", () => {
   test("latitude bounds", () => {
     expect(isValidLatitude(45)).toBe(true);
     expect(isValidLatitude(95)).toBe(false);
@@ -61,7 +41,7 @@ describe("numeric validators", () => {
 
 describe("validateCreateActivityInput", () => {
   const valid: CreateActivityInput = {
-    category: "beach_volley",
+    category: "ball_sport",
     location: {
       addressLabel: "Plage de Pornichet",
       latitude: 47.2667,
@@ -89,5 +69,9 @@ describe("validateCreateActivityInput", () => {
     expect(fields).toContain("category");
     expect(fields).toContain("maxParticipants");
     expect(fields).toContain("location.latitude");
+    expect(errors).toContainEqual({
+      field: "category",
+      message: "category_invalid",
+    });
   });
 });

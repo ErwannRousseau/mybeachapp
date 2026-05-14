@@ -1,16 +1,7 @@
-import type {
-  ACTIVITY_CATEGORIES,
-  ACTIVITY_STATUSES,
-  PARTICIPATION_STATUSES,
-  USER_ROLES,
-  USER_STATUSES,
-} from "../constants";
+import type { ACTIVITY_CATEGORIES, ACTIVITY_STATUSES } from "./constants";
 
 export type ActivityCategory = (typeof ACTIVITY_CATEGORIES)[number];
 export type ActivityStatus = (typeof ACTIVITY_STATUSES)[number];
-export type ParticipationStatus = (typeof PARTICIPATION_STATUSES)[number];
-export type UserRole = (typeof USER_ROLES)[number];
-export type UserStatus = (typeof USER_STATUSES)[number];
 
 export interface ActivityLocation {
   addressLabel: string;
@@ -49,28 +40,6 @@ export interface ActivitySummary {
   location: ActivityLocation;
 }
 
-export interface Participation {
-  id: string;
-  activityId: string;
-  userId: string;
-  status: ParticipationStatus;
-  joinedAt: number;
-  cancelledAt?: number;
-}
-
-export interface Profile {
-  id: string;
-  userId: string;
-  pseudo?: string;
-  email?: string;
-  avatarStorageId?: string;
-  role: UserRole;
-  status: UserStatus;
-  createdAt: number;
-  updatedAt: number;
-  lastLoginAt?: number;
-}
-
 export interface CreateActivityInput {
   title: string;
   description?: string;
@@ -81,9 +50,4 @@ export interface CreateActivityInput {
   maxParticipants: number;
   location: ActivityLocation;
   placePhotoStorageId?: string;
-}
-
-export interface JoinActivityInput {
-  activityId: string;
-  userId: string;
 }
