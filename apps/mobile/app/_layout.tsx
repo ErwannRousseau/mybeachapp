@@ -1,8 +1,10 @@
 import { Stack } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useUnistyles } from "react-native-unistyles";
 
+import { AppProviders } from "@/src/providers/app-providers";
+
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: "(tabs)",
 };
 
@@ -10,19 +12,27 @@ export default function RootLayout() {
   const { theme } = useUnistyles();
 
   return (
-    <Stack
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.colors.background,
-        },
-        headerTintColor: theme.colors.typography,
-        headerTitleStyle: {
-          color: theme.colors.typography,
-        },
-      }}
-    >
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-    </Stack>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AppProviders>
+        <Stack
+          screenOptions={{
+            contentStyle: {
+              backgroundColor: theme.colors.background,
+            },
+            headerStyle: {
+              backgroundColor: theme.colors.background,
+            },
+            headerTintColor: theme.colors.onSurface,
+            headerTitleStyle: {
+              color: theme.colors.onSurface,
+            },
+          }}
+        >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="onboarding" options={{ title: "Bienvenue" }} />
+          <Stack.Screen name="sign-in" options={{ title: "Connexion" }} />
+        </Stack>
+      </AppProviders>
+    </GestureHandlerRootView>
   );
 }

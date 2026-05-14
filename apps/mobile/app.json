@@ -2,10 +2,10 @@
   "expo": {
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#ffffff",
+        "backgroundColor": "#F8FBFA",
         "foregroundImage": "./assets/adaptive-icon.png"
       },
-      "package": "com.anonymous.mobile"
+      "package": "app.mybeach.mobile"
     },
     "assetBundlePatterns": ["**/*"],
     "experiments": {
@@ -14,17 +14,17 @@
     },
     "icon": "./assets/icon.png",
     "ios": {
-      "bundleIdentifier": "com.anonymous.mobile",
+      "bundleIdentifier": "app.mybeach.mobile",
       "supportsTablet": true
     },
-    "name": "mobile",
+    "name": "My Beach App",
     "orientation": "portrait",
     "platforms": ["ios", "android"],
     "plugins": ["expo-router", "expo-web-browser"],
-    "scheme": "mobile",
-    "slug": "mobile",
+    "scheme": "mybeachapp",
+    "slug": "mybeachapp",
     "splash": {
-      "backgroundColor": "#ffffff",
+      "backgroundColor": "#F8FBFA",
       "image": "./assets/splash.png",
       "resizeMode": "contain"
     },
