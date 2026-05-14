@@ -1,6 +1,8 @@
+import { ACTIVITY_CATEGORIES } from "@mybeachapp/shared/activities/constants";
 import { v } from "convex/values";
 
 import { mutation, query } from "./_generated/server";
+import { literalUnion } from "./lib/validators";
 
 export const getActivityById = query({
   args: { id: v.id("activities") },
@@ -12,8 +14,9 @@ export const getActivityById = query({
 export const createActivity = mutation({
   args: {
     addressLabel: v.string(),
-    category: v.string(),
+    category: literalUnion(ACTIVITY_CATEGORIES),
     creatorId: v.string(),
+    description: v.optional(v.string()),
     latitude: v.number(),
     longitude: v.number(),
     maxParticipants: v.number(),
@@ -25,7 +28,6 @@ export const createActivity = mutation({
 
     return await ctx.db.insert("activities", {
       ...args,
-      category: "other",
       createdAt: now,
       currentParticipantsCount: 1,
       status: "open",

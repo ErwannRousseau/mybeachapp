@@ -1,19 +1,18 @@
+import {
+  ACTIVITY_CATEGORIES,
+  ACTIVITY_STATUSES,
+} from "@mybeachapp/shared/activities/constants";
+import { PARTICIPATION_STATUSES } from "@mybeachapp/shared/participations/constants";
+import { USER_ROLES, USER_STATUSES } from "@mybeachapp/shared/users/constants";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
+
+import { literalUnion } from "./lib/validators";
 
 export default defineSchema({
   activities: defineTable({
     addressLabel: v.string(),
-    category: v.union(
-      v.literal("beach_volley"),
-      v.literal("paddle"),
-      v.literal("surf"),
-      v.literal("yoga"),
-      v.literal("running"),
-      v.literal("petanque"),
-      v.literal("swimming"),
-      v.literal("other"),
-    ),
+    category: literalUnion(ACTIVITY_CATEGORIES),
     createdAt: v.number(),
     creatorId: v.string(),
     currentParticipantsCount: v.number(),
@@ -27,12 +26,7 @@ export default defineSchema({
     placeName: v.optional(v.string()),
     placePhotoStorageId: v.optional(v.id("_storage")),
     startDateTime: v.number(),
-    status: v.union(
-      v.literal("open"),
-      v.literal("full"),
-      v.literal("cancelled"),
-      v.literal("finished"),
-    ),
+    status: literalUnion(ACTIVITY_STATUSES),
     title: v.string(),
     updatedAt: v.number(),
   })
@@ -45,24 +39,21 @@ export default defineSchema({
     activityId: v.id("activities"),
     cancelledAt: v.optional(v.number()),
     joinedAt: v.number(),
-    status: v.union(v.literal("joined"), v.literal("cancelled")),
+    status: literalUnion(PARTICIPATION_STATUSES),
     userId: v.string(),
   })
     .index("by_activity", ["activityId"])
     .index("by_user", ["userId"])
     .index("by_activity_user", ["activityId", "userId"]),
+
   users: defineTable({
     avatarStorageId: v.optional(v.id("_storage")),
     createdAt: v.number(),
     email: v.optional(v.string()),
     lastLoginAt: v.optional(v.number()),
     pseudo: v.optional(v.string()),
-    role: v.union(
-      v.literal("user"),
-      v.literal("admin"),
-      v.literal("super_admin"),
-    ),
-    status: v.union(v.literal("active"), v.literal("disabled")),
+    role: literalUnion(USER_ROLES),
+    status: literalUnion(USER_STATUSES),
     updatedAt: v.number(),
     userId: v.string(),
   })

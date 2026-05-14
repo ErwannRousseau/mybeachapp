@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { getRemainingPlaces, isActivityJoinable } from ".";
+import { getRemainingPlaces, isActivityJoinable } from "./index";
 
 describe("activity helpers", () => {
   test("calculates remaining places without negative values", () => {
