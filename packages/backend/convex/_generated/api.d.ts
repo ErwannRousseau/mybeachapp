@@ -11,8 +11,10 @@
 import type * as activities from "../activities.js";
 import type * as admin from "../admin.js";
 import type * as auth from "../auth.js";
+import type * as config_env from "../config/env.js";
 import type * as files from "../files.js";
 import type * as http from "../http.js";
+import type * as lib_currentBeachUser from "../lib/currentBeachUser.js";
 import type * as lib_validators from "../lib/validators.js";
 import type * as locations from "../locations.js";
 import type * as participations from "../participations.js";
@@ -28,8 +30,10 @@ declare const fullApi: ApiFromModules<{
   activities: typeof activities;
   admin: typeof admin;
   auth: typeof auth;
+  "config/env": typeof config_env;
   files: typeof files;
   http: typeof http;
+  "lib/currentBeachUser": typeof lib_currentBeachUser;
   "lib/validators": typeof lib_validators;
   locations: typeof locations;
   participations: typeof participations;
@@ -62,4 +66,6 @@ export declare const internal: FilterApi<
   FunctionReference<any, "internal">
 >;
 
-export declare const components: {};
+export declare const components: {
+  betterAuth: import("../betterAuth/_generated/component.js").ComponentApi<"betterAuth">;
+};

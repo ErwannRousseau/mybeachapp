@@ -1,14 +1,16 @@
 {
   "dependencies": {
-    "@auth/core": "0.37.0",
-    "@convex-dev/auth": "^0.0.92",
+    "@better-auth/expo": "catalog:",
+    "@convex-dev/better-auth": "catalog:",
     "@edge-runtime/vm": "^5.0.0",
     "@mybeachapp/shared": "workspace:*",
-    "convex": "^1.28.0",
+    "better-auth": "catalog:",
+    "convex": "catalog:",
     "convex-test": "^0.0.51"
   },
   "devDependencies": {
     "@mybeachapp/config": "workspace:*",
+    "@types/node": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

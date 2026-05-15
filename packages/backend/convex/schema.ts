@@ -1,4 +1,3 @@
-import { authTables } from "@convex-dev/auth/server";
 import {
   ACTIVITY_CATEGORIES,
   ACTIVITY_STATUSES,
@@ -11,8 +10,6 @@ import { v } from "convex/values";
 import { literalUnion } from "./lib/validators";
 
 export default defineSchema({
-  ...authTables,
-
   activities: defineTable({
     addressLabel: v.string(),
     category: literalUnion(ACTIVITY_CATEGORIES),

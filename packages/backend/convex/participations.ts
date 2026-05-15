@@ -1,18 +1,14 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 
 import { mutation } from "./_generated/server";
+import { ensureCurrentBeachUser } from "./lib/currentBeachUser";
 
 export const joinActivity = mutation({
   args: {
     activityId: v.id("activities"),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-
-    if (!userId) {
-      throw new Error("Not authenticated");
-    }
+    const user = await ensureCurrentBeachUser(ctx);
 
     const now = Date.now();
 
@@ -20,7 +16,7 @@ export const joinActivity = mutation({
       activityId: args.activityId,
       joinedAt: now,
       status: "joined",
-      userId,
+      userId: user.userId,
     });
   },
 });

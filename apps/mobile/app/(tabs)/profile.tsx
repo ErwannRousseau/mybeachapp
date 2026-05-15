@@ -1,18 +1,12 @@
-import { useAuthActions, useConvexAuth } from "@convex-dev/auth/react";
-import { Link, router, Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 
 import { PrimaryButton } from "@/components/PrimaryButton";
+import { signOutAndRedirect, useAuthSession } from "@/src/auth/session";
 
 export default function ProfileScreen() {
-  const { isAuthenticated, isLoading } = useConvexAuth();
-  const { signOut } = useAuthActions();
-
-  async function handleSignOut() {
-    await signOut();
-    router.replace("/sign-in");
-  }
+  const { data: session, isPending } = useAuthSession();
 
   return (
     <>
@@ -23,26 +17,31 @@ export default function ProfileScreen() {
       >
         <View style={styles.card}>
           <Text selectable style={styles.title}>
-            {isAuthenticated ? "Profil connecté" : "Profil invité"}
+            {session ? "Profil connecté" : "Profil invité"}
           </Text>
           <Text selectable style={styles.body}>
-            {isLoading
+            {isPending
               ? "Vérification de la session en cours."
-              : isAuthenticated
-                ? "Ta session Convex Auth est active."
+              : session
+                ? (session.user.email ?? "Ta session Better Auth est active.")
                 : "Connecte-toi pour créer et rejoindre des activités."}
           </Text>
         </View>
-        {isAuthenticated ? (
+        {session ? (
           <PrimaryButton
             label="Se déconnecter"
-            onPress={() => void handleSignOut()}
+            onPress={() => void signOutAndRedirect()}
             variant="secondary"
           />
         ) : (
-          <Link asChild href="/sign-in">
-            <PrimaryButton label="Se connecter" variant="secondary" />
-          </Link>
+          <View style={styles.authActions}>
+            <Link asChild href="/sign-in">
+              <PrimaryButton label="Se connecter" />
+            </Link>
+            <Link asChild href="/sign-up">
+              <PrimaryButton label="Créer un compte" variant="secondary" />
+            </Link>
+          </View>
         )}
       </ScrollView>
     </>
@@ -50,6 +49,9 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create((theme) => ({
+  authActions: {
+    gap: theme.spacing.sm,
+  },
   body: {
     ...theme.typography.body,
     color: theme.colors.onSurfaceMuted,

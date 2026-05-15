@@ -9,30 +9,37 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
-  const { theme } = useUnistyles();
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AppProviders>
-        <Stack
-          screenOptions={{
-            contentStyle: {
-              backgroundColor: theme.colors.background,
-            },
-            headerStyle: {
-              backgroundColor: theme.colors.background,
-            },
-            headerTintColor: theme.colors.onSurface,
-            headerTitleStyle: {
-              color: theme.colors.onSurface,
-            },
-          }}
-        >
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="onboarding" options={{ title: "Bienvenue" }} />
-          <Stack.Screen name="sign-in" options={{ title: "Connexion" }} />
-        </Stack>
+        <RootNavigator />
       </AppProviders>
     </GestureHandlerRootView>
+  );
+}
+
+function RootNavigator() {
+  const { theme } = useUnistyles();
+
+  return (
+    <Stack
+      screenOptions={{
+        contentStyle: {
+          backgroundColor: theme.colors.background,
+        },
+        headerStyle: {
+          backgroundColor: theme.colors.background,
+        },
+        headerTintColor: theme.colors.onSurface,
+        headerTitleStyle: {
+          color: theme.colors.onSurface,
+        },
+      }}
+    >
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="onboarding" options={{ title: "Bienvenue" }} />
+      <Stack.Screen name="sign-in" options={{ title: "Connexion" }} />
+      <Stack.Screen name="sign-up" options={{ title: "Inscription" }} />
+    </Stack>
   );
 }

@@ -8,12 +8,12 @@ describe("authCredentialsSchema", () => {
       authCredentialsSchema.parse({
         email: "  BEACH@example.COM ",
         flow: "signUp",
-        password: "password123",
+        password: "password1234",
       }),
     ).toEqual({
       email: "beach@example.com",
       flow: "signUp",
-      password: "password123",
+      password: "password1234",
     });
   });
 
