@@ -295,7 +295,7 @@ The design direction is **Beach Glass**: bright, breathable, coastal, premium, l
 
 The MVP is intentionally narrow. Every screen should support at least one core action: see nearby activities, create an activity with a precise pinned meeting point, or join an activity in one tap. Do not introduce chat, groups, payments, reputation, marketplace behavior, social feeds, or moderation-heavy surfaces unless explicitly requested.
 
-The product targets iOS and Android through Expo and React Native. iOS may use native Liquid Glass for floating controls. Android should use Material-like white surfaces with soft elevation. Web or admin surfaces should stay operational, clean, and connected to the same palette without glass effects.
+The product targets iOS and Android through Expo and React Native. iOS may use native Liquid Glass for floating controls. Android should use Compose-native white surfaces with soft elevation, implemented through `@expo/ui/jetpack-compose` where native UI layers are needed. Web or admin surfaces should stay operational, clean, and connected to the same palette without glass effects.
 
 Customer-facing copy is French by default. Use short, direct, warm sentences with `tu`. Documentation and code comments may be English. Avoid emoji and decorative symbols in product UI.
 
@@ -373,7 +373,7 @@ Depth is soft, daylight-friendly, and tinted with the deep navy rather than pure
 - **Medium elevation:** `0 6px 16px rgba(6,42,59,0.12)` for floating chips, FAB containers, and active controls.
 - **Large elevation:** `0 12px 28px rgba(6,42,59,0.16)` for sticky CTAs, raised sheets, and highest-priority overlays.
 
-Liquid Glass is an iOS material, not a decoration. Use it only through a wrapper such as `GlassSurface`, and only for floating search, filter chips, activity preview sheets, floating tab bars, FAB containers, compact headers, and map controls. Android should use semi-opaque white surfaces and elevation instead. Web/admin should use plain white surfaces, borders, and shadows.
+Liquid Glass is an iOS material, not a decoration. Use it only through a wrapper such as `GlassSurface`, and only for floating search, filter chips, activity preview sheets, floating tab bars, FAB containers, compact headers, and map controls. Android should use semi-opaque white surfaces and elevation in a Compose-native style instead. Web/admin should use plain white surfaces, borders, and shadows.
 
 If map tiles or photos reduce readability under a translucent surface, add a scrim, increase opacity, or fall back to a white card.
 
@@ -408,9 +408,9 @@ Aujourd'hui · 14:00 · 450 m
 
 **Bottom sheets:** Use for activity previews, nearby lists, and place selection. Use a visible handle, 32px top radius, 20px padding, and no more than two visible CTAs.
 
-**Bottom navigation:** The mobile app may use a persistent bottom navigation with a central create action. On iOS, treat it as an approved Liquid Glass floating surface: pill-shaped, detached from the screen edges, inside `GlassSurface`, respecting the safe-area inset, with soft navy-tinted elevation and enough opacity for map readability. On Android, translate the same hierarchy into Material: opaque white bottom bar or navigation container, no blur, no fake glass, Material-like elevation, and a clear central FAB for create.
+**Bottom navigation:** The mobile app may use a persistent bottom navigation with a central create action. On iOS, treat it as an approved Liquid Glass floating surface: pill-shaped, detached from the screen edges, inside `GlassSurface`, respecting the safe-area inset, with soft navy-tinted elevation and enough opacity for map readability. On Android, translate the same hierarchy into Compose-native surfaces: opaque white bottom bar or navigation container, no blur, no fake glass, soft elevation, and a clear central FAB for create.
 
-Recommended items are "Carte", "Liste", central "Créer", and "Profil". Active items use Secondary Ocean icon and label. Inactive items use navy text with lower visual emphasis through icon weight, opacity, or Material state layers while preserving AA contrast. The central create action uses Primary Coral and should remain visually dominant, but it must still meet contrast rules; use a plus icon with accessible label "Créer une activité". Keep icon targets at least 44px and keep labels short.
+Recommended items are "Carte", "Liste", central "Créer", and "Profil". Active items use Secondary Ocean icon and label. Inactive items use navy text with lower visual emphasis through icon weight or opacity while preserving AA contrast. The central create action uses Primary Coral and should remain visually dominant, but it must still meet contrast rules; use a plus icon with accessible label "Créer une activité". Keep icon targets at least 44px and keep labels short.
 
 **Map pins:** Use round 44px pins with centered category icons. Open activities use Mint, almost-full activities use Sand, full activities use muted neutral, and cancelled or finished activities should usually be hidden from the live map.
 
@@ -436,6 +436,7 @@ Déplace la carte ou crée la première activité sur cette plage.
 - Do use semantic tokens from this file before inventing new values.
 - Do keep the app mobile-first, map-first, and focused on see, create, and join.
 - Do keep customer-facing MVP copy in French.
+- Do implement Android native surfaces in a Compose-native style through `@expo/ui/jetpack-compose` when native UI layers are required.
 - Do reserve Primary Coral for the main CTA only.
 - Do keep text readable on map, photo, or glass surfaces.
 - Do make iOS and Android feel native in their own ways.

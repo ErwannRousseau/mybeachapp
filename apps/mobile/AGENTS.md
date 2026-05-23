@@ -7,7 +7,7 @@ Applies to `apps/mobile`.
 ## Stack
 
 - Expo Router app.
-- Expo SDK 56: read the exact versioned docs at https://docs.expo.dev/versions/v56.0.0/ before writing Expo code.
+- Expo SDK 56: read the exact versioned docs at <https://docs.expo.dev/versions/v56.0.0/> before writing Expo code.
 - React Native with Unistyles.
 - Use Expo-compatible APIs and libraries.
 
@@ -17,6 +17,12 @@ Applies to `apps/mobile`.
 - Keep screens map-first and task-focused.
 - Reuse existing components before adding new primitives.
 - Avoid marketing-page patterns in app screens.
+- For iOS Liquid Glass-approved surfaces, prefer `@expo/ui/swift-ui` via app wrappers (for example `GlassSurface`) rather than ad-hoc effects.
+- For Android surface implementations, prefer `@expo/ui/jetpack-compose` and keep a Compose-native style (no fake glass).
+- Implement reusable UI primitives with flat Compound Component naming (for example `Sheet`, `SheetHeader`, `SheetBody`, `SheetActions`) instead of dot names and boolean prop explosion.
+- UI components must use `export function` declarations only.
+- Do not use `const` component declarations, default exports, or barrel files for UI components.
+- Design system source components must live in `mobile/ui/`.
 - Do not hard-code shared business constants; import from explicit `@mybeachapp/shared/*` feature subpaths.
 
 ## Navigation

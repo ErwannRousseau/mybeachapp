@@ -29,6 +29,10 @@ This file applies to the whole repository. Deeper `AGENTS.md` files override it 
 
 - Keep modules feature-oriented where that improves locality.
 - Do not add barrel files by default. Prefer explicit package exports and explicit imports.
+- For reusable UI components, prefer flat Compound Component APIs (for example `Sheet`, `SheetHeader`, `SheetBody`, `SheetActions`) over boolean-prop-heavy single components.
+- UI components must be declared with `export function`.
+- Do not use `const` component declarations or default exports for UI components.
+- Design system source components must live in `mobile/ui/`.
 - Keep shared business contracts in `packages/shared`; apps and backend should consume those contracts instead of duplicating constants or TypeScript types.
 - Add dependencies at the narrowest package that uses them. Shared cross-package dependencies should use the root workspace catalog.
 - Do not add new dependencies without a clear reason.

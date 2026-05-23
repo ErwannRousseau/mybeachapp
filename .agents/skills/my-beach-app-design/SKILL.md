@@ -1,6 +1,6 @@
 ---
 name: my-beach-app-design
-description: Design, prototype, implement, or review My Beach App interfaces using the Beach Glass design system in DESIGN.md. Use when Codex works on My Beach App mobile screens, map-first UX, iOS Liquid Glass surfaces, Android Material adaptations, design tokens, UI copy, HTML mockups, React Native UI, or design QA for see/create/join beach activity flows.
+description: Design, prototype, implement, or review My Beach App interfaces using the Beach Glass design system in DESIGN.md. Use when Codex works on My Beach App mobile screens, map-first UX, iOS Liquid Glass surfaces, Android Compose adaptations, design tokens, UI copy, HTML mockups, React Native UI, or design QA for see/create/join beach activity flows.
 ---
 
 # My Beach App Design
@@ -10,6 +10,7 @@ description: Design, prototype, implement, or review My Beach App interfaces usi
 1. Read `DESIGN.md` first.
 2. Read the YAML frontmatter before prose; it is the canonical token source.
 3. Treat `DESIGN.md` as the only local source of truth for brand, tokens, and component rules.
+4. If implementing from Figma frames, read the Figma Integration section next.
 
 ## Default workflow
 
@@ -27,14 +28,31 @@ description: Design, prototype, implement, or review My Beach App interfaces usi
 - No emoji in product UI.
 - No decorative Unicode symbols.
 - iOS glass only on approved floating surfaces and only via a wrapper such as `GlassSurface`.
+- For iOS native Liquid Glass surfaces in production code, prefer `@expo/ui/swift-ui` behind the app wrapper layer.
 - Android must not mimic iOS glass.
-- Bottom navigation can be Liquid Glass on iOS and Material-style on Android, following `DESIGN.md`.
+- For Android native UI surfaces, prefer `@expo/ui/jetpack-compose` and keep a Compose-native expression.
+- Bottom navigation can be Liquid Glass on iOS and Compose-native on Android, following `DESIGN.md`.
+- When implementing reusable UI primitives, prefer a flat Compound Component naming style (for example `Sheet`, `SheetHeader`, `SheetBody`, `SheetActions`) over dot names and boolean-prop-heavy monolith components.
+- Component exports must use `export function` declarations only.
+- Do not use `const` component declarations, default exports, or barrel files for UI components.
+- Design system source components must live in `mobile/ui/`.
 - Minimum body text: 16 px.
 - Minimum touch target: 44 px.
 - Cards and search bars use 24 px radius.
 - Bottom sheets use 32 px radius.
 - Inputs use visible labels and clear borders.
 - Do not add chat, payments, groups, reputation, or feed features unless explicitly requested.
+
+## Figma Integration
+
+**Figma is the design authority.** When translating a Figma frame to mobile/ui/:
+
+1. **Require frame URL:** Always ask for the exact `figma.com/design/:fileKey/:name?node-id=:nodeId` before starting.
+2. **Use Figma MCP:** Extract tokens, metadata, and component structure via the `Figma` MCP connection.
+3. **Map all tokens to `DESIGN.md` frontmatter:** Colors, typography, spacing, radius. Never hardcode.
+4. **Reuse `mobile/ui/` primitives:** Check for existing components before implementing new ones.
+5. **Implement flat Compound naming:** `Sheet`, `SheetHeader`, `SheetBody`, `SheetActions` (no dots, `export function` only).
+6. **Validate:** Confirm tokens, platform-native approach (iOS: `@expo/ui/swift-ui`, Android: `@expo/ui/jetpack-compose`), touch targets ≥44px.
 
 ## Asset policy
 
@@ -46,6 +64,7 @@ description: Design, prototype, implement, or review My Beach App interfaces usi
 ## Output guidance
 
 - For production code, emit token-driven UI that maps directly to `DESIGN.md`.
+- When implementing from Figma frames, cite the frame URL and use Figma MCP to extract tokens.
 - For prototypes or mockups, prefer static HTML/CSS artifacts or simple screen specs that still follow the same tokens.
 - For design critique, evaluate Beach Glass fit, platform nativeness, outdoor readability, accessibility, and MVP scope discipline.
 - When changing `DESIGN.md`, run `npx @google/design.md lint DESIGN.md` and fix warnings when feasible.
