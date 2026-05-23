@@ -46,7 +46,7 @@ export default defineSchema({
     .index("by_user", ["userId"])
     .index("by_activity_user", ["activityId", "userId"]),
 
-  users: defineTable({
+  userProfiles: defineTable({
     avatarStorageId: v.optional(v.id("_storage")),
     createdAt: v.number(),
     email: v.optional(v.string()),

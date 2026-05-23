@@ -19,6 +19,7 @@ Applies to `packages/backend/convex`.
   - `@mybeachapp/shared/users/constants`
 - Do not import `@mybeachapp/shared` root or legacy shared buckets.
 - Convex runtime validation still uses `convex/values` validators. Zod schemas from shared are not a replacement for Convex `args` or `defineTable` validators.
+- Do not validate Convex environment variables with Zod inside request paths. Keep `config/env.ts` typed, simple, and non-throwing; optional deployment variables should disable optional capabilities rather than crash auth routes.
 
 ## Schema Rules
 

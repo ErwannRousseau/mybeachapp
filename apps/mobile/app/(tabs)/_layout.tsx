@@ -1,8 +1,6 @@
-import { Link, Tabs } from "expo-router";
-
+import { Tabs } from "expo-router";
 import { useUnistyles } from "react-native-unistyles";
 
-import { HeaderButton } from "../../components/HeaderButton";
 import { TabBarIcon } from "../../components/TabBarIcon";
 
 export default function TabLayout() {
@@ -15,31 +13,35 @@ export default function TabLayout() {
           backgroundColor: theme.colors.background,
         },
         headerTitleStyle: {
-          color: theme.colors.typography,
+          color: theme.colors.onSurface,
         },
-        tabBarActiveTintColor: theme.colors.astral,
+        tabBarActiveTintColor: theme.colors.secondary,
+        tabBarInactiveTintColor: theme.colors.onSurfaceMuted,
         tabBarStyle: {
-          backgroundColor: theme.colors.background,
+          backgroundColor: theme.colors.surface,
+          borderTopColor: theme.colors.border,
         },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          headerRight: () => (
-            <Link asChild href="/modal">
-              <HeaderButton />
-            </Link>
-          ),
-          tabBarIcon: ({ color }) => <TabBarIcon color={color} name="code" />,
-          title: "Tab One",
+          tabBarIcon: ({ color }) => <TabBarIcon color={color} name="map" />,
+          title: "Carte",
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="create"
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon color={color} name="code" />,
-          title: "Tab Two",
+          tabBarIcon: ({ color }) => <TabBarIcon color={color} name="plus" />,
+          title: "Créer",
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon color={color} name="user" />,
+          title: "Profil",
         }}
       />
     </Tabs>

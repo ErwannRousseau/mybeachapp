@@ -5,11 +5,15 @@ import { StyleSheet } from "react-native-unistyles";
 export default function NotFoundScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: "Oops!" }} />
+      <Stack.Screen options={{ title: "Introuvable" }} />
       <View style={styles.container}>
-        <Text style={styles.title}>{"This screen doesn't exist."}</Text>
+        <Text selectable style={styles.title}>
+          Écran introuvable.
+        </Text>
         <Link href="/" style={styles.link}>
-          <Text style={styles.linkText}>Go to home screen!</Text>
+          <Text selectable style={styles.linkText}>
+            Retour à la carte
+          </Text>
         </Link>
       </View>
     </>
@@ -28,10 +32,11 @@ const styles = StyleSheet.create((theme) => ({
     paddingVertical: 16,
   },
   linkText: {
-    color: theme.colors.astral,
-    fontSize: 14,
+    color: theme.colors.secondary,
+    fontSize: 16,
   },
   title: {
+    color: theme.colors.onSurface,
     fontSize: 20,
     fontWeight: "bold",
   },

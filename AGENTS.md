@@ -46,7 +46,9 @@ This file applies to the whole repository. Deeper `AGENTS.md` files override it 
 
 ## Validation
 
+- Use Zod for runtime validation by default, including app-local configuration such as public environment variables.
 - Use Zod schemas in `packages/shared` for shared input/domain validation.
+- Put reusable or cross-workspace validation helpers in `packages/shared`; keep purely app-local validation in the owning app.
 - Keep Convex runtime validators (`v.*`) in Convex functions and schema definitions.
 - Preserve stable error message keys where UI code may translate them.
 
