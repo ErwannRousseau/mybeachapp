@@ -2,7 +2,10 @@ import { z } from "zod";
 
 import { AUTH_ERROR_KEYS, AUTH_PASSWORD_MIN_LENGTH } from "./constants";
 
-export const authFlowSchema = z.enum(["signIn", "signUp"]);
+export const authFlowSchema: z.ZodEnum<{
+  signIn: "signIn";
+  signUp: "signUp";
+}> = z.enum(["signIn", "signUp"]);
 
 export const authEmailSchema = z
   .string()

@@ -9,6 +9,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "experiments": {
+      "reactCompiler": true,
       "tsconfigPaths": true,
       "typedRoutes": true
     },
@@ -31,15 +32,20 @@
         {
           "iosUrlScheme": "com.googleusercontent.apps.434244613471-2qh4iolluj86n6d8otil2hs4ic071h72"
         }
+      ],
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#F8FBFA",
+          "image": "./assets/splash.png",
+          "resizeMode": "contain"
+        }
       ]
     ],
     "scheme": "mybeachapp",
     "slug": "mybeachapp",
-    "splash": {
-      "backgroundColor": "#F8FBFA",
-      "image": "./assets/splash.png",
-      "resizeMode": "contain"
-    },
     "userInterfaceStyle": "automatic",
     "version": "1.0.0",
     "web": {
