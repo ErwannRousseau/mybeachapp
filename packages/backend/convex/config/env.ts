@@ -2,10 +2,9 @@ type BackendAppEnv = "development" | "preview" | "production";
 
 export type BackendEnv = {
   APP_ENV: BackendAppEnv | undefined;
-  APPLE_CLIENT_ID: string | undefined;
-  APPLE_CLIENT_SECRET: string | undefined;
-  GOOGLE_CLIENT_ID: string | undefined;
-  GOOGLE_CLIENT_SECRET: string | undefined;
+  APPLE_APP_BUNDLE_IDENTIFIER: string | undefined;
+  GOOGLE_IOS_CLIENT_ID: string | undefined;
+  GOOGLE_WEB_CLIENT_ID: string | undefined;
   SITE_URL: string;
 };
 
@@ -43,17 +42,14 @@ export const env: BackendEnv = {
   get APP_ENV() {
     return getAppEnv();
   },
-  get APPLE_CLIENT_ID() {
-    return getOptionalEnvValue("APPLE_CLIENT_ID");
+  get APPLE_APP_BUNDLE_IDENTIFIER() {
+    return getOptionalEnvValue("APPLE_APP_BUNDLE_IDENTIFIER");
   },
-  get APPLE_CLIENT_SECRET() {
-    return getOptionalEnvValue("APPLE_CLIENT_SECRET");
+  get GOOGLE_IOS_CLIENT_ID() {
+    return getOptionalEnvValue("GOOGLE_IOS_CLIENT_ID");
   },
-  get GOOGLE_CLIENT_ID() {
-    return getOptionalEnvValue("GOOGLE_CLIENT_ID");
-  },
-  get GOOGLE_CLIENT_SECRET() {
-    return getOptionalEnvValue("GOOGLE_CLIENT_SECRET");
+  get GOOGLE_WEB_CLIENT_ID() {
+    return getOptionalEnvValue("GOOGLE_WEB_CLIENT_ID");
   },
   get SITE_URL() {
     return getConvexSiteUrl();

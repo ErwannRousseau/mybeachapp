@@ -1,18 +1,20 @@
-# Better Auth + Convex + Expo Setup
+# Better Auth + Convex + Expo Native Auth Setup
 
-This guide lists what remains to make authentication work locally and on device.
+This app uses native provider SDKs on mobile, then sends provider `idToken`s to Better Auth running on Convex.
 
 ## Current App Values
 
 - Expo scheme: `mybeachapp`
 - iOS bundle identifier: `app.mybeach.mobile`
 - Android package: `app.mybeach.mobile`
+- Google iOS client ID: `434244613471-2qh4iolluj86n6d8otil2hs4ic071h72.apps.googleusercontent.com`
+- Google iOS URL scheme: `com.googleusercontent.apps.434244613471-2qh4iolluj86n6d8otil2hs4ic071h72`
 - Convex client URL shape: `https://<deployment>.convex.cloud`
 - Convex auth HTTP URL shape: `https://<deployment>.convex.site`
 
 ## 1. Convex Deployment Variables
 
-Better Auth runs inside Convex. Secrets must be set on the Convex deployment, not only in a local `.env`.
+Better Auth runs inside Convex. Deployment variables must be set with Convex, not only in a local `.env`.
 
 Required:
 
@@ -26,14 +28,22 @@ Generate a secret:
 openssl rand -base64 32
 ```
 
+Recommended for development:
+
+```sh
+bunx convex env set APP_ENV development
+bunx convex env set APPLE_APP_BUNDLE_IDENTIFIER app.mybeach.mobile
+bunx convex env set GOOGLE_IOS_CLIENT_ID 434244613471-2qh4iolluj86n6d8otil2hs4ic071h72.apps.googleusercontent.com
+bunx convex env set GOOGLE_WEB_CLIENT_ID '<google-web-client-id>'
+```
+
 Verify:
 
 ```sh
 bunx convex env list
 ```
 
-`SITE_URL` can be set on the Convex deployment to override the Better Auth `baseURL`.
-If it is omitted, the backend derives the `.convex.site` URL from Convex's `CONVEX_CLOUD_URL`.
+`SITE_URL` is optional. If omitted, the backend derives the `.convex.site` URL from Convex's `CONVEX_CLOUD_URL`.
 
 ## 2. Mobile Environment Variables
 
@@ -43,120 +53,108 @@ Create or update `apps/mobile/.env.local`:
 EXPO_PUBLIC_APP_ENV=development
 EXPO_PUBLIC_CONVEX_URL=https://<deployment>.convex.cloud
 EXPO_PUBLIC_CONVEX_SITE_URL=https://<deployment>.convex.site
+EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID=434244613471-2qh4iolluj86n6d8otil2hs4ic071h72.apps.googleusercontent.com
+EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID=
 EXPO_PUBLIC_MAP_PROVIDER=placeholder
 ```
 
 These variables are public and bundled into the Expo app.
 
-## 3. Google OAuth
+## 3. Google Native Sign-In
 
-Create OAuth credentials in Google Cloud Console.
+Google uses `@react-native-google-signin/google-signin`.
 
-Recommended first pass for this codebase:
+### iOS
 
-1. Create an OAuth consent screen.
-2. Add test users while app is in testing mode.
-3. Create a Web OAuth client.
-4. Add authorized redirect URI:
+Already configured:
 
-```txt
-https://<deployment>.convex.site/api/auth/callback/google
-```
+- OAuth client type: iOS
+- Bundle ID: `app.mybeach.mobile`
+- Client ID: `434244613471-2qh4iolluj86n6d8otil2hs4ic071h72.apps.googleusercontent.com`
+- URL scheme in `apps/mobile/app.json`
 
-5. Set Convex deployment variables:
+Set the same iOS client ID in both places:
 
 ```sh
-bunx convex env set GOOGLE_CLIENT_ID '<google-web-client-id>'
-bunx convex env set GOOGLE_CLIENT_SECRET '<google-web-client-secret>'
+bunx convex env set GOOGLE_IOS_CLIENT_ID 434244613471-2qh4iolluj86n6d8otil2hs4ic071h72.apps.googleusercontent.com
 ```
-
-6. Restart `convex dev` if it is running.
-
-The mobile app discovers Google availability through `api.auth.getCapabilities`; the Google button appears only when both variables exist.
-
-## 4. Apple OAuth
-
-Apple Sign In needs Apple Developer account access.
-
-Create Apple identifiers:
-
-1. Register or confirm App ID for bundle identifier:
-
-```txt
-app.mybeach.mobile
-```
-
-2. Enable “Sign in with Apple” on the App ID.
-3. Create a Services ID for the web OAuth client.
-4. Configure return URL:
-
-```txt
-https://<deployment>.convex.site/api/auth/callback/apple
-```
-
-5. Create a Sign in with Apple private key.
-6. Set Convex deployment variables expected by the current backend:
 
 ```sh
-bunx convex env set APPLE_CLIENT_ID '<apple-services-id>'
-bunx convex env set APPLE_CLIENT_SECRET '<apple-client-secret>'
+EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID=434244613471-2qh4iolluj86n6d8otil2hs4ic071h72.apps.googleusercontent.com
 ```
 
-The current backend expects a ready `APPLE_CLIENT_SECRET`. If you do not already have one, generate it as Apple’s ES256 client-secret JWT from:
+### Android
 
-- Team ID
-- Services ID
-- Key ID
-- private key `.p8`
+Create Android OAuth client IDs in Google Cloud for each signing certificate you use.
 
-The Apple button appears only when both variables exist.
-
-## 5. Deep Links And Trusted Origins
-
-Configured in code:
-
-```txt
-mybeachapp://
-mybeachapp://*
-```
-
-Development Expo origins are enabled only when Convex env has:
+For local debug builds:
 
 ```sh
-bunx convex env set APP_ENV development
+cd apps/mobile/android
+./gradlew signingReport
 ```
 
-Then trusted origins also include:
+Use these values for the local prebuild debug client:
 
 ```txt
-exp://
-exp://**
-exp://192.168.*.*:*/**
+Package name: app.mybeach.mobile
+SHA-1: 5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25
 ```
 
-## 6. Run Locally
-
-Backend:
+Then create or reuse a Web OAuth client ID. The native Android SDK needs this web client ID to request an ID token, and Better Auth uses the same ID as the accepted token audience:
 
 ```sh
-bun run --cwd packages/backend dev
+bunx convex env set GOOGLE_WEB_CLIENT_ID '<google-web-client-id>'
 ```
 
-Mobile:
+```sh
+EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID=<google-web-client-id>
+```
+
+Android will not show the Google button until `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` is set.
+
+Do not put the Android OAuth client ID in Convex or Expo env. It only belongs in Google Cloud so Google can trust the Android package name and signing SHA-1. The current mobile flow does not use Google client secrets.
+
+## 4. Apple Native Sign-In
+
+Apple native auth uses `expo-apple-authentication`.
+
+Required Apple Developer setup:
+
+1. Register or confirm App ID for bundle identifier `app.mybeach.mobile`.
+2. Enable “Sign in with Apple” on that App ID.
+3. Make sure Xcode signing uses the same bundle ID and team.
+4. Set Convex:
+
+```sh
+bunx convex env set APPLE_APP_BUNDLE_IDENTIFIER app.mybeach.mobile
+```
+
+Apple native Sign In is iOS-only in Expo. The app hides the Apple button on Android. If Android Apple sign-in is required later, that is a web OAuth flow with a Services ID and client secret, not this native flow.
+
+## 5. Expo Prebuild
+
+Native config plugins are declared in `apps/mobile/app.json`:
+
+- `expo-apple-authentication`
+- `@react-native-google-signin/google-signin`
+
+After changing these values, regenerate native projects:
+
+```sh
+bun run --cwd apps/mobile native:prebuild
+```
+
+Then rebuild the dev client:
 
 ```sh
 bun run --cwd apps/mobile ios
-```
-
-or:
-
-```sh
 bun run --cwd apps/mobile android
 ```
 
 This app uses Expo prebuild/dev-client flow, not Expo Go.
 
-## 7. Verification Checklist
+## 6. Verification Checklist
 
 Run:
 
@@ -166,36 +164,42 @@ bun run typecheck
 bun run test
 ```
 
-These commands assume `apps/mobile/.env.local` is filled.
-
 Manual checks:
 
 - Email sign-up creates a Better Auth user.
 - Email sign-in persists after app restart.
 - Sign-out returns to `/sign-in`.
-- Google button appears only after `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set.
-- Apple button appears only after `APPLE_CLIENT_ID` and `APPLE_CLIENT_SECRET` are set.
-- Creating a **Beach Activity** also creates the Organizer **Participation**.
+- Google button appears on iOS when Convex has `GOOGLE_IOS_CLIENT_ID` and mobile has `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID`.
+- Google button appears on Android when Convex has `GOOGLE_WEB_CLIENT_ID` and mobile has `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`.
+- Apple button appears on iOS when Convex has `APPLE_APP_BUNDLE_IDENTIFIER` and Apple capability is available.
+- Apple button does not appear on Android.
 
-## 8. Common Failures
+## 7. Common Failures
 
 No social button:
 
-- Missing provider env vars in Convex deployment.
 - Check `bunx convex env list`.
+- Check `apps/mobile/.env.local`.
+- Restart Metro after changing `EXPO_PUBLIC_*` values.
+- Rebuild the dev client after changing native plugins or URL schemes.
 
-Convex auth route fails:
+Google `DEVELOPER_ERROR` on Android:
 
-- Check `bunx convex env list` for `BETTER_AUTH_SECRET`.
-- `SITE_URL` is optional, but if it exists it must point to the `.convex.site` deployment URL.
-- OAuth buttons require complete provider pairs: ID and secret together.
+- Android OAuth client is missing or has the wrong SHA-1.
+- Package name must be `app.mybeach.mobile`.
+- Use `./gradlew signingReport` for local debug SHA-1.
 
-OAuth redirect fails:
+Google returns no ID token:
 
-- Redirect URI in provider console must match `https://<deployment>.convex.site/api/auth/callback/<provider>`.
-- Expo scheme must stay `mybeachapp`.
+- `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` is missing.
+- The web client ID is from another Google Cloud project.
+
+Apple invalid audience:
+
+- Convex `APPLE_APP_BUNDLE_IDENTIFIER` must be `app.mybeach.mobile`.
+- Xcode bundle identifier must be `app.mybeach.mobile`.
 
 Session does not reach Convex queries:
 
-- Mobile must use `EXPO_PUBLIC_CONVEX_URL` for Convex client.
-- Mobile must use `EXPO_PUBLIC_CONVEX_SITE_URL` for Better Auth client.
+- Mobile must use `EXPO_PUBLIC_CONVEX_URL` for the Convex client.
+- Mobile must use `EXPO_PUBLIC_CONVEX_SITE_URL` for the Better Auth HTTP client.

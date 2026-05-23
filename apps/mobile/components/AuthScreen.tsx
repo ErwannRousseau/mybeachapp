@@ -1,4 +1,6 @@
 import type { AuthFlow } from "@mybeachapp/shared/auth/types";
+import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
+import * as AppleAuthentication from "expo-apple-authentication";
 import { Link, router, Stack } from "expo-router";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
@@ -65,19 +67,34 @@ export function AuthScreen({ flow }: AuthScreenProps) {
           {hasSocialAuth ? (
             <View style={styles.oauthGroup}>
               {hasAppleAuth ? (
-                <PrimaryButton
-                  disabled={isAuthenticating}
-                  label="Continuer avec Apple"
-                  onPress={() => void submitSocialAuth("apple")}
-                  variant="secondary"
-                />
+                <View
+                  pointerEvents={isAuthenticating ? "none" : "auto"}
+                  style={isAuthenticating ? styles.disabled : undefined}
+                >
+                  <AppleAuthentication.AppleAuthenticationButton
+                    buttonStyle={
+                      AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+                    }
+                    buttonType={
+                      isSignIn
+                        ? AppleAuthentication.AppleAuthenticationButtonType
+                            .SIGN_IN
+                        : AppleAuthentication.AppleAuthenticationButtonType
+                            .SIGN_UP
+                    }
+                    cornerRadius={27}
+                    onPress={() => void submitSocialAuth("apple")}
+                    style={styles.nativeAuthButton}
+                  />
+                </View>
               ) : null}
               {hasGoogleAuth ? (
-                <PrimaryButton
+                <GoogleSigninButton
+                  color={GoogleSigninButton.Color.Light}
                   disabled={isAuthenticating}
-                  label="Continuer avec Google"
                   onPress={() => void submitSocialAuth("google")}
-                  variant="secondary"
+                  size={GoogleSigninButton.Size.Wide}
+                  style={styles.googleAuthButton}
                 />
               ) : null}
             </View>
@@ -167,6 +184,9 @@ const styles = StyleSheet.create((theme) => ({
     gap: theme.spacing.lg,
     padding: theme.spacing.md,
   },
+  disabled: {
+    opacity: 0.5,
+  },
   divider: {
     backgroundColor: theme.colors.border,
     height: 1,
@@ -177,6 +197,11 @@ const styles = StyleSheet.create((theme) => ({
   },
   fieldGroup: {
     gap: theme.spacing.xs,
+  },
+  googleAuthButton: {
+    alignSelf: "stretch",
+    height: 54,
+    width: "100%",
   },
   input: {
     ...theme.typography.body,
@@ -194,6 +219,10 @@ const styles = StyleSheet.create((theme) => ({
   label: {
     ...theme.typography.bodyStrong,
     color: theme.colors.onSurface,
+  },
+  nativeAuthButton: {
+    height: 54,
+    width: "100%",
   },
   oauthGroup: {
     gap: theme.spacing.sm,

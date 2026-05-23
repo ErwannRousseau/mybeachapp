@@ -14,13 +14,25 @@
     },
     "icon": "./assets/icon.png",
     "ios": {
+      "appleTeamId": "98FD594FLL",
       "bundleIdentifier": "app.mybeach.mobile",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "usesAppleSignIn": true
     },
     "name": "My Beach App",
     "orientation": "portrait",
     "platforms": ["ios", "android"],
-    "plugins": ["expo-router", "expo-web-browser"],
+    "plugins": [
+      "expo-router",
+      "expo-web-browser",
+      "expo-apple-authentication",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.434244613471-2qh4iolluj86n6d8otil2hs4ic071h72"
+        }
+      ]
+    ],
     "scheme": "mybeachapp",
     "slug": "mybeachapp",
     "splash": {

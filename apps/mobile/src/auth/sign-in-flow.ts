@@ -4,14 +4,14 @@ import {
 } from "@mybeachapp/shared/auth/constants";
 import { authCredentialsSchema } from "@mybeachapp/shared/auth/schemas";
 import type { AuthFlow } from "@mybeachapp/shared/auth/types";
-import { useQuery } from "convex/react";
 import { router } from "expo-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import type { authClient } from "./auth-client";
 import {
-  authCapabilitiesQuery,
+  hasNativeAppleAuthProvider,
+  hasNativeGoogleAuthProvider,
   type SocialAuthProvider,
   signInWithPassword,
   signInWithSocial,
@@ -88,11 +88,10 @@ export function useSignInFlow({
   const [flow, setFlow] = useState<AuthFlow>(initialFlow);
   const [socialProviderPending, setSocialProviderPending] =
     useState<SocialAuthProvider | null>(null);
-  const authCapabilities = useQuery(authCapabilitiesQuery);
 
   const isAuthenticating = isSubmitting || socialProviderPending !== null;
-  const hasAppleAuth = Boolean(authCapabilities?.socialProviders.apple);
-  const hasGoogleAuth = Boolean(authCapabilities?.socialProviders.google);
+  const hasAppleAuth = hasNativeAppleAuthProvider();
+  const hasGoogleAuth = hasNativeGoogleAuthProvider();
   const hasSocialAuth = hasAppleAuth || hasGoogleAuth;
   const formError =
     errors.root?.message ?? errors.email?.message ?? errors.password?.message;
@@ -137,9 +136,15 @@ export function useSignInFlow({
     try {
       const response = await signInWithSocial(provider);
 
-      if (response.error) {
+      if (response.status === "cancelled") {
+        return;
+      }
+
+      if (response.response.error) {
         setError("root", {
-          message: "Connexion OAuth impossible pour le moment.",
+          message:
+            response.response.error.message ??
+            "Connexion impossible pour le moment.",
         });
         return;
       }
@@ -147,7 +152,7 @@ export function useSignInFlow({
       router.replace("/");
     } catch {
       setError("root", {
-        message: "Connexion OAuth impossible pour le moment.",
+        message: "Connexion impossible pour le moment.",
       });
     } finally {
       setSocialProviderPending(null);

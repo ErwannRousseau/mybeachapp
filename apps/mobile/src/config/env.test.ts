@@ -71,4 +71,20 @@ describe("createMobileEnv", () => {
       mapProvider: "placeholder",
     });
   });
+
+  test("normalizes optional native Google client IDs", () => {
+    expect(
+      createMobileEnv({
+        EXPO_PUBLIC_CONVEX_SITE_URL: "https://beach.convex.site",
+        EXPO_PUBLIC_CONVEX_URL: "https://beach.convex.cloud",
+        EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID:
+          "google-ios.apps.googleusercontent.com",
+        EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID:
+          "google-web.apps.googleusercontent.com",
+      }),
+    ).toMatchObject({
+      googleIosClientId: "google-ios.apps.googleusercontent.com",
+      googleWebClientId: "google-web.apps.googleusercontent.com",
+    });
+  });
 });

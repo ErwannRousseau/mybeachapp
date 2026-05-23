@@ -10,6 +10,7 @@ import { components } from "../_generated/api";
 import type { DataModel } from "../_generated/dataModel";
 import authConfig from "../auth.config";
 import { env } from "../config/env";
+import { getAppleUserInfoFromIdToken, providerClientId } from "../lib/oauth";
 import schema from "./schema";
 
 export const authComponent = createClient<DataModel, typeof schema>(
@@ -22,18 +23,22 @@ export const authComponent = createClient<DataModel, typeof schema>(
 
 export function getSocialProviders(): BetterAuthOptions["socialProviders"] {
   const socialProviders: BetterAuthOptions["socialProviders"] = {};
+  const googleClientId = providerClientId([
+    env.GOOGLE_WEB_CLIENT_ID,
+    env.GOOGLE_IOS_CLIENT_ID,
+  ]);
 
-  if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
+  if (googleClientId) {
     socialProviders.google = {
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
+      clientId: googleClientId,
     };
   }
 
-  if (env.APPLE_CLIENT_ID && env.APPLE_CLIENT_SECRET) {
+  if (env.APPLE_APP_BUNDLE_IDENTIFIER) {
     socialProviders.apple = {
-      clientId: env.APPLE_CLIENT_ID,
-      clientSecret: env.APPLE_CLIENT_SECRET,
+      appBundleIdentifier: env.APPLE_APP_BUNDLE_IDENTIFIER,
+      clientId: env.APPLE_APP_BUNDLE_IDENTIFIER,
+      getUserInfo: getAppleUserInfoFromIdToken,
     };
   }
 
@@ -44,6 +49,7 @@ export function getTrustedOrigins() {
   return [
     "mybeachapp://",
     "mybeachapp://*",
+    "https://appleid.apple.com",
     ...(env.APP_ENV === "development"
       ? ["exp://", "exp://**", "exp://192.168.*.*:*/**"]
       : []),
