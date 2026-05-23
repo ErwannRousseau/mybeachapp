@@ -21,8 +21,8 @@
   "workspaces": {
     "catalog": {
       "@better-auth/expo": "^1.6.11",
-      "@types/node": "^22.19.18",
       "@convex-dev/better-auth": "^0.12.2",
+      "@types/node": "^22.19.18",
       "better-auth": "^1.6.11",
       "convex": "^1.28.0",
       "react-hook-form": "^7.75.0",
