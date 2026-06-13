@@ -1,129 +1,89 @@
 import { ACTIVITY_CATEGORIES } from "@mybeachapp/shared/activities/constants";
 import { Link, Stack } from "expo-router";
-import { Pressable, ScrollView, Text, View } from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { XStack, YStack } from "tamagui";
 
-import { PrimaryButton } from "@/components/PrimaryButton";
+import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
 import { env } from "@/src/config/env";
 import { activityCategoryLabels } from "@/src/features/activities/activity-copy";
+import { Button } from "@/ui/button";
+import { FilterChip } from "@/ui/filter-chip";
+import { SearchBar } from "@/ui/search-bar";
+import { Tag } from "@/ui/tag";
+import { Headline, Text, Title } from "@/ui/typography";
 
 export default function Home() {
+  const insets = useSafeAreaInsets();
+  const [searchQuery, setSearchQuery] = useState("");
+  const normalizedSearchQuery = searchQuery.trim();
+  const mapStatusLabel =
+    normalizedSearchQuery.length > 0
+      ? `Recherche: ${normalizedSearchQuery}`
+      : `Carte: ${env.mapProvider}`;
+
   return (
     <>
-      <Stack.Screen options={{ title: "Carte" }} />
-      <ScrollView
-        contentContainerStyle={styles.content}
-        contentInsetAdjustmentBehavior="automatic"
-      >
-        <View style={styles.mapPreview}>
-          <Text selectable style={styles.eyebrow}>
-            Autour de toi
-          </Text>
-          <Text selectable style={styles.title}>
-            Trouve une activité sur la plage
-          </Text>
-          <Text selectable style={styles.body}>
-            Carte prête pour brancher le provider natif. Les données Convex se
-            connecteront dès que l’URL publique sera configurée.
-          </Text>
-          <View style={styles.statusRow}>
-            <Text selectable style={styles.statusBadge}>
-              Convex prêt
-            </Text>
-            <Text selectable style={styles.statusBadge}>
-              Carte: {env.mapProvider}
-            </Text>
-          </View>
-        </View>
+      <Stack.Screen options={{ headerShown: false }} />
+      <YStack bg="$background" flex={1}>
+        <TabScreenScrollView>
+          <YStack gap="$lg" p="$md" pb="$md" pt={insets.top + 88}>
+            <YStack
+              bg="$secondary"
+              borderColor="$border"
+              borderWidth={1}
+              gap="$md"
+              minH={360}
+              p="$xl"
+              rounded="$xxl"
+            >
+              <Text
+                selectable
+                size="sm"
+                textTransform="uppercase"
+                variant="accent"
+                weight="semibold"
+              >
+                Autour de toi
+              </Text>
+              <Headline selectable>Trouve une activité sur la plage</Headline>
+              <Text selectable variant="muted">
+                Carte prête pour brancher le provider natif. Les données Convex
+                se connecteront dès que l’URL publique sera configurée.
+              </Text>
+              <XStack flexWrap="wrap" gap="$xs" mt="auto">
+                <Tag>Convex prêt</Tag>
+                <Tag>{mapStatusLabel}</Tag>
+              </XStack>
+            </YStack>
 
-        <View style={styles.section}>
-          <Text selectable style={styles.sectionTitle}>
-            Filtres MVP
-          </Text>
-          <View style={styles.chipGrid}>
-            {ACTIVITY_CATEGORIES.slice(0, 6).map((category) => (
-              <Pressable key={category} style={styles.chip}>
-                <Text selectable style={styles.chipText}>
-                  {activityCategoryLabels[category]}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        </View>
+            <YStack gap="$sm">
+              <Title selectable size="sm">
+                Filtres MVP
+              </Title>
+              <XStack flexWrap="wrap" gap="$sm">
+                {ACTIVITY_CATEGORIES.slice(0, 6).map((category, index) => (
+                  <FilterChip key={category} selected={index === 0}>
+                    {activityCategoryLabels[category]}
+                  </FilterChip>
+                ))}
+              </XStack>
+            </YStack>
 
-        <Link asChild href="/create">
-          <PrimaryButton label="Créer une activité" />
-        </Link>
-      </ScrollView>
+            <Link asChild href="/create">
+              <Button>Créer une activité</Button>
+            </Link>
+          </YStack>
+        </TabScreenScrollView>
+
+        <YStack l="$md" position="absolute" r="$md" t={insets.top + 12} z={10}>
+          <SearchBar
+            onChangeText={setSearchQuery}
+            onSearch={setSearchQuery}
+            placeholder="Pornichet, La Baule..."
+          />
+        </YStack>
+      </YStack>
     </>
   );
 }
-
-const styles = StyleSheet.create((theme) => ({
-  body: {
-    ...theme.typography.body,
-    color: theme.colors.onSurfaceMuted,
-  },
-  chip: {
-    backgroundColor: theme.colors.surface,
-    borderColor: theme.colors.border,
-    borderRadius: theme.radii.full,
-    borderWidth: 1,
-    minHeight: 36,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-  },
-  chipGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: theme.spacing.sm,
-  },
-  chipText: {
-    ...theme.typography.label,
-    color: theme.colors.onSurface,
-  },
-  content: {
-    backgroundColor: theme.colors.background,
-    gap: theme.spacing.lg,
-    padding: theme.spacing.md,
-  },
-  eyebrow: {
-    ...theme.typography.label,
-    color: theme.colors.secondary,
-    textTransform: "uppercase",
-  },
-  mapPreview: {
-    backgroundColor: theme.colors.secondarySoft,
-    borderColor: theme.colors.border,
-    borderRadius: theme.radii.xxl,
-    borderWidth: 1,
-    gap: theme.spacing.md,
-    minHeight: 360,
-    padding: theme.spacing.xl,
-  },
-  section: {
-    gap: theme.spacing.sm,
-  },
-  sectionTitle: {
-    ...theme.typography.title,
-    color: theme.colors.onSurface,
-  },
-  statusBadge: {
-    ...theme.typography.label,
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.radii.full,
-    color: theme.colors.onSurface,
-    paddingHorizontal: theme.spacing.sm,
-    paddingVertical: theme.spacing.xs,
-  },
-  statusRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: theme.spacing.xs,
-    marginTop: "auto",
-  },
-  title: {
-    ...theme.typography.headline,
-    color: theme.colors.onSurface,
-  },
-}));

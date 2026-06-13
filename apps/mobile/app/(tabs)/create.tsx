@@ -1,10 +1,15 @@
 import { ACTIVITY_MAX_PARTICIPANTS } from "@mybeachapp/shared/activities/constants";
 import { Link, Stack } from "expo-router";
-import { ScrollView, Text, TextInput, View } from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+import { YStack } from "tamagui";
 
-import { PrimaryButton } from "@/components/PrimaryButton";
+import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
 import { useAuthSession } from "@/src/auth/session";
+import { Button } from "@/ui/button";
+import { Card } from "@/ui/card";
+import { Field } from "@/ui/field";
+import { Input } from "@/ui/input";
+import { Label } from "@/ui/label";
+import { Headline, Text } from "@/ui/typography";
 
 const defaultParticipants = Math.min(8, ACTIVITY_MAX_PARTICIPANTS);
 
@@ -14,115 +19,55 @@ export default function CreateActivityScreen() {
   return (
     <>
       <Stack.Screen options={{ title: "Créer" }} />
-      <ScrollView
-        contentContainerStyle={styles.content}
-        contentInsetAdjustmentBehavior="automatic"
-      >
-        {!session ? (
-          <View style={styles.authCard}>
-            <Text selectable style={styles.title}>
-              Connecte-toi pour créer une activité
-            </Text>
-            <Text selectable style={styles.body}>
-              {isPending
-                ? "Vérification de ta session."
-                : "La création reste visible dans la navigation, mais elle nécessite un compte pour publier dans Convex."}
-            </Text>
-            <View style={styles.authActions}>
-              <Link asChild href="/sign-in">
-                <PrimaryButton label="Se connecter" />
-              </Link>
-              <Link asChild href="/sign-up">
-                <PrimaryButton label="Créer un compte" variant="secondary" />
-              </Link>
-            </View>
-          </View>
-        ) : (
-          <>
-            <View style={styles.section}>
-              <Text selectable style={styles.title}>
-                Nouvelle activité
+      <TabScreenScrollView>
+        <YStack gap="$lg" p="$md" pb="$md">
+          {!session ? (
+            <Card gap="$md">
+              <Headline selectable>
+                Connecte-toi pour créer une activité
+              </Headline>
+              <Text selectable variant="muted">
+                {isPending
+                  ? "Vérification de ta session."
+                  : "La création reste visible dans la navigation, mais elle nécessite un compte pour publier dans Convex."}
               </Text>
-              <Text selectable style={styles.body}>
-                Base d’écran prête pour relier validation partagée, auth et
-                mutation Convex.
-              </Text>
-            </View>
+              <YStack gap="$sm">
+                <Link asChild href="/sign-in">
+                  <Button>Se connecter</Button>
+                </Link>
+                <Link asChild href="/sign-up">
+                  <Button variant="secondary">Créer un compte</Button>
+                </Link>
+              </YStack>
+            </Card>
+          ) : (
+            <>
+              <YStack gap="$sm">
+                <Headline selectable>Nouvelle activité</Headline>
+                <Text selectable variant="muted">
+                  Base d’écran prête pour relier validation partagée, auth et
+                  mutation Convex.
+                </Text>
+              </YStack>
 
-            <View style={styles.fieldGroup}>
-              <Text selectable style={styles.label}>
-                Titre
-              </Text>
-              <TextInput
-                placeholder="Beach-volley à la plage centrale"
-                placeholderTextColor="#6B7C86"
-                style={styles.input}
-              />
-            </View>
+              <Field>
+                <Label>Titre</Label>
+                <Input placeholder="Beach-volley à la plage centrale" />
+              </Field>
 
-            <View style={styles.fieldGroup}>
-              <Text selectable style={styles.label}>
-                Participants max
-              </Text>
-              <TextInput
-                defaultValue={String(defaultParticipants)}
-                keyboardType="number-pad"
-                placeholderTextColor="#6B7C86"
-                style={styles.input}
-              />
-            </View>
+              <Field>
+                <Label>Participants max</Label>
+                <Input
+                  defaultValue={String(defaultParticipants)}
+                  keyboardType="number-pad"
+                />
+              </Field>
 
-            <PrimaryButton label="Préparer l’activité" />
-          </>
-        )}
-      </ScrollView>
+              <Button>Préparer l’activité</Button>
+            </>
+          )}
+        </YStack>
+      </TabScreenScrollView>
     </>
   );
 }
-
-const styles = StyleSheet.create((theme) => ({
-  authActions: {
-    gap: theme.spacing.sm,
-  },
-  authCard: {
-    backgroundColor: theme.colors.surface,
-    borderColor: theme.colors.border,
-    borderRadius: theme.radii.xl,
-    borderWidth: 1,
-    gap: theme.spacing.md,
-    padding: theme.spacing.md,
-  },
-  body: {
-    ...theme.typography.body,
-    color: theme.colors.onSurfaceMuted,
-  },
-  content: {
-    backgroundColor: theme.colors.background,
-    gap: theme.spacing.lg,
-    padding: theme.spacing.md,
-  },
-  fieldGroup: {
-    gap: theme.spacing.xs,
-  },
-  input: {
-    ...theme.typography.body,
-    backgroundColor: theme.colors.surface,
-    borderColor: theme.colors.border,
-    borderRadius: theme.radii.lg,
-    borderWidth: 1,
-    color: theme.colors.onSurface,
-    minHeight: 52,
-    paddingHorizontal: theme.spacing.md,
-  },
-  label: {
-    ...theme.typography.bodyStrong,
-    color: theme.colors.onSurface,
-  },
-  section: {
-    gap: theme.spacing.sm,
-  },
-  title: {
-    ...theme.typography.headline,
-    color: theme.colors.onSurface,
-  },
-}));

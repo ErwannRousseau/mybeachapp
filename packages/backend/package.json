@@ -6,7 +6,8 @@
     "@mybeachapp/shared": "workspace:*",
     "better-auth": "catalog:",
     "convex": "catalog:",
-    "convex-test": "^0.0.51"
+    "convex-test": "^0.0.51",
+    "kysely": "catalog:"
   },
   "devDependencies": {
     "@mybeachapp/config": "workspace:*",
