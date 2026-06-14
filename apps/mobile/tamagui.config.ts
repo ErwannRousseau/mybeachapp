@@ -1,59 +1,9 @@
 import { defaultConfig } from "@tamagui/config/v5";
 import { createFont, createTamagui, createTokens } from "tamagui";
 
-const lightColors = {
-  accent: "#0077B6",
-  background: "#F8FBFA",
-  border: "#DDE7E5",
-  card: "#FFFFFF",
-  cardForeground: "#062A3B",
-  color: "#062A3B",
-  destructive: "#E85739",
-  destructiveForeground: "#001923",
-  destructiveSoft: "#FCE4DC",
-  floatingSurface: "rgba(255, 255, 255, 0.94)",
-  floatingSurfaceForeground: "#062A3B",
-  foreground: "#062A3B",
-  input: "#DDE7E5",
-  muted: "#EEF4F3",
-  mutedForeground: "#5E717A",
-  primary: "#FF6B4A",
-  primaryForeground: "#062A3B",
-  primaryPressed: "#9F331F",
-  ring: "#0077B6",
-  secondary: "#EAF8FC",
-  secondaryForeground: "#062A3B",
-  success: "#1FAF84",
-  successSoft: "#E5F5EE",
-  surface: "#FFFFFF",
-  surfaceForeground: "#062A3B",
-  transparent: "rgba(255, 255, 255, 0)",
-  warning: "#DDBB72",
-  warningForeground: "#062A3B",
-  warningSoft: "#FFF9EA",
-} as const;
+import { semanticLightColors, themes } from "./themes";
 
-const darkColors = {
-  ...lightColors,
-  background: "#062A3B",
-  border: "#245166",
-  card: "#0B3447",
-  cardForeground: "#F8FBFA",
-  color: "#F8FBFA",
-  floatingSurface: "rgba(11, 52, 71, 0.94)",
-  floatingSurfaceForeground: "#F8FBFA",
-  foreground: "#F8FBFA",
-  input: "#245166",
-  muted: "#123E55",
-  mutedForeground: "#B8C8CC",
-  secondary: "#123E55",
-  secondaryForeground: "#F8FBFA",
-  surface: "#0B3447",
-  surfaceForeground: "#F8FBFA",
-} as const;
-
-export const lightTheme = lightColors;
-export const darkTheme = darkColors;
+export { darkTheme, lightTheme } from "./themes";
 
 const bodyFont = createFont({
   family: "System",
@@ -91,7 +41,7 @@ const bodyFont = createFont({
 
 const tokens = createTokens({
   ...defaultConfig.tokens,
-  color: lightColors,
+  color: semanticLightColors,
   radius: {
     ...defaultConfig.tokens.radius,
     full: 9999,
@@ -131,10 +81,7 @@ export const tamaguiConfig = createTamagui({
     body: bodyFont,
     heading: bodyFont,
   },
-  themes: {
-    dark: darkTheme,
-    light: lightTheme,
-  },
+  themes,
   tokens,
 });
 

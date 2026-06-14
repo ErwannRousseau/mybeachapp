@@ -105,7 +105,8 @@ Cons:
 - The visual system should stay close between iOS and Android by default.
 - Real blur and native visual effects must be isolated behind explicit primitives if introduced later.
 - No generic `GlassSurface` should be part of the baseline design system.
-- No Takeout Pro structure or dependencies should be copied into the app unless explicitly approved for a narrow reason.
+- Takeout Pro and Bento may be used as reference-only sources for premium Tamagui patterns, following `docs/design-system/takeout-bento-reference-map.md`.
+- No Takeout Pro structure, runtime dependency, backend, routing, or infrastructure should be copied into the app unless explicitly approved for a narrow reason.
 
 ## Verification
 

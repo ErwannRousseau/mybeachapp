@@ -24,6 +24,14 @@ _Avoid_: Anonymous user, guest, prospect
 A person with an account who can create and join **Beach Activities**.
 _Avoid_: Account, auth user, member
 
+**Beach Profile**:
+The public-facing identity of a **Signed-in User**, including a required pseudo, optional first and last name, avatar, preferred **Activity Categories**, and cities.
+_Avoid_: App profile, account profile, auth profile
+
+**Onboarding**:
+The first-run product flow that helps a **Signed-in User** complete their **Beach Profile** enough to create and join **Beach Activities** confidently.
+_Avoid_: Setup wizard, tutorial, registration
+
 **Spot**:
 A participant place counted against the capacity of a **Beach Activity**.
 _Avoid_: Slot, seat, ticket
@@ -41,7 +49,7 @@ The manually adjustable map marker for a **Meeting Point**.
 _Avoid_: Marker, coordinate, location
 
 **Participation**:
-The record that a **Signed-in User** has joined or cancelled joining a **Beach Activity**.
+The record that a **Signed-in User** has joined a **Beach Activity**.
 _Avoid_: Registration, booking, enrollment
 
 **Pilot Zone**:
@@ -63,6 +71,8 @@ _Avoid_: Detail page, event page, card
 ## Relationships
 
 - A **Visitor** may view open **Beach Activities**
+- A **Signed-in User** has one **Beach Profile**
+- A **Signed-in User** may complete **Onboarding** for their **Beach Profile**
 - A **Signed-in User** may organize zero or more **Beach Activities**
 - A **Beach Activity** has exactly one **Organizer**
 - A **Beach Activity** has one **Activity Category** and one **Activity Status**
