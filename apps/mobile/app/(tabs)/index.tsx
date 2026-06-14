@@ -10,6 +10,7 @@ import { activityCategoryLabels } from "@/src/features/activities/activity-copy"
 import { Button } from "@/ui/button";
 import { FilterChip } from "@/ui/filter-chip";
 import { SearchBar } from "@/ui/search-bar";
+import { Surface } from "@/ui/surface";
 import { Tag } from "@/ui/tag";
 import { Headline, Text, Title } from "@/ui/typography";
 
@@ -28,10 +29,8 @@ export default function Home() {
       <YStack bg="$background" flex={1}>
         <TabScreenScrollView>
           <YStack gap="$lg" p="$md" pb="$md" pt={insets.top + 88}>
-            <YStack
+            <Surface
               bg="$secondary"
-              borderColor="$border"
-              borderWidth={1}
               gap="$md"
               minH={360}
               p="$xl"
@@ -55,7 +54,7 @@ export default function Home() {
                 <Tag>Convex prêt</Tag>
                 <Tag>{mapStatusLabel}</Tag>
               </XStack>
-            </YStack>
+            </Surface>
 
             <YStack gap="$sm">
               <Title selectable size="sm">

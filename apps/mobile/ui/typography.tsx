@@ -1,4 +1,4 @@
-import { type GetProps, styled, Text as TamaguiText } from "tamagui";
+import { type GetProps, SizableText, styled } from "tamagui";
 
 export type TextVariant =
   | "accent"
@@ -11,26 +11,22 @@ export type TextVariant =
 export type TextSize = "lg" | "md" | "sm";
 export type TextWeight = "bold" | "medium" | "regular" | "semibold";
 
-const TextFrame = styled(TamaguiText, {
+const TextFrame = styled(SizableText, {
   color: "$foreground",
   fontFamily: "$body",
-  fontSize: 16,
   letterSpacing: 0,
-  lineHeight: 24,
   name: "BeachText",
+  size: "$bodyMd",
   variants: {
     textSize: {
       lg: {
-        fontSize: 18,
-        lineHeight: 26,
+        size: "$titleSm",
       },
       md: {
-        fontSize: 16,
-        lineHeight: 24,
+        size: "$bodyMd",
       },
       sm: {
-        fontSize: 13,
-        lineHeight: 18,
+        size: "$labelMd",
       },
     },
     variant: {
@@ -73,7 +69,7 @@ const TextFrame = styled(TamaguiText, {
   } as const,
 });
 
-export type TextProps = GetProps<typeof TextFrame> & {
+export type TextProps = Omit<GetProps<typeof TextFrame>, "size"> & {
   children?: React.ReactNode;
   size?: TextSize;
 };
@@ -93,25 +89,22 @@ export function Text({
 }
 
 const TitleFrame = styled(TextFrame, {
-  fontSize: 22,
   fontWeight: "700",
-  lineHeight: 28,
   name: "BeachTitle",
+  size: "$headlineMd",
   variants: {
     titleSize: {
       md: {
-        fontSize: 22,
-        lineHeight: 28,
+        size: "$headlineMd",
       },
       sm: {
-        fontSize: 18,
-        lineHeight: 24,
+        size: "$titleSm",
       },
     },
   } as const,
 });
 
-export type TitleProps = GetProps<typeof TitleFrame> & {
+export type TitleProps = Omit<GetProps<typeof TitleFrame>, "size"> & {
   children?: React.ReactNode;
   size?: "md" | "sm";
 };
@@ -130,29 +123,25 @@ export function Title({
 }
 
 const HeadlineFrame = styled(TextFrame, {
-  fontSize: 28,
   fontWeight: "700",
-  lineHeight: 34,
   name: "BeachHeadline",
+  size: "$headlineLg",
   variants: {
     headlineSize: {
       display: {
-        fontSize: 34,
-        lineHeight: 40,
+        size: "$headlineDisplay",
       },
       lg: {
-        fontSize: 28,
-        lineHeight: 34,
+        size: "$headlineLg",
       },
       md: {
-        fontSize: 28,
-        lineHeight: 34,
+        size: "$headlineLg",
       },
     },
   } as const,
 });
 
-export type HeadlineProps = GetProps<typeof HeadlineFrame> & {
+export type HeadlineProps = Omit<GetProps<typeof HeadlineFrame>, "size"> & {
   children?: React.ReactNode;
   size?: "display" | "lg" | "md";
 };
