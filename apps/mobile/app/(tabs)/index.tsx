@@ -8,7 +8,7 @@ import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
 import { env } from "@/src/config/env";
 import { activityCategoryLabels } from "@/src/features/activities/activity-copy";
 import { Button } from "@/ui/button";
-import { FilterChip } from "@/ui/filter-chip";
+import { Chip } from "@/ui/chip";
 import { SearchBar } from "@/ui/search-bar";
 import { Surface } from "@/ui/surface";
 import { Tag } from "@/ui/tag";
@@ -62,9 +62,9 @@ export default function Home() {
               </Title>
               <XStack flexWrap="wrap" gap="$sm">
                 {ACTIVITY_CATEGORIES.slice(0, 6).map((category, index) => (
-                  <FilterChip key={category} selected={index === 0}>
+                  <Chip key={category} selected={index === 0}>
                     {activityCategoryLabels[category]}
-                  </FilterChip>
+                  </Chip>
                 ))}
               </XStack>
             </YStack>

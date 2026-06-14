@@ -1,21 +1,22 @@
 import { type GetProps, styled, Button as TamaguiButton } from "tamagui";
 
-const FilterChipFrame = styled(TamaguiButton, {
+const ChipFrame = styled(TamaguiButton, {
   bg: "$surface",
   borderColor: "$border",
   borderWidth: 1,
   color: "$surfaceForeground",
-  fontSize: 13,
+  fontSize: "$labelMd",
   fontWeight: "500",
   items: "center",
   justify: "center",
-  minH: 36,
-  name: "BeachFilterChip",
+  minH: "$touchMin",
+  name: "BeachChip",
   pressStyle: {
     opacity: 0.82,
   },
-  px: 12,
+  px: "$md",
   rounded: "$full",
+  self: "flex-start",
   unstyled: true,
   variants: {
     selected: {
@@ -29,19 +30,15 @@ const FilterChipFrame = styled(TamaguiButton, {
   width: "auto",
 });
 
-export type FilterChipProps = GetProps<typeof FilterChipFrame> & {
+export type ChipProps = GetProps<typeof ChipFrame> & {
   children: React.ReactNode;
   selected?: boolean;
 };
 
-export function FilterChip({
-  children,
-  selected = false,
-  ...props
-}: FilterChipProps) {
+export function Chip({ children, selected = false, ...props }: ChipProps) {
   return (
-    <FilterChipFrame selected={selected} {...props}>
+    <ChipFrame selected={selected} {...props}>
       {children}
-    </FilterChipFrame>
+    </ChipFrame>
   );
 }
