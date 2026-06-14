@@ -10,9 +10,8 @@ import { ScrollView, YStack } from "tamagui";
 import { useAuthSession } from "@/src/auth/session";
 import { useSignInFlow } from "@/src/auth/sign-in-flow";
 import { Button } from "@/ui/button";
-import { Field, FieldError } from "@/ui/field";
+import { Field, FieldError, FieldLabel } from "@/ui/field";
 import { Input } from "@/ui/input";
-import { Label } from "@/ui/label";
 import { Headline, Text } from "@/ui/typography";
 
 type AuthScreenProps = {
@@ -106,7 +105,7 @@ export function AuthScreen({ flow }: AuthScreenProps) {
             {hasSocialAuth ? <YStack bg="$border" height={1} /> : null}
 
             <Field>
-              <Label>Email</Label>
+              <FieldLabel>Email</FieldLabel>
               <Controller
                 control={control}
                 name="email"
@@ -114,7 +113,7 @@ export function AuthScreen({ flow }: AuthScreenProps) {
                   <Input
                     autoCapitalize="none"
                     autoComplete="email"
-                    inputState={fieldErrors.email ? "error" : "default"}
+                    invalid={Boolean(fieldErrors.email)}
                     keyboardType="email-address"
                     onBlur={onBlur}
                     onChangeText={onChange}
@@ -130,7 +129,7 @@ export function AuthScreen({ flow }: AuthScreenProps) {
             </Field>
 
             <Field>
-              <Label>Mot de passe</Label>
+              <FieldLabel>Mot de passe</FieldLabel>
               <Controller
                 control={control}
                 name="password"
@@ -139,7 +138,7 @@ export function AuthScreen({ flow }: AuthScreenProps) {
                     autoComplete={
                       isSignIn ? "current-password" : "new-password"
                     }
-                    inputState={fieldErrors.password ? "error" : "default"}
+                    invalid={Boolean(fieldErrors.password)}
                     onBlur={onBlur}
                     onChangeText={onChange}
                     placeholder="12 caractères minimum"

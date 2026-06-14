@@ -6,9 +6,8 @@ import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
 import { useAuthSession } from "@/src/auth/session";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
-import { Field } from "@/ui/field";
+import { Field, FieldLabel } from "@/ui/field";
 import { Input } from "@/ui/input";
-import { Label } from "@/ui/label";
 import { Headline, Text } from "@/ui/typography";
 
 const defaultParticipants = Math.min(8, ACTIVITY_MAX_PARTICIPANTS);
@@ -51,12 +50,12 @@ export default function CreateActivityScreen() {
               </YStack>
 
               <Field>
-                <Label>Titre</Label>
+                <FieldLabel>Titre</FieldLabel>
                 <Input placeholder="Beach-volley à la plage centrale" />
               </Field>
 
               <Field>
-                <Label>Participants max</Label>
+                <FieldLabel>Participants max</FieldLabel>
                 <Input
                   defaultValue={String(defaultParticipants)}
                   keyboardType="number-pad"
