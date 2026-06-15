@@ -2,6 +2,12 @@ import type { ActivityStatus } from "@mybeachapp/shared/activities/types";
 
 import { Tag, type TagProps, type TagVariant } from "@/ui/tag";
 
+import {
+  type ActivityStatusTone,
+  getActivityStatusLabel,
+  getActivityStatusTone,
+} from "./activity-status-tone";
+
 export type ActivityStatusTagProps = Omit<TagProps, "children" | "variant"> & {
   status: ActivityStatus;
 };
@@ -17,27 +23,17 @@ export function ActivityStatusTag({
   );
 }
 
-function getActivityStatusLabel(status: ActivityStatus) {
-  switch (status) {
-    case "cancelled":
-      return "Annulé";
-    case "finished":
-      return "Terminé";
-    case "full":
-      return "Complet";
-    case "open":
-      return "Ouvert";
-  }
+function getActivityStatusVariant(status: ActivityStatus): TagVariant {
+  return getTagVariantFromActivityTone(getActivityStatusTone(status));
 }
 
-function getActivityStatusVariant(status: ActivityStatus): TagVariant {
-  switch (status) {
-    case "cancelled":
+function getTagVariantFromActivityTone(tone: ActivityStatusTone): TagVariant {
+  switch (tone) {
+    case "destructive":
       return "destructive";
-    case "finished":
-    case "full":
+    case "muted":
       return "muted";
-    case "open":
+    case "success":
       return "success";
   }
 }
