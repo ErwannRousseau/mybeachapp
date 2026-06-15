@@ -1,14 +1,15 @@
+import type { ActivityStatus } from "@mybeachapp/shared/activities/types";
 import { XStack, YStack } from "tamagui";
 
+import { ActivityStatusTag } from "@/src/features/activities/components/activity-status-tag";
 import { Card } from "@/ui/card";
-import { StatusBadge, type StatusBadgeState } from "@/ui/status-badge";
 import { Text, Title } from "@/ui/typography";
 
 export type ActivityCardProps = {
   category: string;
   distance: string;
   participants: string;
-  status: StatusBadgeState;
+  status: ActivityStatus;
   time: string;
   title: string;
 };
@@ -36,7 +37,7 @@ export function ActivityCard({
         </Text>
         <XStack items="center" justify="space-between" mt="$xs">
           <Text size="sm">{participants}</Text>
-          <StatusBadge state={status} />
+          <ActivityStatusTag status={status} />
         </XStack>
       </YStack>
     </Card>

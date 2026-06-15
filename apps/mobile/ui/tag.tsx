@@ -1,33 +1,79 @@
 import { type GetProps, styled, Text as TamaguiText, XStack } from "tamagui";
 
+export type TagVariant =
+  | "default"
+  | "destructive"
+  | "muted"
+  | "success"
+  | "warning";
+
 const TagFrame = styled(XStack, {
   bg: "$surface",
   items: "center",
   justify: "center",
   name: "BeachTag",
-  px: 10,
-  py: 4,
+  px: "$xs",
+  py: "$xxs",
   rounded: "$full",
+  variants: {
+    variant: {
+      default: {
+        bg: "$surface",
+      },
+      destructive: {
+        bg: "$destructiveSoft",
+      },
+      muted: {
+        bg: "$muted",
+      },
+      success: {
+        bg: "$successSoft",
+      },
+      warning: {
+        bg: "$warningSoft",
+      },
+    },
+  } as const,
 });
 
 const TagText = styled(TamaguiText, {
   color: "$surfaceForeground",
   fontFamily: "$body",
-  fontSize: 13,
+  fontSize: "$labelMd",
   fontWeight: "500",
   includeFontPadding: false,
-  lineHeight: 18,
+  lineHeight: "$labelMd",
   name: "BeachTagText",
+  variants: {
+    variant: {
+      default: {
+        color: "$surfaceForeground",
+      },
+      destructive: {
+        color: "$destructiveForeground",
+      },
+      muted: {
+        color: "$foreground",
+      },
+      success: {
+        color: "$foreground",
+      },
+      warning: {
+        color: "$warningForeground",
+      },
+    },
+  } as const,
 });
 
 export type TagProps = GetProps<typeof TagFrame> & {
   children: React.ReactNode;
+  variant?: TagVariant;
 };
 
-export function Tag({ children, ...props }: TagProps) {
+export function Tag({ children, variant = "default", ...props }: TagProps) {
   return (
-    <TagFrame {...props}>
-      <TagText>{children}</TagText>
+    <TagFrame variant={variant} {...props}>
+      <TagText variant={variant}>{children}</TagText>
     </TagFrame>
   );
 }
