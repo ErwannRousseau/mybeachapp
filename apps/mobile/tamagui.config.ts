@@ -1,5 +1,5 @@
 import { defaultConfig } from "@tamagui/config/v5";
-import { createFont, createTamagui, createTokens } from "tamagui";
+import { createFont, createTamagui, createTokens } from "@tamagui/core";
 
 import { semanticLightColors, themes } from "./themes";
 
@@ -103,6 +103,6 @@ export default tamaguiConfig;
 
 export type TamaguiConfig = typeof tamaguiConfig;
 
-declare module "tamagui" {
+declare module "@tamagui/core" {
   interface TamaguiCustomConfig extends TamaguiConfig {}
 }

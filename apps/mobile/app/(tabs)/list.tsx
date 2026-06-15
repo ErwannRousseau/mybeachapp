@@ -1,4 +1,4 @@
-import { List } from "@tamagui/lucide-icons";
+import { List } from "@tamagui/lucide-icons-2";
 import { Link, Stack } from "expo-router";
 import { YStack } from "tamagui";
 

@@ -1,4 +1,5 @@
-import { Search } from "@tamagui/lucide-icons";
+import { Search } from "@tamagui/lucide-icons-2";
+import { useCallback } from "react";
 import { type GetProps, styled, Input as TamaguiInput, XStack } from "tamagui";
 
 const SearchBarFrame = styled(XStack, {
@@ -35,6 +36,14 @@ export function SearchBar({
   placeholder,
   ...props
 }: SearchBarProps) {
+  const handleSubmitEditing = useCallback(
+    (event: Parameters<NonNullable<SearchBarProps["onSubmitEditing"]>>[0]) => {
+      onSubmitEditing?.(event);
+      onSearch?.(event.nativeEvent.text);
+    },
+    [onSearch, onSubmitEditing],
+  );
+
   return (
     <SearchBarFrame>
       <Search color="$mutedForeground" size={18} />
@@ -42,10 +51,7 @@ export function SearchBar({
         placeholder={placeholder}
         returnKeyType="search"
         {...props}
-        onSubmitEditing={(event) => {
-          onSubmitEditing?.(event);
-          onSearch?.(event.nativeEvent.text);
-        }}
+        onSubmitEditing={handleSubmitEditing}
       />
     </SearchBarFrame>
   );

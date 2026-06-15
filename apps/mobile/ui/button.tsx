@@ -267,6 +267,15 @@ export function Button({
   ...props
 }: ButtonProps) {
   const resolvedFullWidth = fullWidth ?? size !== "icon";
+  const handlePressIn = React.useCallback(
+    (event: Parameters<NonNullable<ButtonProps["onPressIn"]>>[0]) => {
+      if (!disabled) {
+        triggerButtonHaptic(haptic);
+      }
+      onPressIn?.(event);
+    },
+    [disabled, haptic, onPressIn],
+  );
 
   return (
     <ButtonFrame
@@ -276,12 +285,7 @@ export function Button({
       disabled={disabled}
       fullWidth={resolvedFullWidth}
       glass={glass}
-      onPressIn={(event) => {
-        if (!disabled) {
-          triggerButtonHaptic(haptic);
-        }
-        onPressIn?.(event);
-      }}
+      onPressIn={handlePressIn}
     >
       {tint ? <ButtonTint /> : null}
       {glint ? <ButtonGlint /> : null}
@@ -293,12 +297,9 @@ export function Button({
 }
 
 export namespace Button {
-  export let Icon: typeof ButtonIcon;
-  export let Text: typeof ButtonText;
+  export const Icon = ButtonIcon;
+  export const Text = ButtonText;
 }
-
-Button.Icon = ButtonIcon;
-Button.Text = ButtonText;
 
 function renderButtonChildren(children: React.ReactNode) {
   return React.Children.map(children, (child) => {

@@ -2,8 +2,8 @@ import type { AuthFlow } from "@mybeachapp/shared/auth/types";
 import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { Link, router, Stack } from "expo-router";
-import { useEffect } from "react";
-import { Controller } from "react-hook-form";
+import { useCallback, useEffect } from "react";
+import { useController } from "react-hook-form";
 import { KeyboardAvoidingView } from "react-native";
 import { ScrollView, YStack } from "tamagui";
 
@@ -32,6 +32,28 @@ export function AuthScreen({ flow }: AuthScreenProps) {
     submitSocialAuth,
   } = useSignInFlow({ initialFlow: flow });
   const isSignIn = flow === "signIn";
+  const {
+    field: { onBlur: onEmailBlur, onChange: onEmailChange, value: emailValue },
+  } = useController({ control, name: "email" });
+  const {
+    field: {
+      onBlur: onPasswordBlur,
+      onChange: onPasswordChange,
+      value: passwordValue,
+    },
+  } = useController({ control, name: "password" });
+
+  const submitAppleAuth = useCallback(() => {
+    void submitSocialAuth("apple");
+  }, [submitSocialAuth]);
+
+  const submitGoogleAuth = useCallback(() => {
+    void submitSocialAuth("google");
+  }, [submitSocialAuth]);
+
+  const submitPassword = useCallback(() => {
+    void submitPasswordAuth();
+  }, [submitPasswordAuth]);
 
   useEffect(() => {
     if (!(session || isSessionPending)) {
@@ -85,7 +107,7 @@ export function AuthScreen({ flow }: AuthScreenProps) {
                               .SIGN_UP
                       }
                       cornerRadius={27}
-                      onPress={() => void submitSocialAuth("apple")}
+                      onPress={submitAppleAuth}
                       style={{ height: 54, width: "100%" }}
                     />
                   </YStack>
@@ -94,7 +116,7 @@ export function AuthScreen({ flow }: AuthScreenProps) {
                   <GoogleSigninButton
                     color={GoogleSigninButton.Color.Light}
                     disabled={isAuthenticating}
-                    onPress={() => void submitSocialAuth("google")}
+                    onPress={submitGoogleAuth}
                     size={GoogleSigninButton.Size.Wide}
                     style={{ height: 54, width: "100%" }}
                   />
@@ -106,22 +128,16 @@ export function AuthScreen({ flow }: AuthScreenProps) {
 
             <Field>
               <FieldLabel>Email</FieldLabel>
-              <Controller
-                control={control}
-                name="email"
-                render={({ field: { onBlur, onChange, value } }) => (
-                  <Input
-                    autoCapitalize="none"
-                    autoComplete="email"
-                    invalid={Boolean(fieldErrors.email)}
-                    keyboardType="email-address"
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    placeholder="toi@example.com"
-                    textContentType="emailAddress"
-                    value={value}
-                  />
-                )}
+              <Input
+                autoCapitalize="none"
+                autoComplete="email"
+                invalid={Boolean(fieldErrors.email)}
+                keyboardType="email-address"
+                onBlur={onEmailBlur}
+                onChangeText={onEmailChange}
+                placeholder="toi@example.com"
+                textContentType="emailAddress"
+                value={emailValue}
               />
               {fieldErrors.email ? (
                 <FieldError>{fieldErrors.email}</FieldError>
@@ -130,23 +146,15 @@ export function AuthScreen({ flow }: AuthScreenProps) {
 
             <Field>
               <FieldLabel>Mot de passe</FieldLabel>
-              <Controller
-                control={control}
-                name="password"
-                render={({ field: { onBlur, onChange, value } }) => (
-                  <Input
-                    autoComplete={
-                      isSignIn ? "current-password" : "new-password"
-                    }
-                    invalid={Boolean(fieldErrors.password)}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    placeholder="12 caractères minimum"
-                    secureTextEntry
-                    textContentType={isSignIn ? "password" : "newPassword"}
-                    value={value}
-                  />
-                )}
+              <Input
+                autoComplete={isSignIn ? "current-password" : "new-password"}
+                invalid={Boolean(fieldErrors.password)}
+                onBlur={onPasswordBlur}
+                onChangeText={onPasswordChange}
+                placeholder="12 caractères minimum"
+                secureTextEntry
+                textContentType={isSignIn ? "password" : "newPassword"}
+                value={passwordValue}
               />
               {fieldErrors.password ? (
                 <FieldError>{fieldErrors.password}</FieldError>
@@ -159,10 +167,7 @@ export function AuthScreen({ flow }: AuthScreenProps) {
               </Text>
             ) : null}
 
-            <Button
-              disabled={isAuthenticating}
-              onPress={() => void submitPasswordAuth()}
-            >
+            <Button disabled={isAuthenticating} onPress={submitPassword}>
               {isSignIn ? "Se connecter" : "Créer un compte"}
             </Button>
             <Link asChild href={isSignIn ? "/sign-up" : "/sign-in"}>

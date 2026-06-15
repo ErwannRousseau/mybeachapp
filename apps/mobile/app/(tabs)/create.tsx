@@ -4,7 +4,7 @@ import {
 } from "@mybeachapp/shared/activities/constants";
 import type { ActivityCategory } from "@mybeachapp/shared/activities/types";
 import { Link, Stack } from "expo-router";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { YStack } from "tamagui";
 import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
 import { useAuthSession } from "@/src/auth/session";
@@ -32,6 +32,14 @@ export default function CreateActivityScreen() {
   const [categorySheetOpen, setCategorySheetOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] =
     useState<ActivityCategory>(defaultCategory);
+
+  const openCategorySheet = useCallback(() => {
+    setCategorySheetOpen(true);
+  }, []);
+
+  const closeCategorySheet = useCallback(() => {
+    setCategorySheetOpen(false);
+  }, []);
 
   return (
     <>
@@ -76,7 +84,7 @@ export default function CreateActivityScreen() {
                 <FieldLabel>Catégorie</FieldLabel>
                 <Button
                   haptic="selection"
-                  onPress={() => setCategorySheetOpen(true)}
+                  onPress={openCategorySheet}
                   variant="secondary"
                 >
                   {activityCategoryLabels[selectedCategory]}
@@ -107,20 +115,19 @@ export default function CreateActivityScreen() {
                 <SheetBody>
                   <YStack gap="$sm">
                     {ACTIVITY_CATEGORIES.map((category) => (
-                      <Chip
+                      <ActivityCategoryChip
+                        category={category}
                         key={category}
-                        onPress={() => setSelectedCategory(category)}
+                        onSelect={setSelectedCategory}
                         selected={selectedCategory === category}
-                      >
-                        {activityCategoryLabels[category]}
-                      </Chip>
+                      />
                     ))}
                   </YStack>
                 </SheetBody>
                 <SheetActions>
                   <Button
                     haptic="selection"
-                    onPress={() => setCategorySheetOpen(false)}
+                    onPress={closeCategorySheet}
                     variant="secondary"
                   >
                     Valider
@@ -132,5 +139,27 @@ export default function CreateActivityScreen() {
         </YStack>
       </TabScreenScrollView>
     </>
+  );
+}
+
+type ActivityCategoryChipProps = {
+  category: ActivityCategory;
+  onSelect: (category: ActivityCategory) => void;
+  selected: boolean;
+};
+
+function ActivityCategoryChip({
+  category,
+  onSelect,
+  selected,
+}: ActivityCategoryChipProps) {
+  const handlePress = useCallback(() => {
+    onSelect(category);
+  }, [category, onSelect]);
+
+  return (
+    <Chip onPress={handlePress} selected={selected}>
+      {activityCategoryLabels[category]}
+    </Chip>
   );
 }

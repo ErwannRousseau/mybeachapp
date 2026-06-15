@@ -1,4 +1,5 @@
 import { Link, Stack } from "expo-router";
+import { useCallback } from "react";
 import { XStack, YStack } from "tamagui";
 
 import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
@@ -10,6 +11,9 @@ import { Text, Title } from "@/ui/typography";
 
 export default function ProfileScreen() {
   const { data: session, isPending } = useAuthSession();
+  const handleSignOut = useCallback(() => {
+    void signOutAndRedirect();
+  }, []);
 
   return (
     <>
@@ -38,10 +42,7 @@ export default function ProfileScreen() {
               </YStack>
             </XStack>
             {session ? (
-              <Button
-                onPress={() => void signOutAndRedirect()}
-                variant="secondary"
-              >
+              <Button onPress={handleSignOut} variant="secondary">
                 Se déconnecter
               </Button>
             ) : (
