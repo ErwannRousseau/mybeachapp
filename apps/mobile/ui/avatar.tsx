@@ -4,36 +4,65 @@ import { Text } from "./typography";
 
 const AvatarFrame = styled(XStack, {
   bg: "$secondary",
-  height: 44,
+  height: "$touchMin",
   items: "center",
   justify: "center",
   name: "BeachAvatar",
   overflow: "hidden",
   rounded: "$full",
-  width: 44,
+  width: "$touchMin",
 });
 
 export type AvatarProps = GetProps<typeof AvatarFrame> & {
-  alt?: string;
-  fallback?: string;
-  src?: string;
+  children: React.ReactNode;
 };
 
-export function Avatar({ alt, fallback, src, ...props }: AvatarProps) {
+export function Avatar({ children, ...props }: AvatarProps) {
+  return <AvatarFrame {...props}>{children}</AvatarFrame>;
+}
+
+const AvatarImageFrame = styled(Image, {
+  height: "100%",
+  name: "BeachAvatarImage",
+  width: "100%",
+});
+
+export type AvatarImageProps = Omit<
+  GetProps<typeof AvatarImageFrame>,
+  "source"
+> & {
+  alt?: string;
+  src: string;
+};
+
+export function AvatarImage({ alt, src, ...props }: AvatarImageProps) {
   return (
-    <AvatarFrame {...props}>
-      {src ? (
-        <Image
-          accessibilityLabel={alt}
-          height="100%"
-          source={{ uri: src }}
-          width="100%"
-        />
-      ) : (
-        <Text size="sm" weight="semibold">
-          {fallback}
-        </Text>
-      )}
-    </AvatarFrame>
+    <AvatarImageFrame
+      accessibilityLabel={alt}
+      source={{ uri: src }}
+      {...props}
+    />
+  );
+}
+
+const AvatarFallbackFrame = styled(XStack, {
+  height: "100%",
+  items: "center",
+  justify: "center",
+  name: "BeachAvatarFallback",
+  width: "100%",
+});
+
+export type AvatarFallbackProps = GetProps<typeof AvatarFallbackFrame> & {
+  children: React.ReactNode;
+};
+
+export function AvatarFallback({ children, ...props }: AvatarFallbackProps) {
+  return (
+    <AvatarFallbackFrame {...props}>
+      <Text size="sm" weight="semibold">
+        {children}
+      </Text>
+    </AvatarFallbackFrame>
   );
 }

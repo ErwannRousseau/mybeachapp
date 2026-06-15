@@ -1,10 +1,17 @@
-import { ACTIVITY_CATEGORIES } from "@mybeachapp/shared/activities/constants";
-import { Stack } from "expo-router";
+import { List } from "@tamagui/lucide-icons";
+import { Link, Stack } from "expo-router";
 import { YStack } from "tamagui";
 
 import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
-import { activityCategoryLabels } from "@/src/features/activities/activity-copy";
-import { Card } from "@/ui/card";
+import { Button } from "@/ui/button";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/ui/empty";
 import { Text, Title } from "@/ui/typography";
 
 export default function ActivityListScreen() {
@@ -21,18 +28,23 @@ export default function ActivityListScreen() {
             </Text>
           </YStack>
 
-          <YStack gap="$sm">
-            {ACTIVITY_CATEGORIES.slice(0, 4).map((category) => (
-              <Card gap="$xs" key={category}>
-                <Title selectable size="sm">
-                  {activityCategoryLabels[category]}
-                </Title>
-                <Text selectable variant="muted">
-                  Aucune activité disponible pour le moment.
-                </Text>
-              </Card>
-            ))}
-          </YStack>
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <List color="$accent" size={26} />
+              </EmptyMedia>
+              <EmptyTitle>Aucune activité pour le moment</EmptyTitle>
+              <EmptyDescription>
+                Les prochaines activités proches apparaîtront ici dès que Convex
+                sera branché.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Link asChild href="/create">
+                <Button>Créer une activité</Button>
+              </Link>
+            </EmptyContent>
+          </Empty>
         </YStack>
       </TabScreenScrollView>
     </>

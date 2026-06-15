@@ -1,8 +1,9 @@
 import { Link, Stack } from "expo-router";
-import { YStack } from "tamagui";
+import { XStack, YStack } from "tamagui";
 
 import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
 import { signOutAndRedirect, useAuthSession } from "@/src/auth/session";
+import { Avatar, AvatarFallback } from "@/ui/avatar";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
 import { Text, Title } from "@/ui/typography";
@@ -16,16 +17,26 @@ export default function ProfileScreen() {
       <TabScreenScrollView>
         <YStack gap="$lg" p="$md" pb="$md">
           <Card gap="$sm">
-            <Title selectable>
-              {session ? "Profil connecté" : "Profil invité"}
-            </Title>
-            <Text selectable variant="muted">
-              {isPending
-                ? "Vérification de la session en cours."
-                : session
-                  ? (session.user.email ?? "Ta session Better Auth est active.")
-                  : "Connecte-toi pour créer et rejoindre des activités."}
-            </Text>
+            <XStack gap="$sm" items="center">
+              <Avatar>
+                <AvatarFallback>
+                  {getProfileFallback(session?.user.email)}
+                </AvatarFallback>
+              </Avatar>
+              <YStack flex={1} gap="$xxs" minW={0}>
+                <Title selectable>
+                  {session ? "Profil connecté" : "Profil invité"}
+                </Title>
+                <Text selectable variant="muted">
+                  {isPending
+                    ? "Vérification de la session en cours."
+                    : session
+                      ? (session.user.email ??
+                        "Ta session Better Auth est active.")
+                      : "Connecte-toi pour créer et rejoindre des activités."}
+                </Text>
+              </YStack>
+            </XStack>
             {session ? (
               <Button
                 onPress={() => void signOutAndRedirect()}
@@ -48,4 +59,10 @@ export default function ProfileScreen() {
       </TabScreenScrollView>
     </>
   );
+}
+
+function getProfileFallback(email?: null | string) {
+  const localPart = email?.split("@")[0]?.replace(/[^a-z0-9]/gi, "") ?? "";
+
+  return localPart.length >= 2 ? localPart.slice(0, 2).toUpperCase() : "VI";
 }
