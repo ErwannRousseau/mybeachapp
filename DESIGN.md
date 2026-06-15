@@ -174,14 +174,14 @@ components:
     rounded: "{rounded.full}"
     height: 44px
     width: 44px
-  filter-chip:
+  chip:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.surface-foreground}"
     typography: "{typography.label-md}"
     rounded: "{rounded.full}"
     height: 36px
     padding: 14px
-  filter-chip-active:
+  chip-active:
     backgroundColor: "{colors.secondary}"
     textColor: "{colors.secondary-foreground}"
     typography: "{typography.label-md}"
@@ -261,19 +261,19 @@ components:
     backgroundColor: "{colors.ring}"
     rounded: "{rounded.lg}"
     height: 2px
-  status-badge-open:
+  activity-status-tag-open:
     backgroundColor: "{colors.success-soft}"
     textColor: "{colors.foreground}"
     typography: "{typography.label-md}"
     rounded: "{rounded.full}"
     padding: 8px
-  status-badge-warning:
+  activity-status-tag-warning:
     backgroundColor: "{colors.warning-soft}"
     textColor: "{colors.warning-foreground}"
     typography: "{typography.label-md}"
     rounded: "{rounded.full}"
     padding: 8px
-  status-badge-destructive:
+  activity-status-tag-destructive:
     backgroundColor: "{colors.destructive-soft}"
     textColor: "{colors.destructive-foreground}"
     typography: "{typography.label-md}"
@@ -560,7 +560,7 @@ Aujourd'hui · 14:00 · 450 m
 
 **Search bar:** Use a floating 52px high search bar with 24px radius. Suggested placeholders: "Ville, plage ou adresse", "Rechercher une plage", and "Pornichet, La Baule...".
 
-**Filter chips:** Use short labels such as "Aujourd'hui", "Volley", "Paddle", "Yoga", "Pétanque", and "Proche". Active chips use Secondary Sunlit Foam background with `secondary-foreground` text. Inactive chips stay quiet.
+**Chips:** Use short labels such as "Aujourd'hui", "Volley", "Paddle", "Yoga", "Pétanque", and "Proche". Active chips use Secondary Sunlit Foam background with `secondary-foreground` text. Inactive chips stay quiet.
 
 **Tags and activity status:** `Tag` is the generic pill primitive for short metadata. Activity status display is feature-owned because it maps the **Activity Status** domain concept to user-facing French labels. Implement it as an `ActivityStatusTag` under the activities feature, composed from `Tag`, with labels such as "Ouvert", "Complet", "Annulé", and "Terminé".
 
