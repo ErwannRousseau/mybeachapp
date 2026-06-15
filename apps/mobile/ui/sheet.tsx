@@ -1,37 +1,110 @@
-import { type GetProps, styled, Sheet as TamaguiSheet } from "tamagui";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { type GetProps, styled, Sheet as TamaguiSheet, YStack } from "tamagui";
 
-export type SheetProps = React.ComponentProps<typeof TamaguiSheet>;
+import { Text, type TextProps, Title, type TitleProps } from "./typography";
 
-export function Sheet({ children, ...props }: SheetProps) {
-  return (
-    <TamaguiSheet dismissOnSnapToBottom modal {...props}>
-      {children}
-    </TamaguiSheet>
-  );
-}
-
-const SheetFrameBase = styled(TamaguiSheet.Frame, {
+const SheetFrame = styled(TamaguiSheet.Frame, {
   bg: "$surface",
   borderTopLeftRadius: "$xxl",
   borderTopRightRadius: "$xxl",
   gap: "$md",
+  name: "BeachSheetFrame",
   p: "$lg",
 });
 
-export type SheetFrameProps = GetProps<typeof SheetFrameBase>;
+const SheetBackdrop = styled(TamaguiSheet.Overlay, {
+  bg: "$foreground",
+  enterStyle: {
+    opacity: 0,
+  },
+  exitStyle: {
+    opacity: 0,
+  },
+  name: "BeachSheetBackdrop",
+  opacity: 0.18,
+});
 
-export function SheetFrame({ children, ...props }: SheetFrameProps) {
-  return <SheetFrameBase {...props}>{children}</SheetFrameBase>;
+const SheetHandle = styled(TamaguiSheet.Handle, {
+  bg: "$border",
+  name: "BeachSheetHandle",
+});
+
+export type SheetProps = React.ComponentProps<typeof TamaguiSheet> & {
+  children: React.ReactNode;
+};
+
+export function Sheet({ children, ...props }: SheetProps) {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <TamaguiSheet dismissOnSnapToBottom modal snapPointsMode="fit" {...props}>
+      <SheetBackdrop />
+      <SheetFrame pb={insets.bottom + 20}>
+        <SheetHandle />
+        {children}
+      </SheetFrame>
+    </TamaguiSheet>
+  );
 }
 
-export type SheetHeaderProps = GetProps<typeof TamaguiSheet.Handle>;
+const SheetHeaderFrame = styled(YStack, {
+  gap: "$md",
+  name: "BeachSheetHeader",
+});
 
-export function SheetHandle(props: SheetHeaderProps) {
-  return <TamaguiSheet.Handle {...props} />;
+export type SheetHeaderProps = GetProps<typeof SheetHeaderFrame> & {
+  children: React.ReactNode;
+};
+
+export function SheetHeader({ children, ...props }: SheetHeaderProps) {
+  return <SheetHeaderFrame {...props}>{children}</SheetHeaderFrame>;
 }
 
-export function SheetOverlay(
-  props: React.ComponentProps<typeof TamaguiSheet.Overlay>,
-) {
-  return <TamaguiSheet.Overlay {...props} />;
+const SheetBodyFrame = styled(YStack, {
+  gap: "$md",
+  name: "BeachSheetBody",
+});
+
+export type SheetBodyProps = GetProps<typeof SheetBodyFrame> & {
+  children: React.ReactNode;
+};
+
+export function SheetBody({ children, ...props }: SheetBodyProps) {
+  return <SheetBodyFrame {...props}>{children}</SheetBodyFrame>;
+}
+
+const SheetActionsFrame = styled(YStack, {
+  gap: "$sm",
+  name: "BeachSheetActions",
+});
+
+export type SheetActionsProps = GetProps<typeof SheetActionsFrame> & {
+  children: React.ReactNode;
+};
+
+export function SheetActions({ children, ...props }: SheetActionsProps) {
+  return <SheetActionsFrame {...props}>{children}</SheetActionsFrame>;
+}
+
+export type SheetTitleProps = TitleProps;
+
+export function SheetTitle({ children, ...props }: SheetTitleProps) {
+  return (
+    <Title selectable size="sm" {...props}>
+      {children}
+    </Title>
+  );
+}
+
+export type SheetDescriptionProps = TextProps;
+
+export function SheetDescription({
+  children,
+  ...props
+}: SheetDescriptionProps) {
+  return (
+    <Text selectable variant="muted" {...props}>
+      {children}
+    </Text>
+  );
 }
