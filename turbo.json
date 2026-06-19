@@ -18,8 +18,12 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
+    "clear": {
+      "cache": false
+    },
     "dev": {
       "cache": false,
+      "interactive": true,
       "persistent": true
     },
     "test": {
