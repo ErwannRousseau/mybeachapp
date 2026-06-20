@@ -7,7 +7,7 @@ import {
 } from "@tamagui/lucide-icons-2";
 import type { Tabs } from "expo-router";
 import { useCallback, useEffect } from "react";
-import { Dimensions, Pressable, StyleSheet } from "react-native";
+import { Dimensions, Platform, Pressable, StyleSheet } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -16,18 +16,22 @@ import Animated, {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
-import { GlassView } from "@/ui/effects/GlassView";
+import { GlassView } from "@/ui/effects/glass-view";
 
-import { getTabBarBottomOffset, getTabBarMetrics } from "./tab-bar-metrics";
+import {
+  getTabBarBottomOffset,
+  getTabBarMetrics,
+  TAB_BAR_BORDER_WIDTH,
+  TAB_BAR_CONTENT_HEIGHT,
+  TAB_BAR_HEIGHT,
+  TAB_BAR_INSET,
+} from "./tab-bar-metrics";
 
 export type TabBarProps = Parameters<
   NonNullable<React.ComponentProps<typeof Tabs>["tabBar"]>
 >[0];
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const TAB_BAR_HEIGHT = 50;
-const INDICATOR_INSET = 5;
-
 const tabIcons = {
   create: PlusCircle,
   index: MapIcon,
@@ -37,7 +41,10 @@ const tabIcons = {
 
 export function TabBar({ descriptors, navigation, state }: TabBarProps) {
   const insets = useSafeAreaInsets();
-  const bottomInset = getTabBarBottomOffset(insets.bottom);
+  const bottomInset = getTabBarBottomOffset(
+    insets.bottom,
+    Platform.OS === "android" ? "android" : "ios",
+  );
   const metrics = getTabBarMetrics(SCREEN_WIDTH, state.routes.length);
   const activeTabIndex = useSharedValue(state.index);
 
@@ -81,6 +88,7 @@ export function TabBar({ descriptors, navigation, state }: TabBarProps) {
         ]}
       >
         <GlassView
+          borderWidth={TAB_BAR_BORDER_WIDTH}
           flex={1}
           height="100%"
           intensity={90}
@@ -92,8 +100,8 @@ export function TabBar({ descriptors, navigation, state }: TabBarProps) {
           width="100%"
         >
           <XStack
-            height={TAB_BAR_HEIGHT}
-            p={INDICATOR_INSET}
+            height={TAB_BAR_CONTENT_HEIGHT}
+            p={TAB_BAR_INSET}
             position="relative"
             width={metrics.containerWidth}
           >
@@ -176,9 +184,9 @@ const styles = StyleSheet.create({
   indicator: {
     backgroundColor: "rgba(126, 126, 126, 0.2)",
     borderRadius: 100,
-    bottom: INDICATOR_INSET,
+    height: TAB_BAR_CONTENT_HEIGHT - TAB_BAR_INSET * 2,
     left: 0,
     position: "absolute",
-    top: INDICATOR_INSET,
+    top: TAB_BAR_INSET,
   },
 });

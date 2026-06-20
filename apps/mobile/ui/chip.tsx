@@ -7,14 +7,15 @@ const ChipFrame = styled(TamaguiButton, {
   color: "$surfaceForeground",
   fontSize: "$labelMd",
   fontWeight: "500",
+  height: "$chip",
   items: "center",
   justify: "center",
-  minH: "$touchMin",
+  minH: "$chip",
   name: "BeachChip",
   pressStyle: {
     opacity: 0.82,
   },
-  px: "$md",
+  px: "$chip",
   rounded: "$full",
   self: "flex-start",
   unstyled: true,
@@ -35,9 +36,14 @@ export type ChipProps = GetProps<typeof ChipFrame> & {
   selected?: boolean;
 };
 
-export function Chip({ children, selected = false, ...props }: ChipProps) {
+export function Chip({
+  children,
+  hitSlop = 4,
+  selected = false,
+  ...props
+}: ChipProps) {
   return (
-    <ChipFrame selected={selected} {...props}>
+    <ChipFrame hitSlop={hitSlop} selected={selected} {...props}>
       {children}
     </ChipFrame>
   );

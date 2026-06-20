@@ -26,6 +26,11 @@ vi.mock("expo-haptics", () => ({
   selectionAsync: vi.fn(),
 }));
 
+vi.mock("expo-blur", () => ({
+  BlurTargetView: "BlurTargetView",
+  BlurView: "BlurView",
+}));
+
 Object.defineProperty(window, "matchMedia", {
   configurable: true,
   value: (query: string) => ({

@@ -209,6 +209,7 @@ Tokens are design system values that can be referenced using the `$` prefix.
 - `18`: 158
 - `19`: 172
 - `20`: 186
+- `chip`: 14
 - `lg`: 20
 - `md`: 16
 - `none`: 0
@@ -250,6 +251,7 @@ Tokens are design system values that can be referenced using the `$` prefix.
 - `19`: 264
 - `20`: 284
 - `button`: 54
+- `chip`: 36
 - `input`: 52
 - `none`: 0
 - `touchMin`: 44

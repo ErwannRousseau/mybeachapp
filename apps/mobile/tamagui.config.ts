@@ -70,6 +70,7 @@ const tokens = createTokens({
   size: {
     ...defaultConfig.tokens.size,
     button: 54,
+    chip: 36,
     input: 52,
     none: 0,
     touchMin: 44,
@@ -77,6 +78,7 @@ const tokens = createTokens({
   },
   space: {
     ...defaultConfig.tokens.space,
+    chip: 14,
     lg: 20,
     md: 16,
     none: 0,

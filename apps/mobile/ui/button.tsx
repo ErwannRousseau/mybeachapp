@@ -9,8 +9,8 @@ import {
   XStack,
 } from "tamagui";
 
-import { GlassView } from "./effects/GlassView";
-import { Glint } from "./effects/Glint";
+import { GlassView } from "./effects/glass-view";
+import { Glint } from "./effects/glint";
 import { shouldShowButtonGlint } from "./effects/glint-policy";
 import { type ButtonHaptic, triggerButtonHaptic } from "./haptics/haptics";
 

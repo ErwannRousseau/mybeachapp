@@ -2,17 +2,14 @@ import { BlurView as ExpoBlurView } from "expo-blur";
 import { Platform, StyleSheet, useColorScheme } from "react-native";
 import { type GetProps, styled, View, YStack } from "tamagui";
 
+import { useBlurTarget } from "./blur-target-context";
+
 const GlassViewFrame = styled(YStack, {
   borderColor: "$border",
   borderWidth: 1,
-  name: "BeachNativeGlassView",
+  name: "BeachGlassView",
   overflow: "hidden",
   position: "relative",
-});
-
-const AndroidGlassFallback = styled(GlassViewFrame, {
-  bg: "$color4",
-  name: "BeachAndroidGlassFallback",
 });
 
 const GlassOverlay = styled(View, {
@@ -53,27 +50,23 @@ export function GlassView({
   tintColor,
   ...props
 }: GlassViewProps) {
+  const blurTarget = useBlurTarget();
   const colorScheme = useColorScheme();
   const resolvedTint = tint ?? (colorScheme === "dark" ? "dark" : "light");
   const overlayStyle = {
     backgroundColor: tintColor ?? backgroundColor,
   };
 
-  if (Platform.OS === "android") {
-    return (
-      <AndroidGlassFallback {...props}>
-        <GlassOverlay
-          pointerEvents={isInteractive ? "none" : "auto"}
-          style={overlayStyle}
-        />
-        <GlassContent>{children}</GlassContent>
-      </AndroidGlassFallback>
-    );
-  }
-
   return (
     <GlassViewFrame {...props}>
       <ExpoBlurView
+        blurMethod={
+          Platform.OS === "android" && blurTarget
+            ? "dimezisBlurViewSdk31Plus"
+            : "none"
+        }
+        blurReductionFactor={2}
+        blurTarget={blurTarget}
         intensity={intensity}
         style={StyleSheet.absoluteFill}
         tint={resolvedTint}

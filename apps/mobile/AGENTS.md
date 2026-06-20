@@ -35,6 +35,7 @@ Applies to `apps/mobile`.
 - UI components must use `export function` declarations only.
 - Do not use `const` component declarations, default exports, or barrel files for UI components.
 - Do not import React-only types such as `ReactNode`, `PropsWithChildren`, `Ref`, `ReactElement`, `FC`, or `ComponentProps`. Use the `React` namespace directly in annotations, for example `React.ReactNode` or `React.Ref<T>`.
+- Name mobile UI/component files in kebab-case. Component symbols stay PascalCase, but filenames must not use CamelCase.
 - Design-system primitives must live in `mobile/ui/`.
 - Name `mobile/ui` files after their public primitive. Do not keep legacy compatibility files when renaming primitives: migrate `filter-chip.tsx` to `chip.tsx`, `empty-state.tsx` to `empty.tsx`, remove public `status-badge.tsx` in favor of feature `ActivityStatusTag`, remove `label.tsx` in favor of `FieldLabel`, and move `pin.tsx` to the map or activities feature when it represents a GPS Pin or activity marker.
 - Keep feature interfaces out of `mobile/ui/`. Components such as `ActivityCard`, `ActivityStatusTag`, `AuthCard`, `OnboardingCard`, and `ProfileCard` belong under their feature or route area and should compose `mobile/ui` primitives.
