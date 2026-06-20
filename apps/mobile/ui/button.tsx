@@ -1,16 +1,21 @@
-import * as Haptics from "expo-haptics";
 import React from "react";
+import { Platform } from "react-native";
 import {
   createStyledContext,
   type GetProps,
   SizableText,
   styled,
   Button as TamaguiButton,
-  View,
   XStack,
 } from "tamagui";
 
-export type ButtonHaptic = boolean | "heavy" | "light" | "medium" | "selection";
+import { GlassView } from "./effects/GlassView";
+import { Glint } from "./effects/Glint";
+import { shouldShowButtonGlint } from "./effects/glint-policy";
+import { type ButtonHaptic, triggerButtonHaptic } from "./haptics/haptics";
+
+export type { ButtonHaptic } from "./haptics/haptics";
+
 export type ButtonSize = "icon" | "md" | "sm";
 export type ButtonVariant =
   | "destructive"
@@ -104,9 +109,7 @@ const ButtonFrame = styled(TamaguiButton, {
     },
     glass: {
       true: {
-        bg: "$floatingSurface",
-        borderColor: "$border",
-        borderWidth: 1,
+        bg: "$transparent",
       },
     },
   } as const,
@@ -167,30 +170,6 @@ const ButtonIconFrame = styled(XStack, {
   name: "BeachButtonIcon",
 });
 
-const ButtonTint = styled(View, {
-  b: 0,
-  bg: "$surface",
-  l: 0,
-  opacity: 0.16,
-  pointerEvents: "none",
-  position: "absolute",
-  r: 0,
-  t: 0,
-});
-
-const ButtonGlint = styled(View, {
-  b: 0,
-  borderColor: "$transparent",
-  borderTopColor: "$surface",
-  borderTopWidth: 1,
-  l: 0,
-  opacity: 0.7,
-  pointerEvents: "none",
-  position: "absolute",
-  r: 0,
-  t: 0,
-});
-
 export type ButtonTextProps = GetProps<typeof ButtonTextFrame> & {
   children?: React.ReactNode;
 };
@@ -240,33 +219,62 @@ export type ButtonProps = Omit<
   | "variant"
 > & {
   children?: React.ReactNode;
+  delayPress?: boolean;
+  disableGlint?: boolean;
   fullWidth?: boolean;
   glass?: boolean;
+  glassTint?: string;
   glint?: boolean;
   haptic?: ButtonHaptic;
   icon?: ButtonIconComponent;
   iconAfter?: ButtonIconComponent;
   size?: ButtonSize;
-  tint?: boolean;
   variant?: ButtonVariant;
 };
 
 export function Button({
   children,
+  delayPress = false,
   disabled,
+  disableGlint = false,
   fullWidth,
   glass = false,
-  glint = false,
+  glassTint,
+  glint = true,
   haptic = false,
   icon,
   iconAfter,
+  onPress,
   onPressIn,
   size = "md",
-  tint = false,
   variant = "primary",
   ...props
 }: ButtonProps) {
   const resolvedFullWidth = fullWidth ?? size !== "icon";
+  const showGlint = shouldShowButtonGlint({
+    disabled: Boolean(disabled),
+    disableGlint,
+    glass,
+    glint,
+    platform: Platform.OS,
+    size,
+    variant,
+  });
+  const handlePress = React.useCallback(
+    (event: Parameters<NonNullable<ButtonProps["onPress"]>>[0]) => {
+      if (!onPress) {
+        return;
+      }
+
+      if (delayPress) {
+        setTimeout(() => onPress(event), 20);
+        return;
+      }
+
+      onPress(event);
+    },
+    [delayPress, onPress],
+  );
   const handlePressIn = React.useCallback(
     (event: Parameters<NonNullable<ButtonProps["onPressIn"]>>[0]) => {
       if (!disabled) {
@@ -277,7 +285,7 @@ export function Button({
     [disabled, haptic, onPressIn],
   );
 
-  return (
+  const buttonElement = (
     <ButtonFrame
       {...props}
       buttonSize={size}
@@ -285,14 +293,28 @@ export function Button({
       disabled={disabled}
       fullWidth={resolvedFullWidth}
       glass={glass}
+      onPress={onPress ? handlePress : undefined}
       onPressIn={handlePressIn}
     >
-      {tint ? <ButtonTint /> : null}
-      {glint ? <ButtonGlint /> : null}
+      {showGlint ? <Glint bottomShadow /> : null}
       {icon ? <ButtonIcon icon={icon} /> : null}
       {renderButtonChildren(children)}
       {iconAfter ? <ButtonIcon icon={iconAfter} /> : null}
     </ButtonFrame>
+  );
+
+  if (!glass) {
+    return buttonElement;
+  }
+
+  return (
+    <GlassView
+      rounded="$full"
+      self={resolvedFullWidth ? "stretch" : "flex-start"}
+      tintColor={glassTint}
+    >
+      {buttonElement}
+    </GlassView>
   );
 }
 
@@ -333,24 +355,4 @@ function getButtonContentColor(variant: ButtonVariant, glass?: boolean) {
     case "primary":
       return "$primaryForeground";
   }
-}
-
-function triggerButtonHaptic(haptic: ButtonHaptic) {
-  if (!haptic) {
-    return;
-  }
-
-  if (haptic === "selection") {
-    void Haptics.selectionAsync();
-    return;
-  }
-
-  const style =
-    haptic === "heavy"
-      ? Haptics.ImpactFeedbackStyle.Heavy
-      : haptic === "medium"
-        ? Haptics.ImpactFeedbackStyle.Medium
-        : Haptics.ImpactFeedbackStyle.Light;
-
-  void Haptics.impactAsync(style);
 }
