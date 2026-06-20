@@ -88,6 +88,9 @@ function TabBarItem({
   const options = descriptors[route.key]?.options;
   const title = typeof options?.title === "string" ? options.title : route.name;
   const Icon = tabIcons[route.name as keyof typeof tabIcons] ?? Circle;
+  const isCreateRoute = route.name === "create";
+  const selectedBackground = isCreateRoute ? "$primary" : "$secondary";
+  const selectedContentColor = isCreateRoute ? "$primaryForeground" : "$accent";
 
   const handlePress = useCallback(() => {
     const event = navigation.emit({
@@ -109,15 +112,22 @@ function TabBarItem({
       style={{ flex: 1 }}
     >
       <YStack
-        bg={focused ? "$secondary" : "$transparent"}
+        bg={focused ? selectedBackground : "$transparent"}
         flex={1}
         gap="$xxs"
         items="center"
         justify="center"
         style={{ borderRadius: 9999, overflow: "hidden" }}
       >
-        <Icon color={focused ? "$accent" : "$mutedForeground"} size={26} />
-        <Text size="sm" weight="semibold">
+        <Icon
+          color={focused ? selectedContentColor : "$mutedForeground"}
+          size={26}
+        />
+        <Text
+          color={focused ? selectedContentColor : "$foreground"}
+          size="sm"
+          weight="semibold"
+        >
           {title}
         </Text>
       </YStack>

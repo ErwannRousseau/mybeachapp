@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 process.env.EXPO_PUBLIC_CONVEX_URL = "https://beach.convex.cloud";
 process.env.EXPO_PUBLIC_CONVEX_SITE_URL = "https://beach.convex.site";
 
-const { createMobileEnv, env } = await import("./env");
+const { createMobileEnv, env } = await import("../env");
 
 describe("createMobileEnv", () => {
   test("exposes parsed process env", () => {

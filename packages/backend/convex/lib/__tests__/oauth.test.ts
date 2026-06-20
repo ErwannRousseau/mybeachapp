@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { getAppleUserInfoFromIdToken, providerClientId } from "./oauth";
+import { getAppleUserInfoFromIdToken, providerClientId } from "../oauth";
 
 function encodeJwtPayload(payload: Record<string, unknown>) {
   const encodedPayload = btoa(JSON.stringify(payload))

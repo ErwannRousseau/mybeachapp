@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import type { CreateActivityInput } from "./types";
+import type { CreateActivityInput } from "../types";
 import {
   isActivityCategory,
   isActivityStatus,
@@ -8,7 +8,7 @@ import {
   isValidLongitude,
   isValidMaxParticipants,
   validateCreateActivityInput,
-} from "./validators";
+} from "../validators";
 
 describe("activity validators", () => {
   test("activity category guard", () => {

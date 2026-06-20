@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { isInsideViewport } from "./locations";
+import { isInsideViewport } from "../locations";
 
 describe("location helpers", () => {
   test("detects coordinates inside a map viewport", () => {

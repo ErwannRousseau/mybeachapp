@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { isUserRole, isUserStatus } from "./validators";
+import { isUserRole, isUserStatus } from "../validators";
 
 describe("user validators", () => {
   test("user role guard", () => {

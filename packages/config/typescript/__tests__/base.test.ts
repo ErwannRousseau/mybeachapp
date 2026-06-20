@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import config from "./base.json";
+import config from "../base.json";
 
 describe("typescript config package", () => {
   test("exports the shared TypeScript base config", () => {

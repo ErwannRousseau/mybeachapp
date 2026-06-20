@@ -4,7 +4,7 @@ import {
   hasNativeAppleAuthProviderForPlatform,
   hasNativeGoogleAuthConfigForPlatform,
   hasNativeGoogleAuthProviderForPlatform,
-} from "./native-auth-config";
+} from "../native-auth-config";
 
 describe("hasNativeGoogleAuthConfigForPlatform", () => {
   test("requires the iOS client ID on iOS", () => {

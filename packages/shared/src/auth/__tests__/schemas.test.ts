@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { authCredentialsSchema } from "./schemas";
+import { authCredentialsSchema } from "../schemas";
 
 describe("authCredentialsSchema", () => {
   test("normalizes email and accepts valid credentials", () => {

@@ -135,7 +135,7 @@ const HeadlineFrame = styled(TextFrame, {
         size: "$headlineLg",
       },
       md: {
-        size: "$headlineLg",
+        size: "$headlineMd",
       },
     },
   } as const,

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { isParticipationStatus } from "./validators";
+import { isParticipationStatus } from "../validators";
 
 describe("participation validators", () => {
   test("participation status guard", () => {

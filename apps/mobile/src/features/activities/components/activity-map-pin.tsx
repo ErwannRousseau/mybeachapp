@@ -3,12 +3,10 @@ import { type GetProps, styled, XStack } from "tamagui";
 
 import { Text } from "@/ui/typography";
 
-import {
-  type ActivityStatusTone,
-  getActivityStatusTone,
-} from "./activity-status-tone";
+import { getActivityStatusTone } from "./activity-status-tone";
 
-type ActivityMapPinTone = ActivityStatusTone | "selected";
+export type ActivityMapPinAvailability = "open" | "warning";
+type ActivityMapPinTone = "muted" | "selected" | "success" | "warning";
 
 const ActivityMapPinFrame = styled(XStack, {
   bg: "$surface",
@@ -37,24 +35,36 @@ const ActivityMapPinFrame = styled(XStack, {
         bg: "$successSoft",
         borderColor: "$success",
       },
+      warning: {
+        bg: "$warning",
+        borderColor: "$warning",
+      },
     },
   } as const,
   width: 44,
 });
 
 export type ActivityMapPinProps = GetProps<typeof ActivityMapPinFrame> & {
+  availability?: ActivityMapPinAvailability;
   children?: React.ReactNode;
   selected?: boolean;
   status: ActivityStatus;
 };
 
 export function ActivityMapPin({
+  availability = "open",
   children,
   selected = false,
   status,
   ...props
 }: ActivityMapPinProps) {
-  const tone = selected ? "selected" : getActivityStatusTone(status);
+  const tone = selected
+    ? "selected"
+    : getActivityMapPinTone(status, availability);
+
+  if (!tone) {
+    return null;
+  }
 
   return (
     <ActivityMapPinFrame tone={tone} {...props}>
@@ -123,13 +133,29 @@ export function GPSPin({ children, ...props }: GPSPinProps) {
 
 function getActivityMapPinTextColor(tone: ActivityMapPinTone) {
   switch (tone) {
-    case "destructive":
-      return "$destructiveForeground";
     case "muted":
       return "$foreground";
     case "selected":
       return "$secondaryForeground";
     case "success":
       return "$foreground";
+    case "warning":
+      return "$warningForeground";
+  }
+}
+
+function getActivityMapPinTone(
+  status: ActivityStatus,
+  availability: ActivityMapPinAvailability,
+): ActivityMapPinTone | null {
+  const statusTone = getActivityStatusTone(status);
+
+  switch (statusTone) {
+    case "destructive":
+      return null;
+    case "muted":
+      return status === "full" ? "muted" : null;
+    case "success":
+      return availability === "warning" ? "warning" : "success";
   }
 }

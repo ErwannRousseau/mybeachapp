@@ -29,7 +29,7 @@ Applies to `apps/mobile`.
 - Keep bottom navigation out of `mobile/ui/`; it is app navigation because it owns routes, selected state, safe area, and navigation actions. It may compose `FloatingSurface`, optional isolated blur/backdrop primitives, `Text`, and button/icon primitives.
 - If using Takeout Pro as inspiration for bottom navigation, copy the idea of a floating pill, animated indicator, haptics, and optional backdrop blur only. Do not copy One routing, route names, expanded post menus, or Takeout app behavior.
 - Do not create a separate `IconButton` primitive for the MVP. Use `Button size="icon"` and `Button.Icon` for icon-only button composition.
-- Use `@tamagui/lucide-icons` for standard icons. Do not add a generic icon wrapper or barrel by default. Put shared custom product icons in `mobile/ui/icons/` only when real usage exists; feature-only icons belong with the owning feature.
+- Use `@tamagui/lucide-icons-2` for standard icons. Do not add a generic icon wrapper or barrel by default. Put shared custom product icons in `mobile/ui/icons/` only when real usage exists; feature-only icons belong with the owning feature.
 - Implement reusable UI primitives with flat Compound Component naming (for example `Sheet`, `SheetHeader`, `SheetBody`, `SheetActions`) instead of dot names and boolean prop explosion.
 - Reusable UI primitives may expose Tamagui layout props such as `p`, `px`, `gap`, `w`, `f`, `ai`, and `jc`. Keep visual identity props such as `bg`, `color`, `rounded`, `borderColor`, and typography choices controlled by component variants or semantic primitives.
 - UI components must use `export function` declarations only.

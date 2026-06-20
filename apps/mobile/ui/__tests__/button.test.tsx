@@ -5,8 +5,8 @@ import {
   findByProp,
   findByText,
   renderWithTamagui,
-} from "../test/render-with-tamagui";
-import { Button } from "./button";
+} from "../../test/render-with-tamagui";
+import { Button } from "../button";
 
 function renderIcon() {
   return null;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { shouldShowButtonGlint } from "./glint-policy";
+import { shouldShowButtonGlint } from "../glint-policy";
 
 const baseOptions = {
   disabled: false,

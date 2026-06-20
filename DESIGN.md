@@ -536,7 +536,7 @@ Button haptics are opt-in by default. `haptic` defaults to `false`; `haptic={tru
 
 Do not add a separate `IconButton` primitive for the MVP. Use `Button size="icon"` for icon-only actions, and keep `Button.Icon` available for icon composition. Only introduce `IconButton` later if a real platform behavior diverges from normal button behavior.
 
-Use `@tamagui/lucide-icons` for standard line icons by default. Do not create a generic icon wrapper or icon barrel for the MVP. If custom shared product icons become necessary, put them under `mobile/ui/icons/` and import them explicitly. Feature-only custom icons should stay with their owning feature.
+Use `@tamagui/lucide-icons-2` for standard line icons by default. Do not create a generic icon wrapper or icon barrel for the MVP. If custom shared product icons become necessary, put them under `mobile/ui/icons/` and import them explicitly. Feature-only custom icons should stay with their owning feature.
 
 Do not keep map pins in `mobile/ui` when they encode Beach Activity meaning. A `GPS Pin`, `ActivityMapPin`, or `MeetingPointPin` belongs to the map or activities feature because it owns domain concepts such as Activity Status, Activity Category, Meeting Point, selection state, and map behavior. Only introduce a generic `mobile/ui` pin primitive later if a non-domain repeated visual need appears.
 
