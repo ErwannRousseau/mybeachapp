@@ -8,12 +8,16 @@ export function getTabBarBottomOffset(bottomInset: number) {
 export function getTabBarMetrics(screenWidth: number, routeCount: number) {
   const tabCount = Math.max(routeCount, 1);
   const containerWidth = screenWidth - TAB_BAR_WIDTH_OFFSET;
-  const tabWidth = containerWidth / tabCount;
+  const contentInset = INDICATOR_INSET;
+  const contentWidth = containerWidth - contentInset * 2;
+  const tabWidth = contentWidth / tabCount;
   const indicatorWidth = tabWidth - INDICATOR_INSET * 2;
 
   return {
     containerWidth,
-    indicatorOffset: INDICATOR_INSET,
+    contentInset,
+    contentWidth,
+    indicatorOffset: contentInset + (tabWidth - indicatorWidth) / 2,
     indicatorWidth,
     tabWidth,
   };

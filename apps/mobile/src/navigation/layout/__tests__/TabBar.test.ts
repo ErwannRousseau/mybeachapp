@@ -6,9 +6,11 @@ describe("TabBar layout helpers", () => {
   it("uses a Takeout-like compact floating width", () => {
     expect(getTabBarMetrics(390, 4)).toEqual({
       containerWidth: 240,
-      indicatorOffset: 5,
-      indicatorWidth: 50,
-      tabWidth: 60,
+      contentInset: 5,
+      contentWidth: 230,
+      indicatorOffset: 10,
+      indicatorWidth: 47.5,
+      tabWidth: 57.5,
     });
   });
 
