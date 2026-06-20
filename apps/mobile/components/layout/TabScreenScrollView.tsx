@@ -1,8 +1,29 @@
-import { type GetProps, ScrollView } from "tamagui";
+import type {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ScrollViewProps,
+} from "react-native";
+import { ScrollView } from "tamagui";
 
-export type TabScreenScrollViewProps = GetProps<typeof ScrollView> & {
+export type TabScreenScrollViewProps = Pick<
+  ScrollViewProps,
+  | "contentInset"
+  | "contentInsetAdjustmentBehavior"
+  | "keyboardDismissMode"
+  | "keyboardShouldPersistTaps"
+  | "onScroll"
+  | "refreshControl"
+  | "scrollEnabled"
+  | "scrollEventThrottle"
+  | "scrollIndicatorInsets"
+  | "showsVerticalScrollIndicator"
+> & {
   bottomInset?: number;
   children: React.ReactNode;
+  onMomentumScrollEnd?: (
+    event: NativeSyntheticEvent<NativeScrollEvent>,
+  ) => void;
+  onScrollBeginDrag?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 };
 
 export function TabScreenScrollView({
