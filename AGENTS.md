@@ -79,6 +79,7 @@ This file applies to the whole repository. Deeper `AGENTS.md` files override it 
 - Do not add new dependencies without a clear reason.
 - Keep decomposition incremental: at most one structural split per file in a single change.
 - Avoid packing too much raw logic in one file or component; extract focused helpers/hooks.
+- Test files must live in a `__tests__` directory next to the module they test across all apps and packages. For example, `ui/button.tsx` is tested by `ui/__tests__/button.test.tsx`, and `src/activities/validators.ts` is tested by `src/activities/__tests__/validators.test.ts`.
 
 ## Import Rules
 
