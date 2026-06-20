@@ -16,6 +16,7 @@
     "build": "tsc -p tsconfig.build.json && mkdir -p dist && cp typescript/base.json dist/tsconfig-base.json",
     "check": "biome check .",
     "check:fix": "biome check --write .",
+    "clear": "rm -rf .turbo dist *.tsbuildinfo",
     "dev": "tsc   --watch --preserveWatchOutput",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"

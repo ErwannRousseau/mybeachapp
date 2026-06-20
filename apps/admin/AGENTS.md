@@ -16,6 +16,7 @@ Applies to `apps/admin`.
 - Avoid decorative landing-page composition.
 - Use simple tables, forms, filters, and clear status labels.
 - Reuse existing route/style patterns before adding new abstractions.
+- Do not import React-only types such as `ReactNode`, `PropsWithChildren`, `Ref`, `ReactElement`, `FC`, or `ComponentProps`. Use the `React` namespace directly in annotations, for example `React.ReactNode` or `React.Ref<T>`.
 
 ## Routing
 

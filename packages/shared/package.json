@@ -76,6 +76,7 @@
   "private": true,
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "clear": "rm -rf .turbo dist *.tsbuildinfo",
     "check": "biome check .",
     "check:fix": "biome check --write .",
     "dev": "tsc   --watch --preserveWatchOutput",

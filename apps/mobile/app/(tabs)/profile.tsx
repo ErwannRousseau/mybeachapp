@@ -1,76 +1,69 @@
 import { Link, Stack } from "expo-router";
-import { ScrollView, Text, View } from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+import { useCallback } from "react";
+import { XStack, YStack } from "tamagui";
 
-import { PrimaryButton } from "@/components/PrimaryButton";
+import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
 import { signOutAndRedirect, useAuthSession } from "@/src/auth/session";
+import { Avatar, AvatarFallback } from "@/ui/avatar";
+import { Button } from "@/ui/button";
+import { Card } from "@/ui/card";
+import { Text, Title } from "@/ui/typography";
 
 export default function ProfileScreen() {
   const { data: session, isPending } = useAuthSession();
+  const handleSignOut = useCallback(() => {
+    void signOutAndRedirect();
+  }, []);
 
   return (
     <>
       <Stack.Screen options={{ title: "Profil" }} />
-      <ScrollView
-        contentContainerStyle={styles.content}
-        contentInsetAdjustmentBehavior="automatic"
-      >
-        <View style={styles.card}>
-          <Text selectable style={styles.title}>
-            {session ? "Profil connecté" : "Profil invité"}
-          </Text>
-          <Text selectable style={styles.body}>
-            {isPending
-              ? "Vérification de la session en cours."
-              : session
-                ? (session.user.email ?? "Ta session Better Auth est active.")
-                : "Connecte-toi pour créer et rejoindre des activités."}
-          </Text>
-        </View>
-        {session ? (
-          <PrimaryButton
-            label="Se déconnecter"
-            onPress={() => void signOutAndRedirect()}
-            variant="secondary"
-          />
-        ) : (
-          <View style={styles.authActions}>
-            <Link asChild href="/sign-in">
-              <PrimaryButton label="Se connecter" />
-            </Link>
-            <Link asChild href="/sign-up">
-              <PrimaryButton label="Créer un compte" variant="secondary" />
-            </Link>
-          </View>
-        )}
-      </ScrollView>
+      <TabScreenScrollView>
+        <YStack gap="$lg" p="$md" pb="$md">
+          <Card gap="$sm">
+            <XStack gap="$sm" items="center">
+              <Avatar>
+                <AvatarFallback>
+                  {getProfileFallback(session?.user.email)}
+                </AvatarFallback>
+              </Avatar>
+              <YStack flex={1} gap="$xxs" minW={0}>
+                <Title selectable>
+                  {session ? "Profil connecté" : "Profil invité"}
+                </Title>
+                <Text selectable variant="muted">
+                  {isPending
+                    ? "Vérification de la session en cours."
+                    : session
+                      ? (session.user.email ??
+                        "Ta session Better Auth est active.")
+                      : "Connecte-toi pour créer et rejoindre des activités."}
+                </Text>
+              </YStack>
+            </XStack>
+            {session ? (
+              <Button onPress={handleSignOut} variant="secondary">
+                Se déconnecter
+              </Button>
+            ) : (
+              <YStack gap="$sm">
+                <Link asChild href="/sign-in">
+                  <Button>Se connecter</Button>
+                </Link>
+                <Link asChild href="/sign-up">
+                  <Button variant="secondary">Créer un compte</Button>
+                </Link>
+              </YStack>
+            )}
+          </Card>
+        </YStack>
+      </TabScreenScrollView>
     </>
   );
 }
 
-const styles = StyleSheet.create((theme) => ({
-  authActions: {
-    gap: theme.spacing.sm,
-  },
-  body: {
-    ...theme.typography.body,
-    color: theme.colors.onSurfaceMuted,
-  },
-  card: {
-    backgroundColor: theme.colors.surface,
-    borderColor: theme.colors.border,
-    borderRadius: theme.radii.xl,
-    borderWidth: 1,
-    gap: theme.spacing.sm,
-    padding: theme.spacing.md,
-  },
-  content: {
-    backgroundColor: theme.colors.background,
-    gap: theme.spacing.lg,
-    padding: theme.spacing.md,
-  },
-  title: {
-    ...theme.typography.title,
-    color: theme.colors.onSurface,
-  },
-}));
+function getProfileFallback(email?: null | string) {
+  const localPart = email?.split("@")[0]?.replace(/[^a-z0-9]/gi, "") ?? "";
+
+  return localPart.length >= 2 ? localPart.slice(0, 2).toUpperCase() : "VI";
+}

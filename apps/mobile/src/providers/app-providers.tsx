@@ -1,7 +1,5 @@
-import type { PropsWithChildren } from "react";
-
 import { ConvexClientProvider } from "./convex-client-provider";
 
-export function AppProviders({ children }: PropsWithChildren) {
+export function AppProviders({ children }: React.PropsWithChildren) {
   return <ConvexClientProvider>{children}</ConvexClientProvider>;
 }

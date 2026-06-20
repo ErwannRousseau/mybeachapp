@@ -1,5 +1,5 @@
-import { AuthScreen } from "@/components/AuthScreen";
+import { AuthScreen } from "@/src/screens/AuthScreen";
 
-export default function SignInScreen() {
+export default function SignInRoute() {
   return <AuthScreen flow="signIn" />;
 }

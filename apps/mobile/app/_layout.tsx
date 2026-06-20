@@ -1,8 +1,8 @@
 import { Stack } from "expo-router";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useUnistyles } from "react-native-unistyles";
+import { useColorScheme } from "react-native";
 
-import { AppProviders } from "@/src/providers/app-providers";
+import { getThemeForColorScheme } from "@/src/lib/theme";
+import { RootProviders } from "@/src/providers/root-providers";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -10,29 +10,27 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <AppProviders>
-        <RootNavigator />
-      </AppProviders>
-    </GestureHandlerRootView>
+    <RootProviders>
+      <RootNavigator />
+    </RootProviders>
   );
 }
 
 function RootNavigator() {
-  const { theme } = useUnistyles();
+  const theme = getThemeForColorScheme(useColorScheme());
 
   return (
     <Stack
       screenOptions={{
         contentStyle: {
-          backgroundColor: theme.colors.background,
+          backgroundColor: theme.background,
         },
         headerStyle: {
-          backgroundColor: theme.colors.background,
+          backgroundColor: theme.background,
         },
-        headerTintColor: theme.colors.onSurface,
+        headerTintColor: theme.foreground,
         headerTitleStyle: {
-          color: theme.colors.onSurface,
+          color: theme.foreground,
         },
       }}
     >

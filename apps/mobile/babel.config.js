@@ -1,19 +1,19 @@
 module.exports = (api) => {
   api.cache(true);
-  const plugins = [];
-
-  plugins.push("react-native-worklets/plugin");
-
-  plugins.push([
-    "react-native-unistyles/plugin",
-    {
-      autoProcessImports: ["@/components"],
-      root: "app",
-    },
-  ]);
 
   return {
-    plugins,
+    plugins: [
+      [
+        "@tamagui/babel-plugin",
+        {
+          components: ["tamagui", "@tamagui/core"],
+          config: "./tamagui.config.ts",
+          disableExtraction: process.env.NODE_ENV === "development",
+          logTimings: true,
+        },
+      ],
+      "react-native-worklets/plugin",
+    ],
     presets: ["babel-preset-expo"],
   };
 };

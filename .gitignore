@@ -5,6 +5,7 @@ dist
 build
 .expo
 .turbo
+.tamagui
 coverage
 *.tsbuildinfo
 CLAUDE.md

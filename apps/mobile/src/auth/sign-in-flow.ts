@@ -66,6 +66,10 @@ function getPasswordAuthErrorMessage(
   return error?.message ?? "Connexion impossible pour le moment.";
 }
 
+function isCredentialField(field: unknown): field is keyof SignInFormValues {
+  return field === "email" || field === "password";
+}
+
 type UseSignInFlowOptions = {
   initialFlow?: AuthFlow;
 };
@@ -93,11 +97,14 @@ export function useSignInFlow({
   const hasAppleAuth = hasNativeAppleAuthProvider();
   const hasGoogleAuth = hasNativeGoogleAuthProvider();
   const hasSocialAuth = hasAppleAuth || hasGoogleAuth;
-  const formError =
-    errors.root?.message ?? errors.email?.message ?? errors.password?.message;
+  const fieldErrors = {
+    email: errors.email?.message,
+    password: errors.password?.message,
+  };
+  const formError = errors.root?.message;
 
   const submitPasswordAuth = handleSubmit(async (values) => {
-    clearErrors("root");
+    clearErrors();
 
     const result = authCredentialsSchema.safeParse({
       ...values,
@@ -105,9 +112,24 @@ export function useSignInFlow({
     });
 
     if (!result.success) {
-      setError("root", {
-        message: getAuthFormErrorMessage(result.error.issues[0]?.message),
-      });
+      let hasFieldError = false;
+
+      for (const issue of result.error.issues) {
+        const field = issue.path[0];
+
+        if (isCredentialField(field)) {
+          setError(field, {
+            message: getAuthFormErrorMessage(issue.message),
+          });
+          hasFieldError = true;
+        }
+      }
+
+      if (!hasFieldError) {
+        setError("root", {
+          message: getAuthFormErrorMessage(result.error.issues[0]?.message),
+        });
+      }
       return;
     }
 
@@ -121,7 +143,7 @@ export function useSignInFlow({
         return;
       }
 
-      router.replace("/");
+      router.replace("/(tabs)");
     } catch {
       setError("root", {
         message: "Connexion impossible pour le moment.",
@@ -130,7 +152,7 @@ export function useSignInFlow({
   });
 
   async function submitSocialAuth(provider: SocialAuthProvider) {
-    clearErrors("root");
+    clearErrors();
     setSocialProviderPending(provider);
 
     try {
@@ -149,7 +171,7 @@ export function useSignInFlow({
         return;
       }
 
-      router.replace("/");
+      router.replace("/(tabs)");
     } catch {
       setError("root", {
         message: "Connexion impossible pour le moment.",
@@ -160,12 +182,13 @@ export function useSignInFlow({
   }
 
   function toggleFlow() {
-    clearErrors("root");
+    clearErrors();
     setFlow((currentFlow) => (currentFlow === "signIn" ? "signUp" : "signIn"));
   }
 
   return {
     control,
+    fieldErrors,
     flow,
     formError,
     hasAppleAuth,
