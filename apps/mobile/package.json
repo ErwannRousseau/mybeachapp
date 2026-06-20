@@ -15,6 +15,7 @@
     "convex": "catalog:",
     "expo": "~56.0.9",
     "expo-apple-authentication": "~56.0.4",
+    "expo-blur": "~56.0.3",
     "expo-constants": "~56.0.17",
     "expo-font": "~56.0.5",
     "expo-haptics": "~56.0.3",

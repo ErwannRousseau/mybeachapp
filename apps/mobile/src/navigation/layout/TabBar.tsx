@@ -83,6 +83,7 @@ export function TabBar({ descriptors, navigation, state }: TabBarProps) {
         <GlassView
           flex={1}
           height="100%"
+          intensity={90}
           rounded={32}
           shadowColor="$foreground"
           shadowOffset={{ height: 20, width: 0 }}

@@ -28,7 +28,11 @@ const GlassContent = styled(YStack, {
 });
 
 export type GlassViewProps = GetProps<typeof GlassViewFrame> & {
+  backgroundColor?: string;
   children?: React.ReactNode;
+  intensity?: number;
+  isInteractive?: boolean;
+  tint?: "default" | "dark" | "light";
   tintColor?: string;
 };
 
