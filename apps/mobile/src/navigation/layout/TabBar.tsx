@@ -6,16 +6,27 @@ import {
   UserCircle,
 } from "@tamagui/lucide-icons-2";
 import type { Tabs } from "expo-router";
-import { useCallback } from "react";
-import { Pressable } from "react-native";
+import { useCallback, useEffect } from "react";
+import { Dimensions, Pressable, StyleSheet } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
-import { Text } from "@/ui/typography";
+import { GlassView } from "@/ui/effects/GlassView";
+
+import { getTabBarBottomOffset, getTabBarMetrics } from "./tab-bar-metrics";
 
 export type TabBarProps = Parameters<
   NonNullable<React.ComponentProps<typeof Tabs>["tabBar"]>
 >[0];
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const TAB_BAR_HEIGHT = 50;
+const INDICATOR_INSET = 5;
 
 const tabIcons = {
   create: PlusCircle,
@@ -26,13 +37,32 @@ const tabIcons = {
 
 export function TabBar({ descriptors, navigation, state }: TabBarProps) {
   const insets = useSafeAreaInsets();
-  const bottomInset = Math.max(insets.bottom, 12);
+  const bottomInset = getTabBarBottomOffset(insets.bottom);
+  const metrics = getTabBarMetrics(SCREEN_WIDTH, state.routes.length);
+  const activeTabIndex = useSharedValue(state.index);
+
+  useEffect(() => {
+    activeTabIndex.value = withSpring(state.index, {
+      damping: 30,
+      mass: 0.8,
+      stiffness: 680,
+    });
+  }, [activeTabIndex, state.index]);
+
+  const indicatorStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateX:
+          activeTabIndex.value * metrics.tabWidth + metrics.indicatorOffset,
+      },
+    ],
+    width: metrics.indicatorWidth,
+  }));
 
   return (
     <YStack
-      bg="$transparent"
+      items="center"
       pointerEvents="box-none"
-      px="$md"
       style={{
         bottom: bottomInset,
         left: 0,
@@ -41,30 +71,45 @@ export function TabBar({ descriptors, navigation, state }: TabBarProps) {
         zIndex: 20,
       }}
     >
-      <XStack
-        bg="$surface"
-        borderColor="$border"
-        borderWidth={1}
-        gap="$xs"
-        height={80}
-        p="$xs"
-        rounded="$xl"
-        shadowColor="$foreground"
-        shadowOffset={{ height: 10, width: 0 }}
-        shadowOpacity={0.08}
-        shadowRadius={24}
+      <Animated.View
+        style={[
+          styles.floatingShadow,
+          {
+            height: TAB_BAR_HEIGHT,
+            width: metrics.containerWidth,
+          },
+        ]}
       >
-        {state.routes.map((route, index) => (
-          <TabBarItem
-            descriptors={descriptors}
-            index={index}
-            key={route.key}
-            navigation={navigation}
-            route={route}
-            selectedIndex={state.index}
-          />
-        ))}
-      </XStack>
+        <GlassView
+          flex={1}
+          height="100%"
+          rounded={32}
+          shadowColor="$foreground"
+          shadowOffset={{ height: 20, width: 0 }}
+          shadowOpacity={0.14}
+          shadowRadius={30}
+          width="100%"
+        >
+          <XStack
+            height={TAB_BAR_HEIGHT}
+            p={INDICATOR_INSET}
+            position="relative"
+            width={metrics.containerWidth}
+          >
+            <Animated.View style={[styles.indicator, indicatorStyle]} />
+            {state.routes.map((route, index) => (
+              <TabBarItem
+                descriptors={descriptors}
+                index={index}
+                key={route.key}
+                navigation={navigation}
+                route={route}
+                selectedIndex={state.index}
+              />
+            ))}
+          </XStack>
+        </GlassView>
+      </Animated.View>
     </YStack>
   );
 }
@@ -88,9 +133,6 @@ function TabBarItem({
   const options = descriptors[route.key]?.options;
   const title = typeof options?.title === "string" ? options.title : route.name;
   const Icon = tabIcons[route.name as keyof typeof tabIcons] ?? Circle;
-  const isCreateRoute = route.name === "create";
-  const selectedBackground = isCreateRoute ? "$primary" : "$secondary";
-  const selectedContentColor = isCreateRoute ? "$primaryForeground" : "$accent";
 
   const handlePress = useCallback(() => {
     const event = navigation.emit({
@@ -106,31 +148,36 @@ function TabBarItem({
 
   return (
     <Pressable
+      accessibilityLabel={title}
       accessibilityRole="button"
       accessibilityState={focused ? { selected: true } : undefined}
       onPress={handlePress}
       style={{ flex: 1 }}
     >
       <YStack
-        bg={focused ? selectedBackground : "$transparent"}
         flex={1}
-        gap="$xxs"
         items="center"
         justify="center"
-        style={{ borderRadius: 9999, overflow: "hidden" }}
+        opacity={focused ? 1 : 0.54}
       >
-        <Icon
-          color={focused ? selectedContentColor : "$mutedForeground"}
-          size={26}
-        />
-        <Text
-          color={focused ? selectedContentColor : "$foreground"}
-          size="sm"
-          weight="semibold"
-        >
-          {title}
-        </Text>
+        <Icon color="$foreground" size={26} />
       </YStack>
     </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  floatingShadow: {
+    backgroundColor: "transparent",
+    elevation: 10,
+    overflow: "visible",
+  },
+  indicator: {
+    backgroundColor: "rgba(126, 126, 126, 0.2)",
+    borderRadius: 100,
+    bottom: INDICATOR_INSET,
+    left: 0,
+    position: "absolute",
+    top: INDICATOR_INSET,
+  },
+});
