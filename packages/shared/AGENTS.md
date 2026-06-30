@@ -12,6 +12,7 @@ Applies to `packages/shared`.
 
 Use feature folders:
 
+- `src/auth/*`
 - `src/activities/*`
 - `src/participations/*`
 - `src/users/*`

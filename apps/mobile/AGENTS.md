@@ -11,6 +11,15 @@ Applies to `apps/mobile`.
 - React Native with Tamagui.
 - Use Expo-compatible APIs and libraries.
 
+## Local Commands
+
+- `bun run dev` starts iOS on `iPhone 17 Pro`.
+- `bun run ios:18` and `bun run dev:ios18` target `iPhone 16`.
+- `bun run dev:android` and `bun run open:android` target `Medium_Phone_API_35`.
+- `bun run open:ios18` starts `iPhone 16` without the bundler.
+- `bun run native:prebuild`, `bun run native:prebuild:ios`, and `bun run native:prebuild:android` wrap Expo prebuild.
+- `bun run start` and `bun run web` are available for bundler and web workflows.
+
 ## UI Rules
 
 - Follow the My Beach App design skill and Beach Glass direction when building app UI.
