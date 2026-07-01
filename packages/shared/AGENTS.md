@@ -12,6 +12,7 @@ Applies to `packages/shared`.
 
 Use feature folders:
 
+- `src/auth/*`
 - `src/activities/*`
 - `src/participations/*`
 - `src/users/*`
@@ -32,6 +33,7 @@ Within each feature, keep files explicit:
 - Expose public modules through explicit `package.json` subpath exports.
 - Keep `types` before `default` in export condition objects. Esbuild warns when `default` comes first.
 - Do not reintroduce root exports such as `@mybeachapp/shared`, `@mybeachapp/shared/constants`, `@mybeachapp/shared/types`, or `@mybeachapp/shared/validators`.
+- Do not hide feature exports behind broad buckets; current public subpaths include `@mybeachapp/shared/auth/*`, `@mybeachapp/shared/activities/*`, `@mybeachapp/shared/participations/*`, and `@mybeachapp/shared/users/*`.
 
 ## Zod
 

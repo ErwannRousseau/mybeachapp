@@ -18,7 +18,7 @@ Triage labels use the default five-label vocabulary. See `docs/agents/triage-lab
 
 ### Domain docs
 
-Domain docs use multi-context layout via root `CONTEXT-MAP.md`. See `docs/agents/domain.md`.
+Domain docs use multi-context layout via root `CONTEXT-MAP.md` when present. See `docs/agents/domain.md`.
 
 ## Scope
 
@@ -51,6 +51,8 @@ This file applies to the whole repository. Deeper `AGENTS.md` files override it 
 - Use Bun for package scripts and dependency management.
 - Root scripts delegate through Turborepo.
 - Prefer `bun run check`, `bun run typecheck`, and `bun run test` before claiming completion.
+- Root mobile wrappers are `bun run dev:android`, `bun run dev:ios18`, `bun run open:android`, `bun run open:ios18`, and `bun run native:prebuild`; they delegate to `apps/mobile/package.json`.
+- For app-local Expo work, `apps/mobile` also exposes `bun run dev`, `bun run ios`, `bun run ios:18`, `bun run native:prebuild:android`, `bun run native:prebuild:ios`, `bun run start`, and `bun run web`.
 
 ## Mobile UI Architecture
 
@@ -78,6 +80,8 @@ This file applies to the whole repository. Deeper `AGENTS.md` files override it 
 - Add dependencies at the narrowest package that uses them. Shared cross-package dependencies should use the root workspace catalog.
 - Do not add new dependencies without a clear reason.
 - Keep decomposition incremental: at most one structural split per file in a single change.
+- Do not create artificial `*-internal`, `*-helpers`, or technical bucket files just to satisfy file-size or line-count pressure.
+- Split files only when the new boundary has a clear product, domain, design-system, or reusable API meaning.
 - Avoid packing too much raw logic in one file or component; extract focused helpers/hooks.
 - Test files must live in a `__tests__` directory next to the module they test across all apps and packages. For example, `ui/button.tsx` is tested by `ui/__tests__/button.test.tsx`, and `src/activities/validators.ts` is tested by `src/activities/__tests__/validators.test.ts`.
 
@@ -86,9 +90,13 @@ This file applies to the whole repository. Deeper `AGENTS.md` files override it 
 - Prefer package subpath imports over root package imports.
 - For `@mybeachapp/shared`, import explicit files such as:
   - `@mybeachapp/shared/activities/constants`
-  - `@mybeachapp/shared/activities/types`
   - `@mybeachapp/shared/activities/schemas`
+  - `@mybeachapp/shared/activities/types`
   - `@mybeachapp/shared/activities/validators`
+  - `@mybeachapp/shared/auth/schemas`
+  - `@mybeachapp/shared/auth/types`
+  - `@mybeachapp/shared/users/validators`
+  - same pattern for `participations`
 - Avoid `@mybeachapp/shared` root imports.
 - Avoid legacy technical buckets like `/constants`, `/types`, and `/validators`.
 - In mobile UI code, prefer imports from `mobile/ui/` for design-system components.
@@ -139,6 +147,7 @@ Run the smallest useful verification first, then broaden when touching shared co
 - Cross-package/shared changes: `bun run check && bun run typecheck && bun run test`
 - Backend changes: include Convex typecheck through `packages/backend` script.
 - Mobile UI changes: include the mobile package checks and any available visual/story/screenshot checks.
+- Mobile device checks usually mean `bun run dev:ios18`, `bun run dev:android`, or the matching `open:*` command, then inspect the affected screen.
 - Design-system changes: verify token usage, component reuse, touch targets, and cross-platform behavior.
 
 ## Convex Guardrails
