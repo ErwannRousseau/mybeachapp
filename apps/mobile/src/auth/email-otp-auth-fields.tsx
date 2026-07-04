@@ -1,10 +1,12 @@
+import { AUTH_EMAIL_OTP_LENGTH } from "@mybeachapp/shared/auth/constants";
 import { useEffect, useRef } from "react";
 import { XStack, YStack } from "tamagui";
 
 import { AppleBrandIcon, GoogleBrandIcon } from "@/src/auth/auth-brand-icons";
+import { OtpInput } from "@/src/auth/otp-input";
 import { Button } from "@/ui/button";
+import { FieldLabel } from "@/ui/field";
 import { Input } from "@/ui/input";
-import { OtpInput } from "@/ui/otp-input";
 import { Separator } from "@/ui/separator";
 import { Text } from "@/ui/typography";
 
@@ -27,6 +29,7 @@ export function EmailField({
 }: EmailFieldProps) {
   return (
     <YStack gap="$xs">
+      <FieldLabel>Email</FieldLabel>
       <Input
         accessibilityLabel="Email"
         autoCapitalize="none"
@@ -74,7 +77,7 @@ export function OtpCodeField({
   const lastSubmittedCode = useRef("");
 
   useEffect(() => {
-    if (value.length < 6) {
+    if (value.length < AUTH_EMAIL_OTP_LENGTH) {
       lastSubmittedCode.current = "";
       return;
     }

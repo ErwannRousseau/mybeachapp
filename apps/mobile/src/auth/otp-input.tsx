@@ -1,9 +1,10 @@
+import { AUTH_EMAIL_OTP_LENGTH } from "@mybeachapp/shared/auth/constants";
 import * as Clipboard from "expo-clipboard";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useWindowDimensions } from "react-native";
 import { Input as TamaguiInput, XStack, YStack } from "tamagui";
 
-import { Button } from "./button";
+import { Button } from "@/ui/button";
 
 type FocusableInput = {
   blur: () => void;
@@ -29,7 +30,7 @@ export function OtpInput({
   autoFocus = false,
   disabled = false,
   invalid = false,
-  length = 6,
+  length = AUTH_EMAIL_OTP_LENGTH,
   onCodeChange,
   value,
 }: OtpInputProps) {

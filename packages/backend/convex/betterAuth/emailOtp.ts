@@ -10,19 +10,7 @@ type SendVerificationOtpInput = {
 };
 
 const resendEmailEndpoint = "https://api.resend.com/emails";
-
-function getEmailSubject(type: SendVerificationOtpInput["type"]) {
-  switch (type) {
-    case "change-email":
-      return "Confirme ton nouvel email My Beach App";
-    case "email-verification":
-      return "Confirme ton email My Beach App";
-    case "forget-password":
-      return "Réinitialise ton accès My Beach App";
-    case "sign-in":
-      return "Ton code My Beach App";
-  }
-}
+const authEmailOtpSubject = "Ton code My Beach App";
 
 export async function sendAuthEmailOtp(input: SendVerificationOtpInput) {
   const from =
@@ -49,7 +37,7 @@ export async function sendAuthEmailOtp(input: SendVerificationOtpInput) {
     body: JSON.stringify({
       from,
       ...(await renderAuthEmailOtp({ otp: input.otp })),
-      subject: getEmailSubject(input.type),
+      subject: authEmailOtpSubject,
       to: [input.email],
     }),
     headers: {

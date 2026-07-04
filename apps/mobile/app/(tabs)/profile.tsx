@@ -10,7 +10,7 @@ import { Card } from "@/ui/card";
 import { Text, Title } from "@/ui/typography";
 
 export default function ProfileScreen() {
-  const { data: session, isPending } = useAuthSession();
+  const { data: currentUser, isPending } = useAuthSession();
   const handleSignOut = useCallback(() => {
     void signOut();
   }, []);
@@ -24,24 +24,23 @@ export default function ProfileScreen() {
             <XStack gap="$sm" items="center">
               <Avatar>
                 <AvatarFallback>
-                  {getProfileFallback(session?.user.email)}
+                  {getProfileFallback(currentUser?.email)}
                 </AvatarFallback>
               </Avatar>
               <YStack flex={1} gap="$xxs" minW={0}>
                 <Title selectable>
-                  {session ? "Profil connecté" : "Profil invité"}
+                  {currentUser ? "Profil connecté" : "Profil invité"}
                 </Title>
                 <Text selectable variant="muted">
                   {isPending
                     ? "Vérification de la session en cours."
-                    : session
-                      ? (session.user.email ??
-                        "Ta session Better Auth est active.")
+                    : currentUser
+                      ? (currentUser.email ?? "Ta session est active.")
                       : "Connecte-toi pour créer et rejoindre des activités."}
                 </Text>
               </YStack>
             </XStack>
-            {session ? (
+            {currentUser ? (
               <Button onPress={handleSignOut} variant="secondary">
                 Se déconnecter
               </Button>
@@ -52,23 +51,11 @@ export default function ProfileScreen() {
                     Se connecter
                   </Button>
                 ) : (
-                  <Link
-                    asChild
-                    href={{
-                      params: { redirectTo: "/(tabs)/profile" },
-                      pathname: "/sign-in",
-                    }}
-                  >
+                  <Link asChild href="/sign-in">
                     <Button>Se connecter</Button>
                   </Link>
                 )}
-                <Link
-                  asChild
-                  href={{
-                    params: { redirectTo: "/(tabs)/profile" },
-                    pathname: "/sign-up",
-                  }}
-                >
+                <Link asChild href="/sign-up">
                   <Button variant="secondary">Créer un compte</Button>
                 </Link>
               </YStack>

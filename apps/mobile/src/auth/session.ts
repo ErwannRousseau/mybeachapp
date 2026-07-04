@@ -6,7 +6,10 @@ import * as AppleAuthentication from "expo-apple-authentication";
 import { env } from "../config/env";
 import { isAndroid, isIos } from "../lib/platform";
 import { authClient } from "./auth-client";
-import { emailOtpAuthCapability } from "./email-otp-capability";
+import {
+  type CurrentSignedInUser,
+  emailOtpAuthCapability,
+} from "./email-otp-capability";
 import {
   hasNativeAppleAuthProviderForPlatform,
   hasNativeGoogleAuthConfigForPlatform,
@@ -26,14 +29,31 @@ export type SocialAuthResult =
       status: "cancelled";
     };
 
-type PasswordAuthInput = {
-  email: string;
-  flow: "signIn" | "signUp";
-  password: string;
-};
-
 export function useAuthSession() {
-  return authClient.useSession();
+  const session = authClient.useSession();
+
+  return {
+    data: toCurrentSignedInUser(session.data?.user ?? null),
+    isPending: session.isPending,
+  };
+}
+
+function toCurrentSignedInUser(
+  user?: {
+    email?: null | string;
+    id: string;
+    name?: null | string;
+  } | null,
+): CurrentSignedInUser | null {
+  if (!user) {
+    return null;
+  }
+
+  return {
+    email: user.email ?? null,
+    id: user.id,
+    name: user.name ?? null,
+  };
 }
 
 export function hasNativeGoogleAuthConfig() {
@@ -57,19 +77,6 @@ export function hasNativeGoogleAuthProvider() {
 
 export async function isNativeAppleAuthAvailable() {
   return isIos() && (await AppleAuthentication.isAvailableAsync());
-}
-
-export async function signInWithPassword(input: PasswordAuthInput) {
-  return input.flow === "signIn"
-    ? await authClient.signIn.email({
-        email: input.email,
-        password: input.password,
-      })
-    : await authClient.signUp.email({
-        email: input.email,
-        name: input.email,
-        password: input.password,
-      });
 }
 
 function configureGoogleSignIn() {

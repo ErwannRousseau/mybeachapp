@@ -1,3 +1,4 @@
+import { AUTH_EMAIL_OTP_LENGTH } from "@mybeachapp/shared/auth/constants";
 import { describe, expect, test, vi } from "vitest";
 
 import {
@@ -79,16 +80,43 @@ describe("createEmailOtpAuthCapability", () => {
     });
   });
 
+  test("maps unknown provider errors to stable French copy", async () => {
+    const adapter = createAdapter({
+      sendEmailOtp: vi.fn(async () => ({
+        data: null,
+        error: {
+          code: "PROVIDER_FAILURE",
+          message: "Raw provider error",
+        },
+      })),
+    });
+    const capability = createEmailOtpAuthCapability(adapter);
+
+    const result = await capability.sendEmailOtp({
+      email: "beach@example.com",
+    });
+
+    expect(result).toEqual({
+      data: null,
+      error: {
+        code: "PROVIDER_FAILURE",
+        message: "Connexion impossible pour le moment.",
+      },
+    });
+  });
+
   test("validates OTP shape before signing in", async () => {
     const adapter = createAdapter();
     const capability = createEmailOtpAuthCapability(adapter);
 
     const result = await capability.signInWithEmailOtp({
       email: "beach@example.com",
-      otp: "12345",
+      otp: "1".repeat(AUTH_EMAIL_OTP_LENGTH - 1),
     });
 
-    expect(result.error?.message).toBe("Entre le code à 6 chiffres.");
+    expect(result.error?.message).toBe(
+      `Entre le code à ${AUTH_EMAIL_OTP_LENGTH} chiffres.`,
+    );
     expect(adapter.signInWithEmailOtp).not.toHaveBeenCalled();
   });
 

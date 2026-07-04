@@ -6,7 +6,6 @@ import {
   AUTH_EMAIL_OTP_EXPIRES_IN_SECONDS,
   AUTH_EMAIL_OTP_LENGTH,
   AUTH_EMAIL_OTP_RESEND_AFTER_SECONDS,
-  AUTH_PASSWORD_MIN_LENGTH,
 } from "@mybeachapp/shared/auth/constants";
 import type { BetterAuthOptions } from "better-auth";
 import { betterAuth } from "better-auth";
@@ -83,10 +82,6 @@ export function createAuthOptions(ctx: GenericCtx<DataModel>) {
     appName: "My Beach App",
     baseURL: env.SITE_URL,
     database: authComponent.adapter(ctx),
-    emailAndPassword: {
-      enabled: true,
-      minPasswordLength: AUTH_PASSWORD_MIN_LENGTH,
-    },
     plugins: getPlugins(),
     rateLimit: {
       customRules: {
@@ -109,10 +104,6 @@ export function createSchemaAuthOptions(ctx: GenericCtx<DataModel>) {
     appName: "My Beach App",
     baseURL: "https://schema.mybeachapp.invalid",
     database: authComponent.adapter(ctx),
-    emailAndPassword: {
-      enabled: true,
-      minPasswordLength: AUTH_PASSWORD_MIN_LENGTH,
-    },
     plugins: getPlugins(),
     rateLimit: {
       customRules: {

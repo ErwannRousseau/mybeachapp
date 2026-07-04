@@ -96,7 +96,7 @@ function mapProviderError(error: AuthAdapterError | null | undefined) {
     case "TOO_MANY_REQUESTS":
       return "Attends un peu avant de réessayer.";
     default:
-      return error?.message ?? "Connexion impossible pour le moment.";
+      return "Connexion impossible pour le moment.";
   }
 }
 

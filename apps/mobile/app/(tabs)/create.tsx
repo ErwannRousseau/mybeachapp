@@ -28,7 +28,7 @@ const defaultParticipants = Math.min(8, ACTIVITY_MAX_PARTICIPANTS);
 const defaultCategory = ACTIVITY_CATEGORIES[0];
 
 export default function CreateActivityScreen() {
-  const { data: session, isPending } = useAuthSession();
+  const { data: currentUser, isPending } = useAuthSession();
   const [categorySheetOpen, setCategorySheetOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] =
     useState<ActivityCategory>(defaultCategory);
@@ -46,7 +46,7 @@ export default function CreateActivityScreen() {
       <Stack.Screen options={{ title: "Créer" }} />
       <TabScreenScrollView>
         <YStack gap="$lg" p="$md" pb="$md">
-          {!session ? (
+          {!currentUser ? (
             <Card gap="$md">
               <Headline selectable>
                 Connecte-toi pour créer une activité
@@ -62,13 +62,7 @@ export default function CreateActivityScreen() {
                     Se connecter
                   </Button>
                 ) : (
-                  <Link
-                    asChild
-                    href={{
-                      params: { redirectTo: "/(tabs)/create" },
-                      pathname: "/sign-in",
-                    }}
-                  >
+                  <Link asChild href="/sign-in">
                     <Button>Se connecter</Button>
                   </Link>
                 )}

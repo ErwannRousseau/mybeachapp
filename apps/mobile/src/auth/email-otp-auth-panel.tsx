@@ -1,3 +1,4 @@
+import { AUTH_EMAIL_OTP_LENGTH } from "@mybeachapp/shared/auth/constants";
 import { KeyRound, Mail, Waves } from "@tamagui/lucide-icons-2";
 import type React from "react";
 import { KeyboardAvoidingView } from "react-native";
@@ -74,12 +75,14 @@ export function EmailOtpAuthPanel({
       <AuthStepLayout
         bottom={
           <Button
-            disabled={isAuthUiDisabled || otpValue.length !== 6}
+            disabled={
+              isAuthUiDisabled || otpValue.length !== AUTH_EMAIL_OTP_LENGTH
+            }
             haptic="medium"
             loading={authPendingAction === "otp"}
             loadingLabel="Connexion"
             onPress={onSubmitOtp}
-            opacity={otpValue.length === 6 ? 1 : 0.5}
+            opacity={otpValue.length === AUTH_EMAIL_OTP_LENGTH ? 1 : 0.5}
           >
             Suivant
           </Button>
