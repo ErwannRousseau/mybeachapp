@@ -1,28 +1,43 @@
 import { describe, expect, test } from "vitest";
 
-import { authCredentialsSchema } from "../schemas";
+import { AUTH_EMAIL_OTP_LENGTH } from "../constants";
+import {
+  authEmailOtpRequestSchema,
+  authEmailOtpSignInSchema,
+} from "../schemas";
 
-describe("authCredentialsSchema", () => {
-  test("normalizes email and accepts valid credentials", () => {
+const validOtp = "1".repeat(AUTH_EMAIL_OTP_LENGTH);
+
+describe("authEmailOtpRequestSchema", () => {
+  test("normalizes email", () => {
     expect(
-      authCredentialsSchema.parse({
+      authEmailOtpRequestSchema.parse({
         email: "  BEACH@example.COM ",
-        flow: "signUp",
-        password: "password1234",
       }),
     ).toEqual({
       email: "beach@example.com",
-      flow: "signUp",
-      password: "password1234",
+    });
+  });
+});
+
+describe("authEmailOtpSignInSchema", () => {
+  test("accepts a valid digit OTP", () => {
+    expect(
+      authEmailOtpSignInSchema.parse({
+        email: "beach@example.com",
+        otp: validOtp,
+      }),
+    ).toEqual({
+      email: "beach@example.com",
+      otp: validOtp,
     });
   });
 
-  test("rejects invalid email and short password", () => {
+  test("rejects non-digit and short OTP values", () => {
     expect(() =>
-      authCredentialsSchema.parse({
-        email: "beach",
-        flow: "signIn",
-        password: "short",
+      authEmailOtpSignInSchema.parse({
+        email: "beach@example.com",
+        otp: `${"1".repeat(AUTH_EMAIL_OTP_LENGTH - 1)}a`,
       }),
     ).toThrow();
   });

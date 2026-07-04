@@ -90,7 +90,12 @@ This file applies to the whole repository. Deeper `AGENTS.md` files override it 
 - Prefer package subpath imports over root package imports.
 - For `@mybeachapp/shared`, import explicit files such as:
   - `@mybeachapp/shared/activities/constants`
+  - `@mybeachapp/shared/activities/schemas`
+  - `@mybeachapp/shared/activities/types`
+  - `@mybeachapp/shared/activities/validators`
   - `@mybeachapp/shared/auth/schemas`
+  - `@mybeachapp/shared/auth/types`
+  - `@mybeachapp/shared/users/validators`
   - same pattern for `participations` and `users`.
 - Avoid `@mybeachapp/shared` root imports.
 - Avoid legacy technical buckets like `/constants`, `/types`, and `/validators`.

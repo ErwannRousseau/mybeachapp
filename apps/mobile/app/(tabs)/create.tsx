@@ -28,7 +28,7 @@ const defaultParticipants = Math.min(8, ACTIVITY_MAX_PARTICIPANTS);
 const defaultCategory = ACTIVITY_CATEGORIES[0];
 
 export default function CreateActivityScreen() {
-  const { data: session, isPending } = useAuthSession();
+  const { data: currentUser, isPending } = useAuthSession();
   const [categorySheetOpen, setCategorySheetOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] =
     useState<ActivityCategory>(defaultCategory);
@@ -46,7 +46,7 @@ export default function CreateActivityScreen() {
       <Stack.Screen options={{ title: "Créer" }} />
       <TabScreenScrollView>
         <YStack gap="$lg" p="$md" pb="$md">
-          {!session ? (
+          {!currentUser ? (
             <Card gap="$md">
               <Headline selectable>
                 Connecte-toi pour créer une activité
@@ -54,15 +54,18 @@ export default function CreateActivityScreen() {
               <Text selectable variant="muted">
                 {isPending
                   ? "Vérification de ta session."
-                  : "La création reste visible dans la navigation, mais elle nécessite un compte pour publier dans Convex."}
+                  : "Connecte-toi avec ton email pour publier une activité et retrouver les participants."}
               </Text>
               <YStack gap="$sm">
-                <Link asChild href="/sign-in">
-                  <Button>Se connecter</Button>
-                </Link>
-                <Link asChild href="/sign-up">
-                  <Button variant="secondary">Créer un compte</Button>
-                </Link>
+                {isPending ? (
+                  <Button disabled loading loadingLabel="Vérification">
+                    Se connecter
+                  </Button>
+                ) : (
+                  <Link asChild href="/sign-in">
+                    <Button>Se connecter</Button>
+                  </Link>
+                )}
               </YStack>
             </Card>
           ) : (

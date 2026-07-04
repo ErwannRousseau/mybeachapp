@@ -11,12 +11,12 @@ export function RootProviders({ children }: React.PropsWithChildren) {
   const themeName = colorScheme === "dark" ? "dark" : "light";
 
   return (
-    <TamaguiProvider config={tamaguiConfig} defaultTheme={themeName}>
-      <ThemeProvider value={themeName === "dark" ? DarkTheme : DefaultTheme}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <TamaguiProvider config={tamaguiConfig} defaultTheme={themeName}>
+        <ThemeProvider value={themeName === "dark" ? DarkTheme : DefaultTheme}>
           <AppProviders>{children}</AppProviders>
-        </GestureHandlerRootView>
-      </ThemeProvider>
-    </TamaguiProvider>
+        </ThemeProvider>
+      </TamaguiProvider>
+    </GestureHandlerRootView>
   );
 }
