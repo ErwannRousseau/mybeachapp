@@ -1,4 +1,4 @@
-import { BlurView as ExpoBlurView } from "expo-blur";
+import { BlurView } from "expo-blur";
 import { Platform, StyleSheet, useColorScheme } from "react-native";
 import { type GetProps, styled, View, YStack } from "tamagui";
 
@@ -7,7 +7,7 @@ import { useBlurTarget } from "./blur-target-context";
 const GlassViewFrame = styled(YStack, {
   borderColor: "$border",
   borderWidth: 1,
-  name: "BeachGlassView",
+  name: "GlassViewFrame",
   overflow: "hidden",
   position: "relative",
 });
@@ -59,7 +59,7 @@ export function GlassView({
 
   return (
     <GlassViewFrame {...props}>
-      <ExpoBlurView
+      <BlurView
         blurMethod={
           Platform.OS === "android" && blurTarget
             ? "dimezisBlurViewSdk31Plus"

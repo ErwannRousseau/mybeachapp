@@ -7,11 +7,16 @@
     "better-auth": "catalog:",
     "convex": "catalog:",
     "convex-test": "^0.0.51",
-    "kysely": "catalog:"
+    "kysely": "catalog:",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-email": "^6.6.3"
   },
   "devDependencies": {
     "@mybeachapp/config": "workspace:*",
     "@types/node": "catalog:",
+    "@types/react": "~19.2.10",
+    "@types/react-dom": "^19.2.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

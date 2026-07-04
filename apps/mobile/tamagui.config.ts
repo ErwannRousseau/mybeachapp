@@ -1,3 +1,4 @@
+import { createAnimations } from "@tamagui/animations-react-native";
 import { defaultConfig } from "@tamagui/config/v5";
 import { createFont, createTamagui, createTokens } from "@tamagui/core";
 
@@ -90,8 +91,35 @@ const tokens = createTokens({
   },
 });
 
+const animations = createAnimations(
+  {
+    medium: {
+      damping: 28,
+      mass: 0.9,
+      stiffness: 220,
+      type: "spring",
+    },
+    quick: {
+      damping: 24,
+      mass: 0.8,
+      stiffness: 300,
+      type: "spring",
+    },
+    slow: {
+      damping: 34,
+      mass: 1,
+      stiffness: 160,
+      type: "spring",
+    },
+  },
+  {
+    useNativeDriver: true,
+  },
+);
+
 export const tamaguiConfig = createTamagui({
   ...defaultConfig,
+  animations,
   fonts: {
     ...defaultConfig.fonts,
     body: bodyFont,

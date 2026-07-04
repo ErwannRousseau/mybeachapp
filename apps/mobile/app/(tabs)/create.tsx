@@ -54,15 +54,24 @@ export default function CreateActivityScreen() {
               <Text selectable variant="muted">
                 {isPending
                   ? "Vérification de ta session."
-                  : "La création reste visible dans la navigation, mais elle nécessite un compte pour publier dans Convex."}
+                  : "Connecte-toi avec ton email pour publier une activité et retrouver les participants."}
               </Text>
               <YStack gap="$sm">
-                <Link asChild href="/sign-in">
-                  <Button>Se connecter</Button>
-                </Link>
-                <Link asChild href="/sign-up">
-                  <Button variant="secondary">Créer un compte</Button>
-                </Link>
+                {isPending ? (
+                  <Button disabled loading loadingLabel="Vérification">
+                    Se connecter
+                  </Button>
+                ) : (
+                  <Link
+                    asChild
+                    href={{
+                      params: { redirectTo: "/(tabs)/create" },
+                      pathname: "/sign-in",
+                    }}
+                  >
+                    <Button>Se connecter</Button>
+                  </Link>
+                )}
               </YStack>
             </Card>
           ) : (

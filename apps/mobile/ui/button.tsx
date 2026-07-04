@@ -1,9 +1,11 @@
+import type { IconProps } from "@tamagui/helpers-icon";
 import React from "react";
 import { Platform } from "react-native";
 import {
   createStyledContext,
   type GetProps,
   SizableText,
+  Spinner,
   styled,
   Button as TamaguiButton,
   XStack,
@@ -22,13 +24,10 @@ export type ButtonVariant =
   | "ghost"
   | "primary"
   | "secondary"
+  | "surface"
   | "text";
 
-type ButtonIconComponent = React.ComponentType<{
-  color?: string;
-  size?: number;
-  strokeWidth?: number;
-}>;
+type ButtonIconComponent = React.ComponentType<IconProps>;
 
 const buttonContext = createStyledContext({
   buttonSize: "md" as ButtonSize,
@@ -43,6 +42,7 @@ const ButtonFrame = styled(TamaguiButton, {
   borderColor: "$transparent",
   borderWidth: 0,
   context: buttonContext,
+  flexDirection: "row",
   gap: "$xs",
   items: "center",
   justify: "center",
@@ -87,6 +87,11 @@ const ButtonFrame = styled(TamaguiButton, {
       secondary: {
         bg: "$secondary",
       },
+      surface: {
+        bg: "$surface",
+        borderColor: "$border",
+        borderWidth: 1,
+      },
       text: {
         bg: "$transparent",
         minH: "$touchMin",
@@ -110,6 +115,12 @@ const ButtonFrame = styled(TamaguiButton, {
     glass: {
       true: {
         bg: "$transparent",
+      },
+    },
+    loading: {
+      true: {
+        opacity: 1,
+        pointerEvents: "none",
       },
     },
   } as const,
@@ -150,6 +161,9 @@ const ButtonTextFrame = styled(SizableText, {
       },
       secondary: {
         color: "$secondaryForeground",
+      },
+      surface: {
+        color: "$foreground",
       },
       text: {
         color: "$foreground",
@@ -228,6 +242,8 @@ export type ButtonProps = Omit<
   haptic?: ButtonHaptic;
   icon?: ButtonIconComponent;
   iconAfter?: ButtonIconComponent;
+  loading?: boolean;
+  loadingLabel?: React.ReactNode;
   size?: ButtonSize;
   variant?: ButtonVariant;
 };
@@ -244,6 +260,8 @@ export function Button({
   haptic = false,
   icon,
   iconAfter,
+  loading = false,
+  loadingLabel,
   onPress,
   onPressIn,
   size = "md",
@@ -251,8 +269,9 @@ export function Button({
   ...props
 }: ButtonProps) {
   const resolvedFullWidth = fullWidth ?? size !== "icon";
+  const isDisabled = Boolean(disabled || loading);
   const showGlint = shouldShowButtonGlint({
-    disabled: Boolean(disabled),
+    disabled: isDisabled,
     disableGlint,
     glass,
     glint,
@@ -262,6 +281,10 @@ export function Button({
   });
   const handlePress = React.useCallback(
     (event: Parameters<NonNullable<ButtonProps["onPress"]>>[0]) => {
+      if (isDisabled) {
+        return;
+      }
+
       if (!onPress) {
         return;
       }
@@ -273,33 +296,37 @@ export function Button({
 
       onPress(event);
     },
-    [delayPress, onPress],
+    [delayPress, isDisabled, onPress],
   );
   const handlePressIn = React.useCallback(
     (event: Parameters<NonNullable<ButtonProps["onPressIn"]>>[0]) => {
-      if (!disabled) {
+      if (!isDisabled) {
         triggerButtonHaptic(haptic);
       }
       onPressIn?.(event);
     },
-    [disabled, haptic, onPressIn],
+    [haptic, isDisabled, onPressIn],
   );
+  const loadingColor = getButtonContentColor(variant, glass);
+  const renderedChildren = loading && loadingLabel ? loadingLabel : children;
 
   const buttonElement = (
     <ButtonFrame
       {...props}
       buttonSize={size}
       buttonVariant={variant}
-      disabled={disabled}
+      disabled={isDisabled}
       fullWidth={resolvedFullWidth}
       glass={glass}
+      loading={loading}
       onPress={onPress ? handlePress : undefined}
       onPressIn={handlePressIn}
     >
       {showGlint ? <Glint bottomShadow /> : null}
-      {icon ? <ButtonIcon icon={icon} /> : null}
-      {renderButtonChildren(children)}
-      {iconAfter ? <ButtonIcon icon={iconAfter} /> : null}
+      {loading ? <Spinner color={loadingColor} size="small" /> : null}
+      {!loading && icon ? <ButtonIcon icon={icon} /> : null}
+      {renderButtonChildren(renderedChildren)}
+      {!loading && iconAfter ? <ButtonIcon icon={iconAfter} /> : null}
     </ButtonFrame>
   );
 
@@ -352,6 +379,8 @@ function getButtonContentColor(variant: ButtonVariant, glass?: boolean) {
       return "$foreground";
     case "secondary":
       return "$secondaryForeground";
+    case "surface":
+      return "$foreground";
     case "primary":
       return "$primaryForeground";
   }

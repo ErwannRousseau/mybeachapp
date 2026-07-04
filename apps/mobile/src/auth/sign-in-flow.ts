@@ -1,81 +1,42 @@
-import {
-  AUTH_ERROR_KEYS,
-  AUTH_PASSWORD_MIN_LENGTH,
-} from "@mybeachapp/shared/auth/constants";
-import { authCredentialsSchema } from "@mybeachapp/shared/auth/schemas";
+import { AUTH_EMAIL_OTP_RESEND_AFTER_SECONDS } from "@mybeachapp/shared/auth/constants";
 import type { AuthFlow } from "@mybeachapp/shared/auth/types";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import type { authClient } from "./auth-client";
+import { emailOtpAuthCapability } from "./email-otp-capability";
 import {
   hasNativeAppleAuthProvider,
   hasNativeGoogleAuthProvider,
   type SocialAuthProvider,
-  signInWithPassword,
   signInWithSocial,
 } from "./session";
 
 export type SignInFormValues = {
   email: string;
-  password: string;
+  otp: string;
 };
 
-function getAuthFormErrorMessage(errorKey: string | undefined) {
-  switch (errorKey) {
-    case AUTH_ERROR_KEYS.emailInvalid:
-      return "Vérifie ton email.";
-    case AUTH_ERROR_KEYS.passwordTooShort:
-      return `Ton mot de passe doit contenir au moins ${AUTH_PASSWORD_MIN_LENGTH} caractères.`;
-    default:
-      return "Vérifie ton email et ton mot de passe.";
-  }
+export type AuthPendingAction = "apple" | "email" | "google" | "otp" | null;
+
+function isEmailError(code: string) {
+  return code === "email_invalid" || code === "INVALID_EMAIL";
 }
 
-type AuthClientError = {
-  code?: string;
-  message?: string;
-  status?: number;
-};
-
-type BetterAuthErrorCode = keyof typeof authClient.$ERROR_CODES;
-
-const passwordAuthErrorMessages = {
-  INVALID_EMAIL_OR_PASSWORD: "Email ou mot de passe incorrect.",
-  MISSING_OR_NULL_ORIGIN: "Connexion impossible pour le moment.",
-  USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL:
-    "Un compte existe déjà avec cet email. Connecte-toi plutôt.",
-} satisfies Partial<Record<BetterAuthErrorCode, string>>;
-
-type PasswordAuthErrorCode = keyof typeof passwordAuthErrorMessages;
-
-function isPasswordAuthErrorCode(
-  code: string | undefined,
-): code is PasswordAuthErrorCode {
-  return Boolean(code && code in passwordAuthErrorMessages);
-}
-
-function getPasswordAuthErrorMessage(
-  error: AuthClientError | null | undefined,
-) {
-  if (isPasswordAuthErrorCode(error?.code)) {
-    return passwordAuthErrorMessages[error.code];
-  }
-
-  return error?.message ?? "Connexion impossible pour le moment.";
-}
-
-function isCredentialField(field: unknown): field is keyof SignInFormValues {
-  return field === "email" || field === "password";
+function isOtpError(code: string) {
+  return (
+    code === "otp_invalid" || code === "INVALID_OTP" || code === "OTP_EXPIRED"
+  );
 }
 
 type UseSignInFlowOptions = {
   initialFlow?: AuthFlow;
+  onOtpStepStarted?: () => void;
 };
 
 export function useSignInFlow({
   initialFlow = "signIn",
+  onOtpStepStarted,
 }: UseSignInFlowOptions = {}) {
   const {
     clearErrors,
@@ -83,77 +44,102 @@ export function useSignInFlow({
     formState: { errors, isSubmitting },
     handleSubmit,
     setError,
+    setValue,
   } = useForm<SignInFormValues>({
     defaultValues: {
       email: "",
-      password: "",
+      otp: "",
     },
   });
-  const [flow, setFlow] = useState<AuthFlow>(initialFlow);
-  const [socialProviderPending, setSocialProviderPending] =
-    useState<SocialAuthProvider | null>(null);
+  const [flow] = useState<AuthFlow>(initialFlow);
+  const [otpEmail, setOtpEmail] = useState<null | string>(null);
+  const [pendingAction, setPendingAction] = useState<AuthPendingAction>(null);
+  const [resendCountdown, setResendCountdown] = useState(0);
 
-  const isAuthenticating = isSubmitting || socialProviderPending !== null;
+  const isAuthenticating = isSubmitting || pendingAction !== null;
   const hasAppleAuth = hasNativeAppleAuthProvider();
   const hasGoogleAuth = hasNativeGoogleAuthProvider();
   const hasSocialAuth = hasAppleAuth || hasGoogleAuth;
   const fieldErrors = {
     email: errors.email?.message,
-    password: errors.password?.message,
+    otp: errors.otp?.message,
   };
   const formError = errors.root?.message;
+  const isOtpStep = otpEmail !== null;
 
-  const submitPasswordAuth = handleSubmit(async (values) => {
-    clearErrors();
-
-    const result = authCredentialsSchema.safeParse({
-      ...values,
-      flow,
-    });
-
-    if (!result.success) {
-      let hasFieldError = false;
-
-      for (const issue of result.error.issues) {
-        const field = issue.path[0];
-
-        if (isCredentialField(field)) {
-          setError(field, {
-            message: getAuthFormErrorMessage(issue.message),
-          });
-          hasFieldError = true;
-        }
-      }
-
-      if (!hasFieldError) {
-        setError("root", {
-          message: getAuthFormErrorMessage(result.error.issues[0]?.message),
-        });
-      }
+  useEffect(() => {
+    if (resendCountdown === 0) {
       return;
     }
 
+    const timer = setTimeout(() => {
+      setResendCountdown((currentCountdown) =>
+        Math.max(0, currentCountdown - 1),
+      );
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [resendCountdown]);
+
+  const submitEmailOtp = handleSubmit(async (values) => {
+    clearErrors();
+    setPendingAction("email");
+
     try {
-      const response = await signInWithPassword(result.data);
+      const response = await emailOtpAuthCapability.sendEmailOtp({
+        email: values.email,
+      });
 
       if (response.error) {
-        setError("root", {
-          message: getPasswordAuthErrorMessage(response.error),
+        setError(isEmailError(response.error.code) ? "email" : "root", {
+          message: response.error.message,
         });
         return;
       }
 
-      router.replace("/(tabs)");
-    } catch {
-      setError("root", {
-        message: "Connexion impossible pour le moment.",
-      });
+      onOtpStepStarted?.();
+      setOtpEmail(response.data.email);
+      setResendCountdown(AUTH_EMAIL_OTP_RESEND_AFTER_SECONDS);
+      setValue("email", response.data.email);
+      setValue("otp", "");
+    } finally {
+      setPendingAction((currentAction) =>
+        currentAction === "email" ? null : currentAction,
+      );
     }
   });
 
+  function submitOtpAuth(otpOverride?: string) {
+    return handleSubmit(async (values) => {
+      clearErrors();
+      setPendingAction("otp");
+
+      try {
+        const response = await emailOtpAuthCapability.signInWithEmailOtp({
+          email: otpEmail ?? values.email,
+          otp: otpOverride ?? values.otp,
+        });
+
+        if (response.error) {
+          setError(isOtpError(response.error.code) ? "otp" : "root", {
+            message: response.error.message,
+          });
+          setValue("otp", "");
+          return;
+        }
+
+        router.replace("/(tabs)");
+      } finally {
+        setPendingAction((currentAction) =>
+          currentAction === "otp" ? null : currentAction,
+        );
+      }
+    })();
+  }
+
   async function submitSocialAuth(provider: SocialAuthProvider) {
     clearErrors();
-    setSocialProviderPending(provider);
+    setPendingAction(provider);
 
     try {
       const response = await signInWithSocial(provider);
@@ -172,21 +158,31 @@ export function useSignInFlow({
       }
 
       router.replace("/(tabs)");
-    } catch {
+    } catch (error) {
+      if (!(error instanceof Error)) {
+        throw error;
+      }
+
       setError("root", {
         message: "Connexion impossible pour le moment.",
       });
     } finally {
-      setSocialProviderPending(null);
+      setPendingAction((currentAction) =>
+        currentAction === provider ? null : currentAction,
+      );
     }
   }
 
-  function toggleFlow() {
+  function changeEmail() {
     clearErrors();
-    setFlow((currentFlow) => (currentFlow === "signIn" ? "signUp" : "signIn"));
+    setOtpEmail(null);
+    setResendCountdown(0);
+    setValue("otp", "");
   }
 
   return {
+    authPendingAction: pendingAction,
+    changeEmail,
     control,
     fieldErrors,
     flow,
@@ -195,8 +191,13 @@ export function useSignInFlow({
     hasGoogleAuth,
     hasSocialAuth,
     isAuthenticating,
-    submitPasswordAuth,
+    isOtpStep,
+    otpEmail,
+    resendCountdown,
+    submitEmailOtp,
+    submitOtpAuth,
     submitSocialAuth,
-    toggleFlow,
   };
 }
+
+export type UseSignInFlowResult = ReturnType<typeof useSignInFlow>;

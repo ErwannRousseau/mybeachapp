@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { XStack, YStack } from "tamagui";
 
 import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
-import { signOutAndRedirect, useAuthSession } from "@/src/auth/session";
+import { signOut, useAuthSession } from "@/src/auth/session";
 import { Avatar, AvatarFallback } from "@/ui/avatar";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
@@ -12,7 +12,7 @@ import { Text, Title } from "@/ui/typography";
 export default function ProfileScreen() {
   const { data: session, isPending } = useAuthSession();
   const handleSignOut = useCallback(() => {
-    void signOutAndRedirect();
+    void signOut();
   }, []);
 
   return (
@@ -47,10 +47,28 @@ export default function ProfileScreen() {
               </Button>
             ) : (
               <YStack gap="$sm">
-                <Link asChild href="/sign-in">
-                  <Button>Se connecter</Button>
-                </Link>
-                <Link asChild href="/sign-up">
+                {isPending ? (
+                  <Button disabled loading loadingLabel="Vérification">
+                    Se connecter
+                  </Button>
+                ) : (
+                  <Link
+                    asChild
+                    href={{
+                      params: { redirectTo: "/(tabs)/profile" },
+                      pathname: "/sign-in",
+                    }}
+                  >
+                    <Button>Se connecter</Button>
+                  </Link>
+                )}
+                <Link
+                  asChild
+                  href={{
+                    params: { redirectTo: "/(tabs)/profile" },
+                    pathname: "/sign-up",
+                  }}
+                >
                   <Button variant="secondary">Créer un compte</Button>
                 </Link>
               </YStack>

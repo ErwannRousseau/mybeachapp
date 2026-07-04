@@ -27,6 +27,34 @@ describe("Button", () => {
     expect(findByText(root, "Créer")).toBeTruthy();
   });
 
+  it("renders a loading label and disables press feedback", async () => {
+    const onPress = vi.fn();
+    const root = await renderWithTamagui(
+      <Button loading loadingLabel="Connexion" onPress={onPress}>
+        Se connecter
+      </Button>,
+    );
+
+    expect(findByText(root, "Connexion")).toBeTruthy();
+    expect(() => findByProp(root, "onClick")).toThrow(
+      "Unable to find prop: onClick",
+    );
+    expect(onPress).not.toHaveBeenCalled();
+  });
+
+  it("keeps the normal label when only loadingLabel is provided", async () => {
+    const root = await renderWithTamagui(
+      <Button disabled loadingLabel="Envoi">
+        Suivant
+      </Button>,
+    );
+
+    expect(findByText(root, "Suivant")).toBeTruthy();
+    expect(() => findByText(root, "Envoi")).toThrow(
+      "Unable to find text: Envoi",
+    );
+  });
+
   it("accepts glass tint and disabled glint composition", async () => {
     const root = await renderWithTamagui(
       <Button disableGlint glass glassTint="#eaf8fc" glint>

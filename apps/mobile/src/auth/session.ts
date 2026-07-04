@@ -3,10 +3,10 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
-import { router } from "expo-router";
 import { env } from "../config/env";
 import { isAndroid, isIos } from "../lib/platform";
 import { authClient } from "./auth-client";
+import { emailOtpAuthCapability } from "./email-otp-capability";
 import {
   hasNativeAppleAuthProviderForPlatform,
   hasNativeGoogleAuthConfigForPlatform,
@@ -224,7 +224,6 @@ export async function signInWithSocial(
     : await signInWithApple();
 }
 
-export async function signOutAndRedirect() {
-  await authClient.signOut();
-  router.replace("/sign-in");
+export async function signOut() {
+  await emailOtpAuthCapability.signOut();
 }

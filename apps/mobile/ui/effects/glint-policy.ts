@@ -7,7 +7,13 @@ export type ButtonGlintPolicyOptions = {
   glint?: boolean;
   platform: ButtonGlintPlatform;
   size: "icon" | "md" | "sm";
-  variant: "destructive" | "ghost" | "primary" | "secondary" | "text";
+  variant:
+    | "destructive"
+    | "ghost"
+    | "primary"
+    | "secondary"
+    | "surface"
+    | "text";
 };
 
 export function shouldShowButtonGlint({
@@ -27,7 +33,7 @@ export function shouldShowButtonGlint({
     return false;
   }
 
-  if (variant === "ghost" || variant === "text") {
+  if (variant === "ghost" || variant === "surface" || variant === "text") {
     return false;
   }
 

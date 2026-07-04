@@ -25,6 +25,7 @@ function RootNavigator() {
         contentStyle: {
           backgroundColor: theme.background,
         },
+        headerShadowVisible: false,
         headerStyle: {
           backgroundColor: theme.background,
         },
