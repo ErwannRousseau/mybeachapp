@@ -96,7 +96,7 @@ This file applies to the whole repository. Deeper `AGENTS.md` files override it 
   - `@mybeachapp/shared/auth/schemas`
   - `@mybeachapp/shared/auth/types`
   - `@mybeachapp/shared/users/validators`
-  - same pattern for `participations`
+  - same pattern for `participations` and `users`.
 - Avoid `@mybeachapp/shared` root imports.
 - Avoid legacy technical buckets like `/constants`, `/types`, and `/validators`.
 - In mobile UI code, prefer imports from `mobile/ui/` for design-system components.

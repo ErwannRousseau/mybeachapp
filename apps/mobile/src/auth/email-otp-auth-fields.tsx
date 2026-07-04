@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
-import { Separator, XStack, YStack } from "tamagui";
+import { XStack, YStack } from "tamagui";
 
 import { AppleBrandIcon, GoogleBrandIcon } from "@/src/auth/auth-brand-icons";
 import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
 import { OtpInput } from "@/ui/otp-input";
-
+import { Separator } from "@/ui/separator";
 import { Text } from "@/ui/typography";
 
 type EmailFieldProps = {
