@@ -14,6 +14,7 @@ import type * as auth from "../auth.js";
 import type * as config_env from "../config/env.js";
 import type * as files from "../files.js";
 import type * as http from "../http.js";
+import type * as lib_adminAuthorization from "../lib/adminAuthorization.js";
 import type * as lib_currentBeachUser from "../lib/currentBeachUser.js";
 import type * as lib_oauth from "../lib/oauth.js";
 import type * as lib_validators from "../lib/validators.js";
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   "config/env": typeof config_env;
   files: typeof files;
   http: typeof http;
+  "lib/adminAuthorization": typeof lib_adminAuthorization;
   "lib/currentBeachUser": typeof lib_currentBeachUser;
   "lib/oauth": typeof lib_oauth;
   "lib/validators": typeof lib_validators;

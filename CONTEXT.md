@@ -24,6 +24,14 @@ _Avoid_: Anonymous user, guest, prospect
 A person with an account who can create and join **Beach Activities**.
 _Avoid_: Account, auth user, member
 
+**Admin**:
+A **Signed-in User** with elevated permissions to operate the back-office.
+_Avoid_: Moderator, operator, back-office user
+
+**Super Admin**:
+An **Admin** with permission to manage other **Admin** roles.
+_Avoid_: Owner, root user, system admin
+
 **Beach Profile**:
 The public-facing identity of a **Signed-in User**, including a required pseudo, optional first and last name, avatar, preferred **Activity Categories**, and cities.
 _Avoid_: App profile, account profile, auth profile
@@ -72,6 +80,10 @@ _Avoid_: Detail page, event page, card
 
 - A **Visitor** may view open **Beach Activities**
 - A **Signed-in User** has one **Beach Profile**
+- An **Admin** is a **Signed-in User**
+- A **Super Admin** is an **Admin**
+- A **Super Admin** may grant or revoke the **Admin** role
+- A **Super Admin** may only grant the **Admin** role to an existing **Signed-in User**
 - A **Signed-in User** may complete **Onboarding** for their **Beach Profile**
 - A **Signed-in User** may organize zero or more **Beach Activities**
 - A **Beach Activity** has exactly one **Organizer**
