@@ -11,6 +11,8 @@ import type {
   AuthEmailOtpSignIn,
 } from "@mybeachapp/shared/auth/types";
 
+import { translate } from "@/src/localization/i18n";
+
 export type AuthCapabilityError = {
   code: string;
   message: string;
@@ -76,27 +78,29 @@ export type EmailOtpAuthCapability = {
 function mapValidationError(errorKey: string | undefined) {
   switch (errorKey) {
     case AUTH_ERROR_KEYS.emailInvalid:
-      return "Vérifie ton email.";
+      return translate("auth.errors.emailInvalid");
     case AUTH_ERROR_KEYS.otpInvalid:
-      return `Entre le code à ${AUTH_EMAIL_OTP_LENGTH} chiffres.`;
+      return translate("auth.errors.otpLength", {
+        length: AUTH_EMAIL_OTP_LENGTH,
+      });
     default:
-      return "Vérifie les informations saisies.";
+      return translate("auth.errors.validation");
   }
 }
 
 function mapProviderError(error: AuthAdapterError | null | undefined) {
   switch (error?.code) {
     case "INVALID_EMAIL":
-      return "Vérifie ton email.";
+      return translate("auth.errors.emailInvalid");
     case "INVALID_OTP":
-      return "Ce code est invalide. Vérifie l’email reçu.";
+      return translate("auth.errors.otpInvalid");
     case "OTP_EXPIRED":
-      return "Ce code a expiré. Demande un nouveau code.";
+      return translate("auth.errors.otpExpired");
     case "RATE_LIMIT_EXCEEDED":
     case "TOO_MANY_REQUESTS":
-      return "Attends un peu avant de réessayer.";
+      return translate("auth.errors.rateLimit");
     default:
-      return "Connexion impossible pour le moment.";
+      return translate("auth.errors.generic");
   }
 }
 

@@ -1,6 +1,7 @@
 import { AUTH_EMAIL_OTP_LENGTH } from "@mybeachapp/shared/auth/constants";
 import { KeyRound, Mail, Waves } from "@tamagui/lucide-icons-2";
 import type React from "react";
+import { useTranslation } from "react-i18next";
 import { KeyboardAvoidingView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Circle, ScrollView, YStack } from "tamagui";
@@ -69,6 +70,7 @@ export function EmailOtpAuthPanel({
   resendCountdown,
 }: EmailOtpAuthPanelProps) {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   if (isOtpStep) {
     return (
@@ -80,17 +82,17 @@ export function EmailOtpAuthPanel({
             }
             haptic="medium"
             loading={authPendingAction === "otp"}
-            loadingLabel="Connexion"
+            loadingLabel={t("auth.otp.loading")}
             onPress={onSubmitOtp}
             opacity={otpValue.length === AUTH_EMAIL_OTP_LENGTH ? 1 : 0.5}
           >
-            Suivant
+            {t("auth.actions.next")}
           </Button>
         }
-        description="On a envoyé un code de vérification à ton email"
+        description={t("auth.otp.description")}
         descriptionSecondLine={otpEmail}
         icon={KeyRound}
-        title="Entre le code"
+        title={t("auth.otp.title")}
       >
         <OtpCodeField
           disabled={isAuthUiDisabled}
@@ -115,16 +117,16 @@ export function EmailOtpAuthPanel({
             disabled={isAuthUiDisabled || !emailValue.trim()}
             haptic="medium"
             loading={authPendingAction === "email"}
-            loadingLabel="Envoi"
+            loadingLabel={t("auth.email.loading")}
             onPress={onSubmitEmail}
             opacity={emailValue.trim() ? 1 : 0.5}
           >
-            Suivant
+            {t("auth.actions.next")}
           </Button>
         }
-        description="Connecte-toi ou inscris-toi avec ton email."
+        description={t("auth.email.description")}
         icon={Mail}
-        title="Continuer avec email"
+        title={t("auth.email.title")}
       >
         <EmailField
           disabled={isAuthUiDisabled}
@@ -154,10 +156,10 @@ export function EmailOtpAuthPanel({
           <AuthLogoMark size={64} />
           <YStack gap="$xs" items="center">
             <Headline selectable size="lg" text="center">
-              My Beach App
+              {t("auth.landing.title")}
             </Headline>
             <Text selectable text="center" variant="muted">
-              Connecte-toi pour continuer.
+              {t("auth.landing.subtitle")}
             </Text>
           </YStack>
         </YStack>
@@ -179,7 +181,7 @@ export function EmailOtpAuthPanel({
             icon={Mail}
             onPress={onStartEmail}
           >
-            Continuer avec email
+            {t("auth.actions.continueEmail")}
           </Button>
           {hasSocialAuth ? (
             <SocialAuthActions
@@ -196,8 +198,7 @@ export function EmailOtpAuthPanel({
             />
           ) : null}
           <Text selectable size="sm" text="center" variant="muted">
-            En continuant, tu acceptes les conditions d’utilisation, la
-            politique de confidentialité et les règles de la communauté.
+            {t("auth.landing.terms")}
           </Text>
           <AuthErrorMessage message={formError} />
         </FloatingSurface>

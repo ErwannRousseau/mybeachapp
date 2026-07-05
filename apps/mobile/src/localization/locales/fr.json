@@ -1,0 +1,139 @@
+{
+  "activities": {
+    "categories": {
+      "ball_sport": "Sports de ballon",
+      "beach_games": "Jeux de plage",
+      "fitness_wellness": "Fitness",
+      "other": "Autre",
+      "racket_sport": "Raquettes",
+      "social": "Social",
+      "walking_running": "Marche",
+      "water_sport": "Sports nautiques"
+    },
+    "create": {
+      "authRequiredDescription": "Connecte-toi avec ton email pour publier une activité et retrouver les participants.",
+      "authRequiredPending": "Vérification de ton accès.",
+      "authRequiredTitle": "Connecte-toi pour créer une activité",
+      "category": "Catégorie",
+      "categorySheetDescription": "Elle aide les autres participants à comprendre rapidement l’activité.",
+      "categorySheetTitle": "Choisis une catégorie",
+      "maxParticipants": "Participants max",
+      "prepare": "Préparer l’activité",
+      "screenDescription": "Ajoute les infos essentielles avant de publier ton activité.",
+      "screenTitle": "Nouvelle activité",
+      "title": "Titre",
+      "titlePlaceholder": "Beach-volley à la plage centrale",
+      "validate": "Valider"
+    },
+    "filters": {
+      "mvp": "Filtres"
+    },
+    "home": {
+      "create": "Créer une activité",
+      "headline": "Trouve une activité sur la plage",
+      "mapProvider": "Carte prête",
+      "mapReady": "Explore les activités proches et prépare ta prochaine sortie.",
+      "nearYou": "Autour de toi",
+      "providerReady": "Autour de toi",
+      "searchPlaceholder": "Pornichet, La Baule...",
+      "searchStatus": "Recherche: {{query}}"
+    },
+    "list": {
+      "create": "Créer une activité",
+      "description": "Retrouve les activités proches dès qu’elles sont publiées.",
+      "emptyDescription": "Les prochaines activités proches apparaîtront ici.",
+      "emptyTitle": "Aucune activité pour le moment",
+      "title": "Activités autour de toi"
+    },
+    "status": {
+      "cancelled": "Annulé",
+      "finished": "Terminé",
+      "full": "Complet",
+      "open": "Ouvert"
+    }
+  },
+  "auth": {
+    "actions": {
+      "continueEmail": "Continuer avec email",
+      "next": "Suivant",
+      "signIn": "Se connecter"
+    },
+    "email": {
+      "description": "Connecte-toi ou inscris-toi avec ton email.",
+      "label": "Email",
+      "loading": "Envoi",
+      "placeholder": "Entre ton email",
+      "title": "Continuer avec email"
+    },
+    "errors": {
+      "appleGeneric": "Connexion Apple impossible pour le moment.",
+      "emailInvalid": "Vérifie ton email.",
+      "generic": "Connexion impossible pour le moment.",
+      "googleConfigMissing": "Connexion Google pas encore configurée sur cet appareil.",
+      "googleGeneric": "Connexion Google impossible pour le moment.",
+      "otpExpired": "Ce code a expiré. Demande un nouveau code.",
+      "otpInvalid": "Ce code est invalide. Vérifie l’email reçu.",
+      "otpLength": "Entre le code à {{length}} chiffres.",
+      "rateLimit": "Attends un peu avant de réessayer.",
+      "validation": "Vérifie les informations saisies."
+    },
+    "landing": {
+      "subtitle": "Connecte-toi pour continuer.",
+      "terms": "En continuant, tu acceptes les conditions d’utilisation, la politique de confidentialité et les règles de la communauté.",
+      "title": "My Beach App"
+    },
+    "otp": {
+      "description": "On a envoyé un code de vérification à ton email",
+      "loading": "Connexion",
+      "paste": "Coller le code",
+      "resend": "Renvoyer",
+      "resendCountdown": "Renvoyer le code dans ({{count}})",
+      "resendLoading": "Renvoi",
+      "title": "Entre le code"
+    },
+    "social": {
+      "separator": "ou continuer avec"
+    }
+  },
+  "common": {
+    "loadingSession": "Vérification",
+    "notFound": {
+      "backToMap": "Retour à la carte",
+      "message": "Écran introuvable.",
+      "title": "Introuvable"
+    }
+  },
+  "locale": {
+    "current": "Actif",
+    "language": "Langue",
+    "names": {
+      "fr": "Français"
+    }
+  },
+  "navigation": {
+    "create": "Créer",
+    "home": "Carte",
+    "list": "Liste",
+    "onboarding": "Bienvenue",
+    "profile": "Profil",
+    "signIn": "Connexion",
+    "signUp": "Inscription"
+  },
+  "onboarding": {
+    "body": "Découvre, crée et rejoins des activités spontanées autour de toi.",
+    "cta": "Voir la carte",
+    "headline": "Rejoins une activité près de ta plage"
+  },
+  "profile": {
+    "createAccount": "Créer un compte",
+    "guestDescription": "Connecte-toi pour créer et rejoindre des activités.",
+    "guestTitle": "Profil visiteur",
+    "languageTitle": "Langue",
+    "sessionActive": "Tu es connecté.",
+    "sessionChecking": "Vérification en cours.",
+    "signedInTitle": "Profil connecté",
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "title": "Profil"
+  }
+}

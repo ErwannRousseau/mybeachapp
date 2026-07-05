@@ -4,6 +4,8 @@ import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { translate } from "@/src/localization/i18n";
+
 import { emailOtpAuthCapability } from "./email-otp-capability";
 import {
   hasNativeAppleAuthProvider,
@@ -150,9 +152,7 @@ export function useSignInFlow({
 
       if (response.response.error) {
         setError("root", {
-          message:
-            response.response.error.message ??
-            "Connexion impossible pour le moment.",
+          message: translate("auth.errors.generic"),
         });
         return;
       }
@@ -164,7 +164,7 @@ export function useSignInFlow({
       }
 
       setError("root", {
-        message: "Connexion impossible pour le moment.",
+        message: translate("auth.errors.generic"),
       });
     } finally {
       setPendingAction((currentAction) =>

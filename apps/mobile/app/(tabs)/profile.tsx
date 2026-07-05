@@ -1,23 +1,28 @@
 import { Link, Stack } from "expo-router";
 import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { XStack, YStack } from "tamagui";
 
 import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
 import { signOut, useAuthSession } from "@/src/auth/session";
+import { useLocale } from "@/src/localization/use-locale";
 import { Avatar, AvatarFallback } from "@/ui/avatar";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
+import { Tag } from "@/ui/tag";
 import { Text, Title } from "@/ui/typography";
 
 export default function ProfileScreen() {
   const { data: currentUser, isPending } = useAuthSession();
+  const { t } = useTranslation();
+  const { currentLocale, localeLabels } = useLocale();
   const handleSignOut = useCallback(() => {
     void signOut();
   }, []);
 
   return (
     <>
-      <Stack.Screen options={{ title: "Profil" }} />
+      <Stack.Screen options={{ title: t("profile.title") }} />
       <TabScreenScrollView>
         <YStack gap="$lg" p="$md" pb="$md">
           <Card gap="$sm">
@@ -29,37 +34,55 @@ export default function ProfileScreen() {
               </Avatar>
               <YStack flex={1} gap="$xxs" minW={0}>
                 <Title selectable>
-                  {currentUser ? "Profil connecté" : "Profil invité"}
+                  {currentUser
+                    ? t("profile.signedInTitle")
+                    : t("profile.guestTitle")}
                 </Title>
                 <Text selectable variant="muted">
                   {isPending
-                    ? "Vérification de la session en cours."
+                    ? t("profile.sessionChecking")
                     : currentUser
-                      ? (currentUser.email ?? "Ta session est active.")
-                      : "Connecte-toi pour créer et rejoindre des activités."}
+                      ? (currentUser.email ?? t("profile.sessionActive"))
+                      : t("profile.guestDescription")}
                 </Text>
               </YStack>
             </XStack>
             {currentUser ? (
               <Button onPress={handleSignOut} variant="secondary">
-                Se déconnecter
+                {t("profile.signOut")}
               </Button>
             ) : (
               <YStack gap="$sm">
                 {isPending ? (
-                  <Button disabled loading loadingLabel="Vérification">
-                    Se connecter
+                  <Button
+                    disabled
+                    loading
+                    loadingLabel={t("common.loadingSession")}
+                  >
+                    {t("profile.signIn")}
                   </Button>
                 ) : (
                   <Link asChild href="/sign-in">
-                    <Button>Se connecter</Button>
+                    <Button>{t("profile.signIn")}</Button>
                   </Link>
                 )}
                 <Link asChild href="/sign-up">
-                  <Button variant="secondary">Créer un compte</Button>
+                  <Button variant="secondary">
+                    {t("profile.createAccount")}
+                  </Button>
                 </Link>
               </YStack>
             )}
+          </Card>
+
+          <Card gap="$sm">
+            <Title selectable size="sm">
+              {t("profile.languageTitle")}
+            </Title>
+            <XStack items="center" justify="space-between">
+              <Text selectable>{localeLabels[currentLocale]}</Text>
+              <Tag variant="success">{t("locale.current")}</Tag>
+            </XStack>
           </Card>
         </YStack>
       </TabScreenScrollView>

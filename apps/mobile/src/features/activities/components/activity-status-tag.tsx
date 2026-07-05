@@ -1,10 +1,10 @@
 import type { ActivityStatus } from "@mybeachapp/shared/activities/types";
+import { useTranslation } from "react-i18next";
 
 import { Tag, type TagProps, type TagVariant } from "@/ui/tag";
 
 import {
   type ActivityStatusTone,
-  getActivityStatusLabel,
   getActivityStatusTone,
 } from "./activity-status-tone";
 
@@ -16,9 +16,11 @@ export function ActivityStatusTag({
   status,
   ...props
 }: ActivityStatusTagProps) {
+  const { t } = useTranslation();
+
   return (
     <Tag variant={getActivityStatusVariant(status)} {...props}>
-      {getActivityStatusLabel(status)}
+      {t(`activities.status.${status}`)}
     </Tag>
   );
 }

@@ -1,6 +1,7 @@
 import { AUTH_EMAIL_OTP_LENGTH } from "@mybeachapp/shared/auth/constants";
 import * as Clipboard from "expo-clipboard";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useWindowDimensions } from "react-native";
 import { Input as TamaguiInput, XStack, YStack } from "tamagui";
 
@@ -35,6 +36,7 @@ export function OtpInput({
   value,
 }: OtpInputProps) {
   const { width: windowWidth } = useWindowDimensions();
+  const { t } = useTranslation();
   const inputRefs = useRef<Array<FocusableInput | null>>([]);
   const [focusedIndex, setFocusedIndex] = useState(
     value.length === length ? -1 : 0,
@@ -238,7 +240,7 @@ export function OtpInput({
         size="sm"
         variant="text"
       >
-        Coller le code
+        {t("auth.otp.paste")}
       </Button>
     </YStack>
   );

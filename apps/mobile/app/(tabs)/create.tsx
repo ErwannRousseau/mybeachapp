@@ -5,10 +5,11 @@ import {
 import type { ActivityCategory } from "@mybeachapp/shared/activities/types";
 import { Link, Stack } from "expo-router";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { YStack } from "tamagui";
 import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
 import { useAuthSession } from "@/src/auth/session";
-import { activityCategoryLabels } from "@/src/features/activities/activity-copy";
+import { getActivityCategoryLabel } from "@/src/features/activities/activity-copy";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
 import { Chip } from "@/ui/chip";
@@ -29,6 +30,7 @@ const defaultCategory = ACTIVITY_CATEGORIES[0];
 
 export default function CreateActivityScreen() {
   const { data: currentUser, isPending } = useAuthSession();
+  const { t } = useTranslation();
   const [categorySheetOpen, setCategorySheetOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] =
     useState<ActivityCategory>(defaultCategory);
@@ -43,27 +45,31 @@ export default function CreateActivityScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: "Créer" }} />
+      <Stack.Screen options={{ title: t("navigation.create") }} />
       <TabScreenScrollView>
         <YStack gap="$lg" p="$md" pb="$md">
           {!currentUser ? (
             <Card gap="$md">
               <Headline selectable>
-                Connecte-toi pour créer une activité
+                {t("activities.create.authRequiredTitle")}
               </Headline>
               <Text selectable variant="muted">
                 {isPending
-                  ? "Vérification de ta session."
-                  : "Connecte-toi avec ton email pour publier une activité et retrouver les participants."}
+                  ? t("activities.create.authRequiredPending")
+                  : t("activities.create.authRequiredDescription")}
               </Text>
               <YStack gap="$sm">
                 {isPending ? (
-                  <Button disabled loading loadingLabel="Vérification">
-                    Se connecter
+                  <Button
+                    disabled
+                    loading
+                    loadingLabel={t("common.loadingSession")}
+                  >
+                    {t("auth.actions.signIn")}
                   </Button>
                 ) : (
                   <Link asChild href="/sign-in">
-                    <Button>Se connecter</Button>
+                    <Button>{t("auth.actions.signIn")}</Button>
                   </Link>
                 )}
               </YStack>
@@ -71,48 +77,52 @@ export default function CreateActivityScreen() {
           ) : (
             <>
               <YStack gap="$sm">
-                <Headline selectable>Nouvelle activité</Headline>
+                <Headline selectable>
+                  {t("activities.create.screenTitle")}
+                </Headline>
                 <Text selectable variant="muted">
-                  Base d’écran prête pour relier validation partagée, auth et
-                  mutation Convex.
+                  {t("activities.create.screenDescription")}
                 </Text>
               </YStack>
 
               <Field>
-                <FieldLabel>Titre</FieldLabel>
-                <Input placeholder="Beach-volley à la plage centrale" />
+                <FieldLabel>{t("activities.create.title")}</FieldLabel>
+                <Input placeholder={t("activities.create.titlePlaceholder")} />
               </Field>
 
               <Field>
-                <FieldLabel>Catégorie</FieldLabel>
+                <FieldLabel>{t("activities.create.category")}</FieldLabel>
                 <Button
                   haptic="selection"
                   onPress={openCategorySheet}
                   variant="secondary"
                 >
-                  {activityCategoryLabels[selectedCategory]}
+                  {getActivityCategoryLabel(selectedCategory, t)}
                 </Button>
               </Field>
 
               <Field>
-                <FieldLabel>Participants max</FieldLabel>
+                <FieldLabel>
+                  {t("activities.create.maxParticipants")}
+                </FieldLabel>
                 <Input
                   defaultValue={String(defaultParticipants)}
                   keyboardType="number-pad"
                 />
               </Field>
 
-              <Button>Préparer l’activité</Button>
+              <Button>{t("activities.create.prepare")}</Button>
 
               <Sheet
                 onOpenChange={setCategorySheetOpen}
                 open={categorySheetOpen}
               >
                 <SheetHeader>
-                  <SheetTitle>Choisis une catégorie</SheetTitle>
+                  <SheetTitle>
+                    {t("activities.create.categorySheetTitle")}
+                  </SheetTitle>
                   <SheetDescription>
-                    Elle aide les autres participants à comprendre rapidement
-                    l’activité.
+                    {t("activities.create.categorySheetDescription")}
                   </SheetDescription>
                 </SheetHeader>
                 <SheetBody>
@@ -123,6 +133,7 @@ export default function CreateActivityScreen() {
                         key={category}
                         onSelect={setSelectedCategory}
                         selected={selectedCategory === category}
+                        t={t}
                       />
                     ))}
                   </YStack>
@@ -133,7 +144,7 @@ export default function CreateActivityScreen() {
                     onPress={closeCategorySheet}
                     variant="secondary"
                   >
-                    Valider
+                    {t("activities.create.validate")}
                   </Button>
                 </SheetActions>
               </Sheet>
@@ -149,12 +160,14 @@ type ActivityCategoryChipProps = {
   category: ActivityCategory;
   onSelect: (category: ActivityCategory) => void;
   selected: boolean;
+  t: ReturnType<typeof useTranslation>["t"];
 };
 
 function ActivityCategoryChip({
   category,
   onSelect,
   selected,
+  t,
 }: ActivityCategoryChipProps) {
   const handlePress = useCallback(() => {
     onSelect(category);
@@ -162,7 +175,7 @@ function ActivityCategoryChip({
 
   return (
     <Chip onPress={handlePress} selected={selected}>
-      {activityCategoryLabels[category]}
+      {getActivityCategoryLabel(category, t)}
     </Chip>
   );
 }

@@ -1,5 +1,6 @@
 import { List } from "@tamagui/lucide-icons-2";
 import { Link, Stack } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { YStack } from "tamagui";
 
 import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
@@ -15,16 +16,17 @@ import {
 import { Text, Title } from "@/ui/typography";
 
 export default function ActivityListScreen() {
+  const { t } = useTranslation();
+
   return (
     <>
-      <Stack.Screen options={{ title: "Liste" }} />
+      <Stack.Screen options={{ title: t("navigation.list") }} />
       <TabScreenScrollView>
         <YStack gap="$lg" p="$md" pb="$md">
           <YStack gap="$sm">
-            <Title selectable>Activités autour de toi</Title>
+            <Title selectable>{t("activities.list.title")}</Title>
             <Text selectable variant="muted">
-              Liste prête pour afficher les activités proches dès que Convex
-              sera branché.
+              {t("activities.list.description")}
             </Text>
           </YStack>
 
@@ -33,15 +35,14 @@ export default function ActivityListScreen() {
               <EmptyMedia variant="icon">
                 <List color="$accent" size={26} />
               </EmptyMedia>
-              <EmptyTitle>Aucune activité pour le moment</EmptyTitle>
+              <EmptyTitle>{t("activities.list.emptyTitle")}</EmptyTitle>
               <EmptyDescription>
-                Les prochaines activités proches apparaîtront ici dès que Convex
-                sera branché.
+                {t("activities.list.emptyDescription")}
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
               <Link asChild href="/create">
-                <Button>Créer une activité</Button>
+                <Button>{t("activities.list.create")}</Button>
               </Link>
             </EmptyContent>
           </Empty>

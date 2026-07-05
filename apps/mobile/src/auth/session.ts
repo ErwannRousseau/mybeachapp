@@ -3,6 +3,7 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 import * as AppleAuthentication from "expo-apple-authentication";
+import { translate } from "@/src/localization/i18n";
 import { env } from "../config/env";
 import { isAndroid, isIos } from "../lib/platform";
 import { authClient } from "./auth-client";
@@ -112,7 +113,7 @@ async function signInWithGoogle(): Promise<SocialAuthResult> {
         data: null,
         error: {
           code: "GOOGLE_NATIVE_CONFIG_MISSING",
-          message: "Connexion Google pas encore configurée sur cet appareil.",
+          message: translate("auth.errors.googleConfigMissing"),
           status: 400,
           statusText: "Bad Request",
         },
@@ -144,7 +145,7 @@ async function signInWithGoogle(): Promise<SocialAuthResult> {
           data: null,
           error: {
             code: "GOOGLE_ID_TOKEN_MISSING",
-            message: "Connexion Google impossible pour le moment.",
+            message: translate("auth.errors.googleGeneric"),
             status: 400,
             statusText: "Bad Request",
           },
@@ -189,7 +190,7 @@ async function signInWithApple(): Promise<SocialAuthResult> {
           data: null,
           error: {
             code: "APPLE_ID_TOKEN_MISSING",
-            message: "Connexion Apple impossible pour le moment.",
+            message: translate("auth.errors.appleGeneric"),
             status: 400,
             statusText: "Bad Request",
           },

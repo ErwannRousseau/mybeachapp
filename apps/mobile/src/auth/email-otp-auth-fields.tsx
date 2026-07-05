@@ -1,5 +1,6 @@
 import { AUTH_EMAIL_OTP_LENGTH } from "@mybeachapp/shared/auth/constants";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { XStack, YStack } from "tamagui";
 
 import { AppleBrandIcon, GoogleBrandIcon } from "@/src/auth/auth-brand-icons";
@@ -27,11 +28,13 @@ export function EmailField({
   onSubmit,
   value,
 }: EmailFieldProps) {
+  const { t } = useTranslation();
+
   return (
     <YStack gap="$xs">
-      <FieldLabel>Email</FieldLabel>
+      <FieldLabel>{t("auth.email.label")}</FieldLabel>
       <Input
-        accessibilityLabel="Email"
+        accessibilityLabel={t("auth.email.label")}
         autoCapitalize="none"
         autoComplete="email"
         disabled={disabled}
@@ -40,7 +43,7 @@ export function EmailField({
         onBlur={onBlur}
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
-        placeholder="Entre ton email"
+        placeholder={t("auth.email.placeholder")}
         textContentType="emailAddress"
         value={value}
       />
@@ -74,6 +77,7 @@ export function OtpCodeField({
   resendCountdown,
   value,
 }: OtpCodeFieldProps) {
+  const { t } = useTranslation();
   const lastSubmittedCode = useRef("");
 
   useEffect(() => {
@@ -106,19 +110,19 @@ export function OtpCodeField({
       ) : null}
       {resendCountdown > 0 ? (
         <Text selectable text="center" variant="muted">
-          Renvoyer le code dans ({resendCountdown})
+          {t("auth.otp.resendCountdown", { count: resendCountdown })}
         </Text>
       ) : (
         <Button
           disabled={disabled}
           fullWidth={false}
           loading={resendLoading}
-          loadingLabel="Renvoi"
+          loadingLabel={t("auth.otp.resendLoading")}
           onPress={onResend}
           size="sm"
           variant="text"
         >
-          Renvoyer
+          {t("auth.otp.resend")}
         </Button>
       )}
     </YStack>
@@ -142,6 +146,8 @@ export function SocialAuthActions({
   onGoogleAuth,
   pendingProvider,
 }: SocialAuthActionsProps) {
+  const { t } = useTranslation();
+
   if (!hasAppleAuth && !hasGoogleAuth) {
     return null;
   }
@@ -151,7 +157,7 @@ export function SocialAuthActions({
       <XStack gap="$sm" items="center">
         <Separator />
         <Text size="sm" variant="muted">
-          ou continuer avec
+          {t("auth.social.separator")}
         </Text>
         <Separator />
       </XStack>
