@@ -152,8 +152,7 @@ export function useSignInFlow({
 
       if (response.response.error) {
         setError("root", {
-          message:
-            response.response.error.message ?? translate("auth.errors.generic"),
+          message: translate("auth.errors.generic"),
         });
         return;
       }

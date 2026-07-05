@@ -12,36 +12,36 @@
     },
     "create": {
       "authRequiredDescription": "Connecte-toi avec ton email pour publier une activité et retrouver les participants.",
-      "authRequiredPending": "Vérification de ta session.",
+      "authRequiredPending": "Vérification de ton accès.",
       "authRequiredTitle": "Connecte-toi pour créer une activité",
       "category": "Catégorie",
       "categorySheetDescription": "Elle aide les autres participants à comprendre rapidement l’activité.",
       "categorySheetTitle": "Choisis une catégorie",
       "maxParticipants": "Participants max",
       "prepare": "Préparer l’activité",
-      "screenDescription": "Base d’écran prête pour relier validation partagée, auth et mutation Convex.",
+      "screenDescription": "Ajoute les infos essentielles avant de publier ton activité.",
       "screenTitle": "Nouvelle activité",
       "title": "Titre",
       "titlePlaceholder": "Beach-volley à la plage centrale",
       "validate": "Valider"
     },
     "filters": {
-      "mvp": "Filtres MVP"
+      "mvp": "Filtres"
     },
     "home": {
       "create": "Créer une activité",
       "headline": "Trouve une activité sur la plage",
-      "mapProvider": "Carte: {{provider}}",
-      "mapReady": "Carte prête pour brancher le provider natif. Les données Convex se connecteront dès que l’URL publique sera configurée.",
+      "mapProvider": "Carte prête",
+      "mapReady": "Explore les activités proches et prépare ta prochaine sortie.",
       "nearYou": "Autour de toi",
-      "providerReady": "Convex prêt",
+      "providerReady": "Autour de toi",
       "searchPlaceholder": "Pornichet, La Baule...",
       "searchStatus": "Recherche: {{query}}"
     },
     "list": {
       "create": "Créer une activité",
-      "description": "Liste prête pour afficher les activités proches dès que Convex sera branché.",
-      "emptyDescription": "Les prochaines activités proches apparaîtront ici dès que Convex sera branché.",
+      "description": "Retrouve les activités proches dès qu’elles sont publiées.",
+      "emptyDescription": "Les prochaines activités proches apparaîtront ici.",
       "emptyTitle": "Aucune activité pour le moment",
       "title": "Activités autour de toi"
     },
@@ -120,17 +120,17 @@
     "signUp": "Inscription"
   },
   "onboarding": {
-    "body": "Découvre, crée et rejoins des sessions spontanées autour de toi.",
+    "body": "Découvre, crée et rejoins des activités spontanées autour de toi.",
     "cta": "Voir la carte",
     "headline": "Rejoins une activité près de ta plage"
   },
   "profile": {
     "createAccount": "Créer un compte",
     "guestDescription": "Connecte-toi pour créer et rejoindre des activités.",
-    "guestTitle": "Profil invité",
+    "guestTitle": "Profil visiteur",
     "languageTitle": "Langue",
-    "sessionActive": "Ta session est active.",
-    "sessionChecking": "Vérification de la session en cours.",
+    "sessionActive": "Tu es connecté.",
+    "sessionChecking": "Vérification en cours.",
     "signedInTitle": "Profil connecté",
     "signIn": "Se connecter",
     "signOut": "Se déconnecter",

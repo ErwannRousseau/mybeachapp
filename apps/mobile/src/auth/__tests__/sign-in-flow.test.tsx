@@ -4,6 +4,7 @@ import { createRoot } from "test-renderer";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { emailOtpAuthCapability } from "../email-otp-capability";
+import { signInWithSocial } from "../session";
 import {
   type SignInFormValues,
   type UseSignInFlowResult,
@@ -33,6 +34,7 @@ vi.mock("../session", () => ({
 
 describe("useSignInFlow", () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.mocked(emailOtpAuthCapability.sendEmailOtp).mockResolvedValue({
       data: { email: "beach@example.com" },
       error: null,
@@ -78,5 +80,44 @@ describe("useSignInFlow", () => {
 
     expect(events).toEqual(["callback:false"]);
     expect(isOtpStep).toBe(true);
+  });
+
+  test("maps social provider errors to stable French copy", async () => {
+    let formError = "";
+    let submitSocialAuth: UseSignInFlowResult["submitSocialAuth"] =
+      async () => {
+        throw new Error("submitSocialAuth was called before render");
+      };
+    const root = createRoot();
+    vi.mocked(signInWithSocial).mockResolvedValue({
+      response: {
+        data: null,
+        error: {
+          code: "PROVIDER_FAILURE",
+          message: "Raw provider error",
+          status: 500,
+          statusText: "Internal Server Error",
+        },
+      },
+      status: "completed",
+    });
+
+    function TestHarness() {
+      const flow = useSignInFlow();
+      formError = flow.formError ?? "";
+      submitSocialAuth = flow.submitSocialAuth;
+
+      return null;
+    }
+
+    await act(async () => {
+      root.render(<TestHarness />);
+    });
+
+    await act(async () => {
+      await submitSocialAuth("google");
+    });
+
+    expect(formError).toBe("Connexion impossible pour le moment.");
   });
 });
