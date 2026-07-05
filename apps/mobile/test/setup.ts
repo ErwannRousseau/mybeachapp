@@ -1,5 +1,7 @@
 import { vi } from "vitest";
 
+import "@/src/localization/i18n";
+
 declare global {
   var IS_REACT_ACT_ENVIRONMENT: boolean | undefined;
 }

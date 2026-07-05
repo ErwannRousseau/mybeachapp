@@ -1,17 +1,20 @@
 import { Link, Stack } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { YStack } from "tamagui";
 
 import { Text, Title } from "@/ui/typography";
 
 export default function NotFoundScreen() {
+  const { t } = useTranslation();
+
   return (
     <>
-      <Stack.Screen options={{ title: "Introuvable" }} />
+      <Stack.Screen options={{ title: t("common.notFound.title") }} />
       <YStack flex={1} items="center" justify="center" p="$lg">
-        <Title selectable>Écran introuvable.</Title>
+        <Title selectable>{t("common.notFound.message")}</Title>
         <Link href="/(tabs)">
           <Text mt="$md" py="$md" selectable variant="accent">
-            Retour à la carte
+            {t("common.notFound.backToMap")}
           </Text>
         </Link>
       </YStack>

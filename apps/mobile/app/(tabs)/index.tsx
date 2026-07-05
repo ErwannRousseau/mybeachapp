@@ -1,12 +1,13 @@
 import { ACTIVITY_CATEGORIES } from "@mybeachapp/shared/activities/constants";
 import { Link, Stack } from "expo-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
 import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
 import { env } from "@/src/config/env";
-import { activityCategoryLabels } from "@/src/features/activities/activity-copy";
+import { getActivityCategoryLabel } from "@/src/features/activities/activity-copy";
 import { Button } from "@/ui/button";
 import { Chip } from "@/ui/chip";
 import { SearchBar } from "@/ui/search-bar";
@@ -16,12 +17,13 @@ import { Headline, Text, Title } from "@/ui/typography";
 
 export default function Home() {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const normalizedSearchQuery = searchQuery.trim();
   const mapStatusLabel =
     normalizedSearchQuery.length > 0
-      ? `Recherche: ${normalizedSearchQuery}`
-      : `Carte: ${env.mapProvider}`;
+      ? t("activities.home.searchStatus", { query: normalizedSearchQuery })
+      : t("activities.home.mapProvider", { provider: env.mapProvider });
 
   return (
     <>
@@ -43,34 +45,33 @@ export default function Home() {
                 variant="accent"
                 weight="semibold"
               >
-                Autour de toi
+                {t("activities.home.nearYou")}
               </Text>
-              <Headline selectable>Trouve une activité sur la plage</Headline>
+              <Headline selectable>{t("activities.home.headline")}</Headline>
               <Text selectable variant="muted">
-                Carte prête pour brancher le provider natif. Les données Convex
-                se connecteront dès que l’URL publique sera configurée.
+                {t("activities.home.mapReady")}
               </Text>
               <XStack flexWrap="wrap" gap="$xs" mt="auto">
-                <Tag>Convex prêt</Tag>
+                <Tag>{t("activities.home.providerReady")}</Tag>
                 <Tag>{mapStatusLabel}</Tag>
               </XStack>
             </Surface>
 
             <YStack gap="$sm">
               <Title selectable size="sm">
-                Filtres MVP
+                {t("activities.filters.mvp")}
               </Title>
               <XStack flexWrap="wrap" gap="$sm">
                 {ACTIVITY_CATEGORIES.slice(0, 6).map((category, index) => (
                   <Chip key={category} selected={index === 0}>
-                    {activityCategoryLabels[category]}
+                    {getActivityCategoryLabel(category, t)}
                   </Chip>
                 ))}
               </XStack>
             </YStack>
 
             <Link asChild href="/create">
-              <Button>Créer une activité</Button>
+              <Button>{t("activities.home.create")}</Button>
             </Link>
           </YStack>
         </TabScreenScrollView>
@@ -79,7 +80,7 @@ export default function Home() {
           <SearchBar
             onChangeText={setSearchQuery}
             onSearch={setSearchQuery}
-            placeholder="Pornichet, La Baule..."
+            placeholder={t("activities.home.searchPlaceholder")}
           />
         </YStack>
       </YStack>

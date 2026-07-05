@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { useColorScheme } from "react-native";
 
 import { getThemeForColorScheme } from "@/src/lib/theme";
@@ -18,6 +19,7 @@ export default function RootLayout() {
 
 function RootNavigator() {
   const theme = getThemeForColorScheme(useColorScheme());
+  const { t } = useTranslation();
 
   return (
     <Stack
@@ -36,9 +38,18 @@ function RootNavigator() {
       }}
     >
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="onboarding" options={{ title: "Bienvenue" }} />
-      <Stack.Screen name="sign-in" options={{ title: "Connexion" }} />
-      <Stack.Screen name="sign-up" options={{ title: "Inscription" }} />
+      <Stack.Screen
+        name="onboarding"
+        options={{ title: t("navigation.onboarding") }}
+      />
+      <Stack.Screen
+        name="sign-in"
+        options={{ title: t("navigation.signIn") }}
+      />
+      <Stack.Screen
+        name="sign-up"
+        options={{ title: t("navigation.signUp") }}
+      />
     </Stack>
   );
 }

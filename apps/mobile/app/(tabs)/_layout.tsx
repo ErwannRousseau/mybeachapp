@@ -1,4 +1,5 @@
 import { Tabs } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { useColorScheme } from "react-native";
 
 import { getThemeForColorScheme } from "@/src/lib/theme";
@@ -18,6 +19,7 @@ function renderScreenLayout({ children }: { children: React.ReactNode }) {
 
 export default function TabLayout() {
   const theme = getThemeForColorScheme(useColorScheme());
+  const { t } = useTranslation();
 
   return (
     <BlurTargetProvider>
@@ -45,10 +47,16 @@ export default function TabLayout() {
         }}
         tabBar={renderTabBar}
       >
-        <Tabs.Screen name="index" options={{ title: "Carte" }} />
-        <Tabs.Screen name="list" options={{ title: "Liste" }} />
-        <Tabs.Screen name="create" options={{ title: "Créer" }} />
-        <Tabs.Screen name="profile" options={{ title: "Profil" }} />
+        <Tabs.Screen name="index" options={{ title: t("navigation.home") }} />
+        <Tabs.Screen name="list" options={{ title: t("navigation.list") }} />
+        <Tabs.Screen
+          name="create"
+          options={{ title: t("navigation.create") }}
+        />
+        <Tabs.Screen
+          name="profile"
+          options={{ title: t("navigation.profile") }}
+        />
       </Tabs>
     </BlurTargetProvider>
   );
