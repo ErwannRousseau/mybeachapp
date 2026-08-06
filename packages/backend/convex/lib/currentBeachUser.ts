@@ -1,3 +1,5 @@
+import { ConvexError } from "convex/values";
+
 import type { Doc } from "../_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
 import { authComponent } from "../betterAuth/auth";
@@ -33,6 +35,10 @@ export async function ensureCurrentBeachUser(ctx: MutationCtx) {
   const user = await getCurrentBeachUser(ctx);
 
   if (user.profile) {
+    if (user.profile.status !== "active") {
+      throw new ConvexError({ code: "forbidden" });
+    }
+
     return user;
   }
 

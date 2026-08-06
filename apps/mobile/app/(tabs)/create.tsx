@@ -49,7 +49,14 @@ export default function CreateActivityScreen() {
       <Stack.Screen options={{ title: t("navigation.create") }} />
       <TabScreenScrollView>
         <YStack gap="$lg" p="$md" pb="$md">
-          {!permissions.currentUser ? (
+          {permissions.isPending ? (
+            <Card gap="$md">
+              <Headline selectable>{t("common.loadingSession")}</Headline>
+              <Text selectable variant="muted">
+                {t("activities.create.authRequiredPending")}
+              </Text>
+            </Card>
+          ) : !permissions.currentUser ? (
             <Card gap="$md">
               <Headline selectable>
                 {t("activities.create.authRequiredTitle")}

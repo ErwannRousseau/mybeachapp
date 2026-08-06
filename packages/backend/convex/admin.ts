@@ -4,7 +4,10 @@ import type { Doc } from "./_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { mutation, query } from "./_generated/server";
 import { env } from "./config/env";
-import { requireAdmin, requireSuperAdmin } from "./lib/adminAuthorization";
+import {
+  requireAdmin,
+  requireAdminRolePermission,
+} from "./lib/adminAuthorization";
 
 function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
@@ -23,8 +26,9 @@ async function getUniqueProfileByEmail(ctx: AdminCtx, email: string) {
     .query("userProfiles")
     .withIndex("by_email", (q) => q.eq("email", normalizeEmail(email)))
     .take(2);
+  const [profile] = profiles;
 
-  if (profiles.length === 0) {
+  if (!profile) {
     throw adminError("not_found");
   }
 
@@ -32,7 +36,7 @@ async function getUniqueProfileByEmail(ctx: AdminCtx, email: string) {
     throw adminError("conflict");
   }
 
-  return profiles[0];
+  return profile;
 }
 
 async function patchRole(
@@ -44,12 +48,13 @@ async function patchRole(
     return profile;
   }
 
+  const updatedAt = Date.now();
   await ctx.db.patch(profile._id, {
     role,
-    updatedAt: Date.now(),
+    updatedAt,
   });
 
-  return (await ctx.db.get(profile._id)) as Doc<"userProfiles">;
+  return { ...profile, role, updatedAt };
 }
 
 export const viewer = query({
@@ -73,7 +78,10 @@ export const getAdminActivities = query({
 export const grantAdminRole = mutation({
   args: { email: v.string() },
   handler: async (ctx, args) => {
-    const currentUser = await requireSuperAdmin(ctx);
+    const currentUser = await requireAdminRolePermission(
+      ctx,
+      "adminRole.grant",
+    );
     const profile = await getUniqueProfileByEmail(ctx, args.email);
 
     if (profile.userId === currentUser.userId || profile.status !== "active") {
@@ -91,7 +99,10 @@ export const grantAdminRole = mutation({
 export const revokeAdminRole = mutation({
   args: { email: v.string() },
   handler: async (ctx, args) => {
-    const currentUser = await requireSuperAdmin(ctx);
+    const currentUser = await requireAdminRolePermission(
+      ctx,
+      "adminRole.revoke",
+    );
     const profile = await getUniqueProfileByEmail(ctx, args.email);
 
     if (

@@ -1,6 +1,7 @@
 type BackendAppEnv = "development" | "preview" | "production";
 
 export type BackendEnv = {
+  ADMIN_SITE_URL: string;
   APP_ENV: BackendAppEnv | undefined;
   APPLE_APP_BUNDLE_IDENTIFIER: string | undefined;
   AUTH_EMAIL_FROM: string | undefined;
@@ -53,6 +54,9 @@ function getCsvEnvValues(name: string, fallback: readonly string[] = []) {
 }
 
 export const env: BackendEnv = {
+  get ADMIN_SITE_URL() {
+    return getOptionalEnvValue("ADMIN_SITE_URL") ?? "http://localhost:3000";
+  },
   get APP_ENV() {
     return getAppEnv();
   },

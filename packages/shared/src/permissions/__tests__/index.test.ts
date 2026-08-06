@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { can } from "../index";
+import { can, createPermissionChecker } from "../index";
 
 describe("permissions", () => {
   test("maps admin roles to back-office permissions", () => {
@@ -51,5 +51,33 @@ describe("permissions", () => {
         },
       ),
     ).toBe(false);
+  });
+
+  test("fails closed when contextual permissions receive missing or incompatible runtime context", () => {
+    const actor = { now: 100, role: "user" as const, userId: "organizer" };
+
+    expect(Reflect.apply(can, undefined, [actor, "activity.updateOwn"])).toBe(
+      false,
+    );
+    expect(
+      Reflect.apply(can, undefined, [
+        actor,
+        "activity.leaveOwn",
+        {
+          creatorId: "organizer",
+          currentParticipantsCount: 2,
+          maxParticipants: 8,
+          startDateTime: 200,
+        },
+      ]),
+    ).toBe(false);
+    expect(
+      createPermissionChecker(actor)("activity.updateOwn", {
+        creatorId: "organizer",
+        currentParticipantsCount: 2,
+        maxParticipants: 8,
+        startDateTime: 200,
+      }),
+    ).toBe(true);
   });
 });

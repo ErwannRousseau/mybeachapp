@@ -1,6 +1,6 @@
 import { expo } from "@better-auth/expo";
 import { createClient } from "@convex-dev/better-auth";
-import { convex } from "@convex-dev/better-auth/plugins";
+import { convex, crossDomain } from "@convex-dev/better-auth/plugins";
 import type { GenericCtx } from "@convex-dev/better-auth/utils";
 import {
   AUTH_EMAIL_OTP_EXPIRES_IN_SECONDS,
@@ -56,6 +56,8 @@ export function getTrustedOrigins() {
     "mybeachapp://",
     "mybeachapp://*",
     "https://appleid.apple.com",
+    env.ADMIN_SITE_URL,
+    "http://localhost:3000",
     ...(env.APP_ENV === "development"
       ? ["exp://", "exp://**", "exp://192.168.*.*:*/**"]
       : []),
@@ -65,6 +67,7 @@ export function getTrustedOrigins() {
 function getPlugins() {
   return [
     expo(),
+    crossDomain({ siteUrl: env.ADMIN_SITE_URL }),
     emailOTP({
       allowedAttempts: 5,
       expiresIn: AUTH_EMAIL_OTP_EXPIRES_IN_SECONDS,

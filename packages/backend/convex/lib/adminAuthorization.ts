@@ -35,12 +35,13 @@ async function getCurrentProfile(ctx: AuthenticatedCtx) {
 
 async function requireActiveProfile(ctx: AuthenticatedCtx) {
   const user = await getCurrentProfile(ctx);
+  const profile = user.profile;
 
-  if (user.profile?.status !== "active") {
+  if (profile?.status !== "active") {
     throw authError("forbidden");
   }
 
-  return user as CurrentAdminUser;
+  return { ...user, profile } satisfies CurrentAdminUser;
 }
 
 export async function requireAdmin(ctx: AuthenticatedCtx) {
@@ -58,12 +59,13 @@ export async function requireAdmin(ctx: AuthenticatedCtx) {
   return user;
 }
 
-export async function requireSuperAdmin(ctx: AuthenticatedCtx) {
+export async function requireAdminRolePermission(
+  ctx: AuthenticatedCtx,
+  permission: "adminRole.grant" | "adminRole.revoke",
+) {
   const user = await requireActiveProfile(ctx);
 
-  if (
-    !can({ role: user.profile.role, userId: user.userId }, "adminRole.grant")
-  ) {
+  if (!can({ role: user.profile.role, userId: user.userId }, permission)) {
     throw authError("forbidden");
   }
 

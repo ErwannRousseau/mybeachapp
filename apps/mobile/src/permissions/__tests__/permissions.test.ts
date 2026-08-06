@@ -15,6 +15,15 @@ describe("getPermissionActor", () => {
     });
   });
 
+  test("does not create an actor while the beach profile is still loading", () => {
+    expect(
+      getPermissionActor(
+        { email: "beach@example.com", id: "user-1", name: null },
+        undefined,
+      ),
+    ).toBeNull();
+  });
+
   test("uses the beach profile role when available", () => {
     expect(
       getPermissionActor(

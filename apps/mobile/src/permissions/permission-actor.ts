@@ -4,15 +4,15 @@ import type { UserRole, UserStatus } from "@mybeachapp/shared/users/types";
 import type { CurrentSignedInUser } from "@/src/auth/email-otp-capability";
 
 type ProfilePermissionFields = {
-  role: UserRole;
-  status: UserStatus;
+  readonly role: UserRole;
+  readonly status: UserStatus;
 };
 
 export function getPermissionActor(
   currentUser: CurrentSignedInUser | null,
   profile: ProfilePermissionFields | null | undefined,
 ): PermissionActor | null {
-  if (!currentUser || profile?.status === "disabled") {
+  if (!currentUser || profile === undefined || profile?.status === "disabled") {
     return null;
   }
 
