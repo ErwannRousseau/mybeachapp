@@ -7,9 +7,10 @@ import { Link, Stack } from "expo-router";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { YStack } from "tamagui";
+
 import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
-import { useAuthSession } from "@/src/auth/session";
 import { getActivityCategoryLabel } from "@/src/features/activities/activity-copy";
+import { usePermissions } from "@/src/permissions/permissions";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
 import { Chip } from "@/ui/chip";
@@ -29,7 +30,7 @@ const defaultParticipants = Math.min(8, ACTIVITY_MAX_PARTICIPANTS);
 const defaultCategory = ACTIVITY_CATEGORIES[0];
 
 export default function CreateActivityScreen() {
-  const { data: currentUser, isPending } = useAuthSession();
+  const permissions = usePermissions();
   const { t } = useTranslation();
   const [categorySheetOpen, setCategorySheetOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] =
@@ -48,18 +49,25 @@ export default function CreateActivityScreen() {
       <Stack.Screen options={{ title: t("navigation.create") }} />
       <TabScreenScrollView>
         <YStack gap="$lg" p="$md" pb="$md">
-          {!currentUser ? (
+          {permissions.isPending ? (
+            <Card gap="$md">
+              <Headline selectable>{t("common.loadingSession")}</Headline>
+              <Text selectable variant="muted">
+                {t("activities.create.authRequiredPending")}
+              </Text>
+            </Card>
+          ) : !permissions.currentUser ? (
             <Card gap="$md">
               <Headline selectable>
                 {t("activities.create.authRequiredTitle")}
               </Headline>
               <Text selectable variant="muted">
-                {isPending
+                {permissions.isPending
                   ? t("activities.create.authRequiredPending")
                   : t("activities.create.authRequiredDescription")}
               </Text>
               <YStack gap="$sm">
-                {isPending ? (
+                {permissions.isPending ? (
                   <Button
                     disabled
                     loading
@@ -73,6 +81,15 @@ export default function CreateActivityScreen() {
                   </Link>
                 )}
               </YStack>
+            </Card>
+          ) : !permissions.can("activity.create") ? (
+            <Card gap="$md">
+              <Headline selectable>
+                {t("activities.create.authRequiredTitle")}
+              </Headline>
+              <Text selectable variant="muted">
+                {t("activities.create.authRequiredDescription")}
+              </Text>
             </Card>
           ) : (
             <>

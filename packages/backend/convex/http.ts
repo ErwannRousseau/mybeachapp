@@ -3,6 +3,6 @@ import { authComponent, createAuth } from "./betterAuth/auth";
 
 const http = httpRouter();
 
-authComponent.registerRoutesLazy(http, createAuth);
+authComponent.registerRoutesLazy(http, createAuth, { cors: true });
 
 export default http;

@@ -96,7 +96,7 @@ export async function getAppleUserInfoFromIdToken(token: AppleIdTokenInput) {
       name,
     },
     user: {
-      email,
+      email: email ?? null,
       emailVerified,
       id: profile.sub,
       name,

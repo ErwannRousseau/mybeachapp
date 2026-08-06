@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "permix": "^4.1.2",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -18,6 +19,10 @@
     "./auth/types": {
       "types": "./dist/auth/types.d.ts",
       "default": "./src/auth/types.ts"
+    },
+    "./permissions": {
+      "types": "./dist/permissions/index.d.ts",
+      "default": "./src/permissions/index.ts"
     },
     "./activities/constants": {
       "types": "./dist/activities/constants.d.ts",

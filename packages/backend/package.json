@@ -28,6 +28,7 @@
     "check:fix": "biome check --write .",
     "clear": "rm -rf .turbo dist *.tsbuildinfo",
     "dev": "convex dev",
+    "seed:super-admin": "convex run --push --identity '{\"email\":\"erwann.rousseau@icloud.com\",\"subject\":\"seed-super-admin\"}' admin:seedInitialSuperAdmin '{\"email\":\"erwann.rousseau@icloud.com\"}'",
     "test": "vitest run",
     "typecheck": "bun run build"
   },
