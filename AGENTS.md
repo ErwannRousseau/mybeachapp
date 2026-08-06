@@ -85,6 +85,14 @@ This file applies to the whole repository. Deeper `AGENTS.md` files override it 
 - Avoid packing too much raw logic in one file or component; extract focused helpers/hooks.
 - Test files must live in a `__tests__` directory next to the module they test across all apps and packages. For example, `ui/button.tsx` is tested by `ui/__tests__/button.test.tsx`, and `src/activities/validators.ts` is tested by `src/activities/__tests__/validators.test.ts`.
 
+## Access Control
+
+- My Beach App uses resource-action permissions for Admin and Beach Activity actions.
+- The permission policy and its TypeScript contracts live in `packages/shared/src/permissions/index.ts`; consume them through `@mybeachapp/shared/permissions` instead of duplicating role checks.
+- Convex is the authorization source of truth. Mobile and admin checks only control routes and interface states and must fail closed while identity or profile data is loading.
+- Read `docs/backend/admin-roles.md` before changing Admin access, roles, promotion, revocation, or the initial Super Admin seed.
+- Read `docs/mobile/permissions.md` before adding a protected mobile action or screen.
+
 ## Import Rules
 
 - Prefer package subpath imports over root package imports.

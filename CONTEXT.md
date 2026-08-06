@@ -32,6 +32,10 @@ _Avoid_: Moderator, operator, back-office user
 An **Admin** with permission to manage other **Admin** roles.
 _Avoid_: Owner, root user, system admin
 
+**Permission**:
+A resource-action authorization decision that allows a **Signed-in User** to perform a global action or an action in the context of a **Beach Activity** or **Participation**.
+_Avoid_: UI visibility, role flag, frontend-only check
+
 **Beach Profile**:
 The public-facing identity of a **Signed-in User**, including a required pseudo, optional first and last name, avatar, preferred **Activity Categories**, and cities.
 _Avoid_: App profile, account profile, auth profile
@@ -84,6 +88,10 @@ _Avoid_: Detail page, event page, card
 - A **Super Admin** is an **Admin**
 - A **Super Admin** may grant or revoke the **Admin** role
 - A **Super Admin** may only grant the **Admin** role to an existing **Signed-in User**
+- An **Admin** has **Permissions** to access the back-office and read **Beach Activities** there
+- A **Super Admin** has **Permissions** to grant or revoke the **Admin** role
+- An **Organizer** has contextual **Permissions** to modify or cancel their future **Beach Activity**
+- A **Participant** has contextual **Permission** to leave their own **Participation**
 - A **Signed-in User** may complete **Onboarding** for their **Beach Profile**
 - A **Signed-in User** may organize zero or more **Beach Activities**
 - A **Beach Activity** has exactly one **Organizer**
@@ -106,5 +114,6 @@ _Avoid_: Detail page, event page, card
 - "user" can mean a Better Auth record, an app profile, a **Visitor**, or a **Signed-in User** — resolved: use **Signed-in User** for the product actor with an account.
 - "location" can mean coordinates, a searchable city/beach/address, or gathering instructions — resolved: use **Place** for discovery, **GPS Pin** for map coordinates, and **Meeting Point** for where participants gather.
 - "creator" appears in storage fields but product language should say **Organizer**.
+- "permission" can mean interface visibility or authorization — resolved: use **Permission** for the resource-action authorization decision enforced by Convex; interface checks only represent it.
 - "place" and "spot" can be confused in English — resolved: **Place** is where the activity happens, **Spot** is participant capacity.
 - "Beach Activity" currently uses broad code categories, while the product source names pilot activities such as beach-volley, paddle, surf, yoga, petanque, running, and swimming — resolved: keep **Activity Category** broad in code and use pilot activity names in product copy.
