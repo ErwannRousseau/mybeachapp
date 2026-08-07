@@ -7,7 +7,7 @@ import { XStack, YStack } from "tamagui";
 
 import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
 import { env } from "@/src/config/env";
-import { getActivityCategoryLabel } from "@/src/features/activities/activity-copy";
+import { getActivityCategoryLabel } from "@/src/features/activities/activity-presentation";
 import { Button } from "@/ui/button";
 import { Chip } from "@/ui/chip";
 import { SearchBar } from "@/ui/search-bar";

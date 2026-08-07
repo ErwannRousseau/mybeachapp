@@ -16,16 +16,20 @@ describe("ActivityMapPin", () => {
           W
         </ActivityMapPin>
         <ActivityMapPin status="full">F</ActivityMapPin>
-        <ActivityMapPin selected status="open">
+        <ActivityMapPin selected status="cancelled">
           S
         </ActivityMapPin>
       </>,
     );
 
     expect(findByText(root, "O")).toBeTruthy();
-    expect(findByText(root, "W")).toBeTruthy();
+    expect(findByText(root, "W").parent?.props.className).toContain(
+      "_bg-warning",
+    );
     expect(findByText(root, "F")).toBeTruthy();
-    expect(findByText(root, "S")).toBeTruthy();
+    expect(findByText(root, "S").parent?.props.className).toContain(
+      "_bg-primary",
+    );
   });
 
   it("hides cancelled and finished activities from live map pins", async () => {

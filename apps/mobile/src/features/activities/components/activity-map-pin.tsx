@@ -1,12 +1,12 @@
 import type { ActivityStatus } from "@mybeachapp/shared/activities/types";
+import { useTranslation } from "react-i18next";
 import { type GetProps, styled, XStack } from "tamagui";
 
+import { getActivityStatusPresentation } from "@/src/features/activities/activity-presentation";
 import { Text } from "@/ui/typography";
 
-import { getActivityStatusTone } from "./activity-status-tone";
-
 export type ActivityMapPinAvailability = "open" | "warning";
-type ActivityMapPinTone = "muted" | "selected" | "success" | "warning";
+type ActivityMapPinTone = "muted" | "primary" | "success" | "warning";
 
 const ActivityMapPinFrame = styled(XStack, {
   bg: "$surface",
@@ -27,9 +27,9 @@ const ActivityMapPinFrame = styled(XStack, {
         bg: "$muted",
         borderColor: "$border",
       },
-      selected: {
-        bg: "$accent",
-        borderColor: "$accent",
+      primary: {
+        bg: "$primary",
+        borderColor: "$primary",
       },
       success: {
         bg: "$successSoft",
@@ -58,9 +58,11 @@ export function ActivityMapPin({
   status,
   ...props
 }: ActivityMapPinProps) {
+  const { t } = useTranslation();
+  const presentation = getActivityStatusPresentation(status, t);
   const tone = selected
-    ? "selected"
-    : getActivityMapPinTone(status, availability);
+    ? "primary"
+    : getActivityMapPinTone(presentation, availability);
 
   if (!tone) {
     return null;
@@ -135,8 +137,8 @@ function getActivityMapPinTextColor(tone: ActivityMapPinTone) {
   switch (tone) {
     case "muted":
       return "$foreground";
-    case "selected":
-      return "$secondaryForeground";
+    case "primary":
+      return "$primaryForeground";
     case "success":
       return "$foreground";
     case "warning":
@@ -145,17 +147,14 @@ function getActivityMapPinTextColor(tone: ActivityMapPinTone) {
 }
 
 function getActivityMapPinTone(
-  status: ActivityStatus,
+  presentation: ReturnType<typeof getActivityStatusPresentation>,
   availability: ActivityMapPinAvailability,
 ): ActivityMapPinTone | null {
-  const statusTone = getActivityStatusTone(status);
-
-  switch (statusTone) {
-    case "destructive":
-      return null;
-    case "muted":
-      return status === "full" ? "muted" : null;
-    case "success":
-      return availability === "warning" ? "warning" : "success";
+  if (presentation.baseMapPinVisibility === "hidden") {
+    return null;
   }
+
+  return presentation.tagTone === "success" && availability === "warning"
+    ? "warning"
+    : presentation.tagTone;
 }

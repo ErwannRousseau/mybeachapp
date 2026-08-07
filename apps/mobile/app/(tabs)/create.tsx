@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { YStack } from "tamagui";
 
 import { TabScreenScrollView } from "@/components/layout/TabScreenScrollView";
-import { getActivityCategoryLabel } from "@/src/features/activities/activity-copy";
+import { getActivityCategoryLabel } from "@/src/features/activities/activity-presentation";
 import { usePermissions } from "@/src/permissions/permissions";
 import { Button } from "@/ui/button";
 import { Card } from "@/ui/card";
