@@ -60,4 +60,13 @@ export function createMobileEnv(source: EnvSource): MobileEnv {
   });
 }
 
-export const env = createMobileEnv(process.env);
+export const env = createMobileEnv({
+  EXPO_PUBLIC_APP_ENV: process.env.EXPO_PUBLIC_APP_ENV,
+  EXPO_PUBLIC_CONVEX_SITE_URL: process.env.EXPO_PUBLIC_CONVEX_SITE_URL,
+  EXPO_PUBLIC_CONVEX_URL: process.env.EXPO_PUBLIC_CONVEX_URL,
+  EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID:
+    process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+  EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID:
+    process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+  EXPO_PUBLIC_MAP_PROVIDER: process.env.EXPO_PUBLIC_MAP_PROVIDER,
+});

@@ -26,6 +26,7 @@ const config: ExpoConfig = {
   platforms: ["ios", "android"],
   plugins: [
     "expo-router",
+    "@maplibre/maplibre-react-native",
     "expo-web-browser",
     "expo-apple-authentication",
     [
