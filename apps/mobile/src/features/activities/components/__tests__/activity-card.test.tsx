@@ -10,7 +10,7 @@ describe("ActivityCard", () => {
   it("renders activity summary details from the feature layer", async () => {
     const root = await renderWithTamagui(
       <ActivityCard
-        category="Sports de ballon"
+        category="ball_sport"
         distance="500 m"
         participants="4 / 8"
         status="open"
@@ -20,6 +20,7 @@ describe("ActivityCard", () => {
     );
 
     expect(findByText(root, "Beach-volley à Bonne-Source")).toBeTruthy();
+    expect(findByText(root, "Sports de ballon")).toBeTruthy();
     expect(findByText(root, "Ouvert")).toBeTruthy();
   });
 });

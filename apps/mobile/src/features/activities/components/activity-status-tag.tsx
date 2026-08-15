@@ -1,12 +1,9 @@
 import type { ActivityStatus } from "@mybeachapp/shared/activities/types";
 import { useTranslation } from "react-i18next";
 
-import { Tag, type TagProps, type TagVariant } from "@/ui/tag";
+import { Tag, type TagProps } from "@/ui/tag";
 
-import {
-  type ActivityStatusTone,
-  getActivityStatusTone,
-} from "./activity-status-tone";
+import { getActivityStatusPresentation } from "../activity-presentation";
 
 export type ActivityStatusTagProps = Omit<TagProps, "children" | "variant"> & {
   status: ActivityStatus;
@@ -17,25 +14,11 @@ export function ActivityStatusTag({
   ...props
 }: ActivityStatusTagProps) {
   const { t } = useTranslation();
+  const presentation = getActivityStatusPresentation(status, t);
 
   return (
-    <Tag variant={getActivityStatusVariant(status)} {...props}>
-      {t(`activities.status.${status}`)}
+    <Tag variant={presentation.tagTone} {...props}>
+      {presentation.label}
     </Tag>
   );
-}
-
-function getActivityStatusVariant(status: ActivityStatus): TagVariant {
-  return getTagVariantFromActivityTone(getActivityStatusTone(status));
-}
-
-function getTagVariantFromActivityTone(tone: ActivityStatusTone): TagVariant {
-  switch (tone) {
-    case "destructive":
-      return "destructive";
-    case "muted":
-      return "muted";
-    case "success":
-      return "success";
-  }
 }
