@@ -123,6 +123,11 @@ fiable. La mémoire résidente observée était d'environ 524 MiB, valeur égale
 spécifique au simulateur. La performance ne doit donc pas être déclarée validée
 avant un passage Release sur au moins un appareil physique iOS et Android.
 
+Le build iOS Release est resté au premier plan plus de dix minutes, puis a
+encore accepté un pan et un recentrage. La dernière mesure indiquait environ
+399 MiB résidents et 1,5 % de CPU. Le flux de logs ne contenait ni erreur
+MapLibre, ni `ZodError`, ni exception fatale, ni crash pendant cette fenêtre.
+
 Une interaction pratique à corriger dans l'implémentation finale a également
 été révélée : l'appui sur un cluster déclenche le zoom mais peut aussi remonter
 jusqu'au handler global de carte et déplacer le `GPS Pin`. Il faudra arbitrer
