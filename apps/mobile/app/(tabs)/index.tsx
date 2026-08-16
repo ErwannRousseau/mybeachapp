@@ -5,7 +5,10 @@ import {
   type ViewStateChangeEvent,
 } from "@maplibre/maplibre-react-native";
 import { api } from "@mybeachapp/backend/convex/_generated/api";
-import type { ActivitySummary } from "@mybeachapp/shared/activities/types";
+import type {
+  ActivitySummary,
+  ViewportBounds,
+} from "@mybeachapp/shared/activities/types";
 import { useQuery } from "convex/react";
 import { Stack } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -34,13 +37,6 @@ const activityTimeFormatter = new Intl.DateTimeFormat("fr-FR", {
   minute: "2-digit",
   month: "short",
 });
-
-type ViewportBounds = {
-  east: number;
-  north: number;
-  south: number;
-  west: number;
-};
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();

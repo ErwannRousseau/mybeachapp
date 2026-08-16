@@ -3,6 +3,7 @@ import { ACTIVITY_CATEGORIES } from "@mybeachapp/shared/activities/constants";
 import type {
   ActivityStatus,
   ActivitySummary,
+  ViewportBounds,
 } from "@mybeachapp/shared/activities/types";
 import { ConvexError, v } from "convex/values";
 
@@ -18,13 +19,6 @@ const activityGeospatialIndex = new GeospatialIndex<
   Id<"activities">,
   { status: ActivityStatus }
 >(components.geospatial);
-
-type ViewportBounds = {
-  east: number;
-  north: number;
-  south: number;
-  west: number;
-};
 
 export const getActivityById = query({
   args: { id: v.id("activities") },
@@ -50,41 +44,29 @@ export const listOpenByViewport = query({
             { ...bounds, east: 180 },
             { ...bounds, west: -180 },
           ];
-    const candidates: Doc<"activities">[] = [];
-
-    for (const rectangle of rectangles) {
-      const matches: Doc<"activities">[] = [];
-      let cursor: string | undefined;
-
-      do {
-        const page = await activityGeospatialIndex.query(
-          ctx,
-          {
-            filter: (filter) => filter.eq("status", "open"),
-            limit: MAX_VIEWPORT_RESULTS - matches.length,
-            shape: { rectangle, type: "rectangle" },
-          },
-          cursor,
-        );
-        const activities = await Promise.all(
-          page.results.map(({ key }) => ctx.db.get(key)),
-        );
-
-        matches.push(
-          ...activities.filter(
-            (activity): activity is Doc<"activities"> =>
-              activity !== null &&
-              activity.status === "open" &&
-              activity.startDateTime > now,
-          ),
-        );
-        cursor = page.nextCursor;
-      } while (cursor !== undefined && matches.length < MAX_VIEWPORT_RESULTS);
-
-      candidates.push(...matches);
-    }
+    const pages = await Promise.all(
+      rectangles.map((rectangle) =>
+        activityGeospatialIndex.query(ctx, {
+          filter: (filter) => filter.eq("status", "open"),
+          limit: MAX_VIEWPORT_RESULTS,
+          shape: { rectangle, type: "rectangle" },
+        }),
+      ),
+    );
+    const activityIds = new Set(
+      pages.flatMap(({ results }) => results.map(({ key }) => key)),
+    );
+    const candidates = await Promise.all(
+      [...activityIds].map((activityId) => ctx.db.get(activityId)),
+    );
 
     return candidates
+      .filter(
+        (activity): activity is Doc<"activities"> =>
+          activity !== null &&
+          activity.status === "open" &&
+          activity.startDateTime > now,
+      )
       .sort((left, right) => left.startDateTime - right.startDateTime)
       .slice(0, MAX_VIEWPORT_RESULTS)
       .map(toActivitySummary);
