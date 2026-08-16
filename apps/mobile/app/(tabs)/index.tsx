@@ -132,13 +132,13 @@ export default function HomeScreen() {
           />
         </YStack>
 
-        <YStack b={ornamentBottom + 40} position="absolute" r="$md" z={10}>
+        <YStack b={ornamentBottom} mb="$3.5" position="absolute" r="$md" z={10}>
           {locationFeedback ? (
             <FloatingSurface maxW={280} mb="$sm" p="$sm">
               <Text
                 accessibilityLiveRegion="polite"
                 accessibilityRole="alert"
-                size="sm"
+                size="md"
               >
                 {locationFeedback}
               </Text>

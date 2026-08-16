@@ -50,6 +50,19 @@ function locationPermission(
   };
 }
 
+async function pressLocate(
+  root: Awaited<ReturnType<typeof renderWithTamagui>>,
+) {
+  await act(async () => {
+    findByProp(root, "onClick").props.onClick({
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
+    });
+    await Promise.resolve();
+    await Promise.resolve();
+  });
+}
+
 describe("HomeScreen", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -102,14 +115,7 @@ describe("HomeScreen", () => {
     });
     const root = await renderWithTamagui(<HomeScreen />);
 
-    await act(async () => {
-      findByProp(root, "onClick").props.onClick({
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      });
-      await Promise.resolve();
-      await Promise.resolve();
-    });
+    await pressLocate(root);
 
     expect(Location.getForegroundPermissionsAsync).toHaveBeenCalledOnce();
     expect(Location.requestForegroundPermissionsAsync).toHaveBeenCalledOnce();
@@ -130,13 +136,7 @@ describe("HomeScreen", () => {
     );
     const root = await renderWithTamagui(<HomeScreen />);
 
-    await act(async () => {
-      findByProp(root, "onClick").props.onClick({
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      });
-      await Promise.resolve();
-    });
+    await pressLocate(root);
 
     expect(Location.requestForegroundPermissionsAsync).not.toHaveBeenCalled();
     expect(Location.getCurrentPositionAsync).not.toHaveBeenCalled();
@@ -161,14 +161,7 @@ describe("HomeScreen", () => {
     );
     const root = await renderWithTamagui(<HomeScreen />);
 
-    await act(async () => {
-      findByProp(root, "onClick").props.onClick({
-        preventDefault: vi.fn(),
-        stopPropagation: vi.fn(),
-      });
-      await Promise.resolve();
-      await Promise.resolve();
-    });
+    await pressLocate(root);
 
     expect(Location.requestForegroundPermissionsAsync).not.toHaveBeenCalled();
     expect(findByType(root, "MapLibreCamera").props.initialViewState).toEqual({
@@ -194,13 +187,7 @@ describe("HomeScreen", () => {
     const root = await renderWithTamagui(<HomeScreen />);
 
     try {
-      await act(async () => {
-        findByProp(root, "onClick").props.onClick({
-          preventDefault: vi.fn(),
-          stopPropagation: vi.fn(),
-        });
-        await Promise.resolve();
-      });
+      await pressLocate(root);
 
       expect(queryByText(root, "Localisation…")).toBeDefined();
 
