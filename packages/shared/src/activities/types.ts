@@ -40,6 +40,13 @@ export interface ActivitySummary {
   location: ActivityLocation;
 }
 
+export interface ViewportBounds {
+  east: number;
+  north: number;
+  south: number;
+  west: number;
+}
+
 export interface CreateActivityInput {
   title: string;
   description?: string;
