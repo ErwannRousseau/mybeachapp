@@ -1,10 +1,8 @@
 import { z } from "zod";
 
 const appEnvValues = ["development", "preview", "production"] as const;
-const mapProviderValues = ["apple", "google", "placeholder"] as const;
 
 type AppEnv = (typeof appEnvValues)[number];
-type MapProvider = (typeof mapProviderValues)[number];
 
 type MobileEnv = {
   appEnv: AppEnv;
@@ -12,7 +10,6 @@ type MobileEnv = {
   convexUrl: string;
   googleIosClientId?: string | undefined;
   googleWebClientId?: string | undefined;
-  mapProvider: MapProvider;
 };
 
 type EnvSource = Record<string, string | undefined>;
@@ -46,7 +43,6 @@ const mobileEnvSchema = z.object({
   convexUrl: convexClientUrlSchema,
   googleIosClientId: optionalPublicStringSchema,
   googleWebClientId: optionalPublicStringSchema,
-  mapProvider: z.enum(mapProviderValues).catch("placeholder"),
 }) satisfies z.ZodType<MobileEnv>;
 
 export function createMobileEnv(source: EnvSource): MobileEnv {
@@ -56,8 +52,15 @@ export function createMobileEnv(source: EnvSource): MobileEnv {
     convexUrl: source.EXPO_PUBLIC_CONVEX_URL,
     googleIosClientId: source.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
     googleWebClientId: source.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
-    mapProvider: source.EXPO_PUBLIC_MAP_PROVIDER,
   });
 }
 
-export const env = createMobileEnv(process.env);
+export const env = createMobileEnv({
+  EXPO_PUBLIC_APP_ENV: process.env.EXPO_PUBLIC_APP_ENV,
+  EXPO_PUBLIC_CONVEX_SITE_URL: process.env.EXPO_PUBLIC_CONVEX_SITE_URL,
+  EXPO_PUBLIC_CONVEX_URL: process.env.EXPO_PUBLIC_CONVEX_URL,
+  EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID:
+    process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+  EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID:
+    process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+});

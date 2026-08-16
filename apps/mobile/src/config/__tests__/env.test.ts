@@ -42,34 +42,34 @@ describe("createMobileEnv", () => {
     ).toThrow("convex_site_url_must_use_convex_site");
   });
 
-  test("normalizes supported public values", () => {
-    expect(
-      createMobileEnv({
-        EXPO_PUBLIC_APP_ENV: "production",
-        EXPO_PUBLIC_CONVEX_SITE_URL: "https://beach.convex.site",
-        EXPO_PUBLIC_CONVEX_URL: "https://beach.convex.cloud",
-        EXPO_PUBLIC_MAP_PROVIDER: "apple",
-      }),
-    ).toEqual({
+  test("normalizes supported public values without a map provider selector", () => {
+    const result = createMobileEnv({
+      EXPO_PUBLIC_APP_ENV: "production",
+      EXPO_PUBLIC_CONVEX_SITE_URL: "https://beach.convex.site",
+      EXPO_PUBLIC_CONVEX_URL: "https://beach.convex.cloud",
+      EXPO_PUBLIC_MAP_PROVIDER: "apple",
+    });
+
+    expect(result).toMatchObject({
       appEnv: "production",
       convexSiteUrl: "https://beach.convex.site",
       convexUrl: "https://beach.convex.cloud",
-      mapProvider: "apple",
     });
+    expect(result).not.toHaveProperty("mapProvider");
   });
 
   test("uses safe defaults for optional public values", () => {
-    expect(
-      createMobileEnv({
-        EXPO_PUBLIC_CONVEX_SITE_URL: "https://beach.convex.site",
-        EXPO_PUBLIC_CONVEX_URL: "https://beach.convex.cloud",
-      }),
-    ).toEqual({
+    const result = createMobileEnv({
+      EXPO_PUBLIC_CONVEX_SITE_URL: "https://beach.convex.site",
+      EXPO_PUBLIC_CONVEX_URL: "https://beach.convex.cloud",
+    });
+
+    expect(result).toMatchObject({
       appEnv: "development",
       convexSiteUrl: "https://beach.convex.site",
       convexUrl: "https://beach.convex.cloud",
-      mapProvider: "placeholder",
     });
+    expect(result).not.toHaveProperty("mapProvider");
   });
 
   test("normalizes optional native Google client IDs", () => {
