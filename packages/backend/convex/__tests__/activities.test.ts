@@ -3,7 +3,7 @@ import type { ActivityStatus } from "@mybeachapp/shared/activities/types";
 import { convexTest, type TestConvex } from "convex-test";
 import { describe, expect, test } from "vitest";
 
-import { api, components } from "../_generated/api";
+import { api, components, internal } from "../_generated/api";
 import schema from "../schema";
 
 const modules = import.meta.glob("../**/*.ts");
@@ -183,6 +183,28 @@ describe("open Beach Activity viewport discovery", () => {
       latitude: 47.34,
       title: "Visible after filtered rows",
     });
+
+    const activities = await t.query(
+      api.activities.listOpenByViewport,
+      PILOT_VIEWPORT,
+    );
+
+    expect(activities.map(({ id }) => id)).toEqual([visibleId]);
+  });
+
+  test("removes expired index entries before they can displace future activities", async () => {
+    const t = createTest();
+
+    for (let index = 0; index < 55; index++) {
+      const activityId = await addActivity(t, {
+        startDateTime: Date.now() - 60_000,
+        title: `Past ${index}`,
+      });
+      await t.mutation(internal.activities.expireActivityDiscovery, {
+        activityId,
+      });
+    }
+    const visibleId = await addActivity(t, { title: "Future" });
 
     const activities = await t.query(
       api.activities.listOpenByViewport,

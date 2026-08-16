@@ -7,9 +7,9 @@ import type {
 } from "@mybeachapp/shared/activities/types";
 import { ConvexError, v } from "convex/values";
 
-import { components } from "./_generated/api";
+import { components, internal } from "./_generated/api";
 import type { Doc, Id } from "./_generated/dataModel";
-import { mutation, query } from "./_generated/server";
+import { internalMutation, mutation, query } from "./_generated/server";
 import { ensureCurrentBeachUser } from "./lib/currentBeachUser";
 import { literalUnion } from "./lib/validators";
 
@@ -73,6 +73,19 @@ export const listOpenByViewport = query({
   },
 });
 
+export const expireActivityDiscovery = internalMutation({
+  args: { activityId: v.id("activities") },
+  handler: async (ctx, { activityId }) => {
+    const activity = await ctx.db.get(activityId);
+
+    if (activity?.status === "open" && activity.startDateTime > Date.now()) {
+      return;
+    }
+
+    await activityGeospatialIndex.remove(ctx, activityId);
+  },
+});
+
 export const createActivity = mutation({
   args: {
     addressLabel: v.string(),
@@ -111,6 +124,11 @@ export const createActivity = mutation({
       { latitude: args.latitude, longitude: args.longitude },
       { status: "open" },
       args.startDateTime,
+    );
+    await ctx.scheduler.runAt(
+      args.startDateTime,
+      internal.activities.expireActivityDiscovery,
+      { activityId },
     );
 
     return activityId;
