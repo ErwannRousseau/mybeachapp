@@ -1,8 +1,9 @@
+import { register as registerGeospatial } from "@convex-dev/geospatial/test";
 import type { ActivityStatus } from "@mybeachapp/shared/activities/types";
 import { convexTest, type TestConvex } from "convex-test";
 import { describe, expect, test } from "vitest";
 
-import { api } from "../_generated/api";
+import { api, components } from "../_generated/api";
 import schema from "../schema";
 
 const modules = import.meta.glob("../**/*.ts");
@@ -22,7 +23,7 @@ async function addActivity(
   return await t.run(async (ctx) => {
     const now = Date.now();
 
-    return await ctx.db.insert("activities", {
+    const activityId = await ctx.db.insert("activities", {
       addressLabel: "Plage de Bonne-Source",
       category: "ball_sport",
       createdAt: now,
@@ -37,7 +38,31 @@ async function addActivity(
       title: fixture.title ?? "Beach-volley",
       updatedAt: now,
     });
+
+    await ctx.runMutation(components.geospatial.document.insert, {
+      document: {
+        coordinates: {
+          latitude: fixture.latitude ?? 47.266,
+          longitude: fixture.longitude ?? -2.344,
+        },
+        filterKeys: { status: fixture.status ?? "open" },
+        key: activityId,
+        sortKey: fixture.startDateTime ?? now + 3_600_000,
+      },
+      levelMod: 2,
+      maxCells: 8,
+      maxLevel: 16,
+      minLevel: 4,
+    });
+
+    return activityId;
   });
+}
+
+function createTest() {
+  const t = convexTest(schema, modules);
+  registerGeospatial(t);
+  return t;
 }
 
 const PILOT_VIEWPORT = {
@@ -49,7 +74,7 @@ const PILOT_VIEWPORT = {
 
 describe("open Beach Activity viewport discovery", () => {
   test("returns future open activities as the shared summary contract", async () => {
-    const t = convexTest(schema, modules);
+    const t = createTest();
     const visibleId = await addActivity(t);
     await addActivity(t, { status: "cancelled", title: "Cancelled" });
     await addActivity(t, {
@@ -83,7 +108,7 @@ describe("open Beach Activity viewport discovery", () => {
   });
 
   test("rejects invalid and unbounded viewports", async () => {
-    const t = convexTest(schema, modules);
+    const t = createTest();
 
     await expect(
       t.query(api.activities.listOpenByViewport, {
@@ -103,7 +128,7 @@ describe("open Beach Activity viewport discovery", () => {
   });
 
   test("supports a bounded viewport crossing the antimeridian", async () => {
-    const t = convexTest(schema, modules);
+    const t = createTest();
     const eastId = await addActivity(t, {
       latitude: 0,
       longitude: 179.5,
@@ -127,16 +152,14 @@ describe("open Beach Activity viewport discovery", () => {
   });
 
   test("caps every viewport response", async () => {
-    const t = convexTest(schema, modules);
+    const t = createTest();
 
-    await Promise.all(
-      Array.from({ length: 55 }, (_, index) =>
-        addActivity(t, {
-          latitude: 47.25 + index * 0.0001,
-          title: `Activity ${index}`,
-        }),
-      ),
-    );
+    for (let index = 0; index < 55; index++) {
+      await addActivity(t, {
+        latitude: 47.25 + index * 0.0001,
+        title: `Activity ${index}`,
+      });
+    }
 
     const activities = await t.query(
       api.activities.listOpenByViewport,
@@ -147,17 +170,15 @@ describe("open Beach Activity viewport discovery", () => {
   });
 
   test("does not hide matches behind longitude-filtered index rows", async () => {
-    const t = convexTest(schema, modules);
+    const t = createTest();
 
-    await Promise.all(
-      Array.from({ length: 250 }, (_, index) =>
-        addActivity(t, {
-          latitude: 47.21 + index * 0.0001,
-          longitude: -1.5,
-          title: `Outside ${index}`,
-        }),
-      ),
-    );
+    for (let index = 0; index < 250; index++) {
+      await addActivity(t, {
+        latitude: 47.21 + index * 0.0001,
+        longitude: -1.5,
+        title: `Outside ${index}`,
+      });
+    }
     const visibleId = await addActivity(t, {
       latitude: 47.34,
       title: "Visible after filtered rows",

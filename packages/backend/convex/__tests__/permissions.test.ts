@@ -1,4 +1,5 @@
-import { register } from "@convex-dev/better-auth/test";
+import { register as registerBetterAuth } from "@convex-dev/better-auth/test";
+import { register as registerGeospatial } from "@convex-dev/geospatial/test";
 import type { UserRole, UserStatus } from "@mybeachapp/shared/users/types";
 import type { FunctionArgs } from "convex/server";
 import { convexTest, type TestConvex } from "convex-test";
@@ -9,6 +10,13 @@ import schema from "../schema";
 
 const modules = import.meta.glob("../**/*.ts");
 const BEACH_ACTIVITY_CATEGORY = "ball_sport";
+
+function createTest() {
+  const t = convexTest(schema, modules);
+  registerBetterAuth(t);
+  registerGeospatial(t);
+  return t;
+}
 
 type ProfileFixture = {
   readonly email: string;
@@ -97,8 +105,7 @@ async function addBeachProfile(
 describe("activity permissions", () => {
   test("allows an ordinary active signed-in user to create a beach activity", async () => {
     // Given
-    const t = convexTest(schema, modules);
-    register(t);
+    const t = createTest();
     const user = await addSignedInUser(t, {
       email: "active@example.com",
       role: "user",
@@ -117,8 +124,7 @@ describe("activity permissions", () => {
 
   test("rejects activity creation for a disabled profile", async () => {
     // Given
-    const t = convexTest(schema, modules);
-    register(t);
+    const t = createTest();
     const now = Date.now();
     const disabled = await addSignedInUser(t, {
       email: "disabled-create@example.com",
@@ -140,8 +146,7 @@ describe("activity permissions", () => {
 
   test("rejects joining a beach activity for a disabled profile", async () => {
     // Given
-    const t = convexTest(schema, modules);
-    register(t);
+    const t = createTest();
     const disabled = await addSignedInUser(t, {
       email: "disabled-join@example.com",
       role: "user",
@@ -174,8 +179,7 @@ describe("activity permissions", () => {
 describe("admin permissions", () => {
   test("rejects an unauthenticated visitor granting an admin role", async () => {
     // Given
-    const t = convexTest(schema, modules);
-    register(t);
+    const t = createTest();
 
     // When
     const grant = t.mutation(api.admin.grantAdminRole, {
@@ -190,8 +194,7 @@ describe("admin permissions", () => {
 
   test("rejects an ordinary signed-in user granting an admin role", async () => {
     // Given
-    const t = convexTest(schema, modules);
-    register(t);
+    const t = createTest();
     const user = await addSignedInUser(t, {
       email: "ordinary@example.com",
       role: "user",
@@ -211,8 +214,7 @@ describe("admin permissions", () => {
 
   test("rejects an admin revoking an admin role", async () => {
     // Given
-    const t = convexTest(schema, modules);
-    register(t);
+    const t = createTest();
     const admin = await addSignedInUser(t, {
       email: "admin@example.com",
       role: "admin",
@@ -232,8 +234,7 @@ describe("admin permissions", () => {
 
   test("rejects a disabled admin opening the back-office", async () => {
     // Given
-    const t = convexTest(schema, modules);
-    register(t);
+    const t = createTest();
     const admin = await addSignedInUser(t, {
       email: "disabled-admin@example.com",
       role: "admin",
@@ -251,8 +252,7 @@ describe("admin permissions", () => {
 
   test("allows a super admin to grant an admin role", async () => {
     // Given
-    const t = convexTest(schema, modules);
-    register(t);
+    const t = createTest();
     const superAdmin = await addSignedInUser(t, {
       email: "grant-super-admin@example.com",
       role: "super_admin",
@@ -275,8 +275,7 @@ describe("admin permissions", () => {
 
   test("allows a super admin to revoke an admin role", async () => {
     // Given
-    const t = convexTest(schema, modules);
-    register(t);
+    const t = createTest();
     const superAdmin = await addSignedInUser(t, {
       email: "revoke-super-admin@example.com",
       role: "super_admin",
@@ -299,8 +298,7 @@ describe("admin permissions", () => {
 
   test("rejects initial super admin seeding when identity email differs", async () => {
     // Given
-    const t = convexTest(schema, modules);
-    register(t);
+    const t = createTest();
     const intruder = t.withIdentity({ email: "intruder@example.com" });
 
     // When

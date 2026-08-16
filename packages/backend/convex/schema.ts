@@ -31,7 +31,6 @@ export default defineSchema({
     updatedAt: v.number(),
   })
     .index("by_status_start", ["status", "startDateTime"])
-    .index("by_status_and_latitude", ["status", "latitude"])
     .index("by_creator", ["creatorId"])
     .index("by_latitude", ["latitude"])
     .index("by_longitude", ["longitude"]),

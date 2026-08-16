@@ -1,14 +1,23 @@
+import { GeospatialIndex } from "@convex-dev/geospatial";
 import { ACTIVITY_CATEGORIES } from "@mybeachapp/shared/activities/constants";
-import type { ActivitySummary } from "@mybeachapp/shared/activities/types";
+import type {
+  ActivityStatus,
+  ActivitySummary,
+} from "@mybeachapp/shared/activities/types";
 import { ConvexError, v } from "convex/values";
 
-import type { Doc } from "./_generated/dataModel";
+import { components } from "./_generated/api";
+import type { Doc, Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 import { ensureCurrentBeachUser } from "./lib/currentBeachUser";
 import { literalUnion } from "./lib/validators";
 
 const MAX_VIEWPORT_SPAN_DEGREES = 5;
 const MAX_VIEWPORT_RESULTS = 50;
+const activityGeospatialIndex = new GeospatialIndex<
+  Id<"activities">,
+  { status: ActivityStatus }
+>(components.geospatial);
 
 type ViewportBounds = {
   east: number;
@@ -34,33 +43,50 @@ export const listOpenByViewport = query({
   handler: async (ctx, bounds) => {
     validateViewport(bounds);
     const now = Date.now();
+    const rectangles =
+      bounds.west <= bounds.east
+        ? [bounds]
+        : [
+            { ...bounds, east: 180 },
+            { ...bounds, west: -180 },
+          ];
+    const candidates: Doc<"activities">[] = [];
 
-    const candidates = await ctx.db
-      .query("activities")
-      .withIndex("by_status_and_latitude", (index) =>
-        index
-          .eq("status", "open")
-          .gte("latitude", bounds.south)
-          .lte("latitude", bounds.north),
-      )
-      .filter((filter) =>
-        filter.and(
-          filter.gt(filter.field("startDateTime"), now),
-          bounds.west <= bounds.east
-            ? filter.and(
-                filter.gte(filter.field("longitude"), bounds.west),
-                filter.lte(filter.field("longitude"), bounds.east),
-              )
-            : filter.or(
-                filter.gte(filter.field("longitude"), bounds.west),
-                filter.lte(filter.field("longitude"), bounds.east),
-              ),
-        ),
-      )
-      .take(MAX_VIEWPORT_RESULTS);
+    for (const rectangle of rectangles) {
+      const matches: Doc<"activities">[] = [];
+      let cursor: string | undefined;
+
+      do {
+        const page = await activityGeospatialIndex.query(
+          ctx,
+          {
+            filter: (filter) => filter.eq("status", "open"),
+            limit: MAX_VIEWPORT_RESULTS - matches.length,
+            shape: { rectangle, type: "rectangle" },
+          },
+          cursor,
+        );
+        const activities = await Promise.all(
+          page.results.map(({ key }) => ctx.db.get(key)),
+        );
+
+        matches.push(
+          ...activities.filter(
+            (activity): activity is Doc<"activities"> =>
+              activity !== null &&
+              activity.status === "open" &&
+              activity.startDateTime > now,
+          ),
+        );
+        cursor = page.nextCursor;
+      } while (cursor !== undefined && matches.length < MAX_VIEWPORT_RESULTS);
+
+      candidates.push(...matches);
+    }
 
     return candidates
       .sort((left, right) => left.startDateTime - right.startDateTime)
+      .slice(0, MAX_VIEWPORT_RESULTS)
       .map(toActivitySummary);
   },
 });
@@ -96,6 +122,14 @@ export const createActivity = mutation({
       status: "joined",
       userId: user.userId,
     });
+
+    await activityGeospatialIndex.insert(
+      ctx,
+      activityId,
+      { latitude: args.latitude, longitude: args.longitude },
+      { status: "open" },
+      args.startDateTime,
+    );
 
     return activityId;
   },
