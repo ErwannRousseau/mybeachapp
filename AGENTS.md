@@ -76,6 +76,7 @@ This file applies to the whole repository. Deeper `AGENTS.md` files override it 
 - UI components must be declared with `export function`.
 - Do not use `const` component declarations for UI components.
 - Do not use default exports for UI components.
+- Keep exactly one UI component per file.
 - Keep shared business contracts in `packages/shared`; apps and backend should consume those contracts instead of duplicating constants or TypeScript types.
 - Add dependencies at the narrowest package that uses them. Shared cross-package dependencies should use the root workspace catalog.
 - Do not add new dependencies without a clear reason.

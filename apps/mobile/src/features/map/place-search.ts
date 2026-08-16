@@ -62,6 +62,18 @@ export type PlaceSearchOptions = {
   signal?: AbortSignal;
 };
 
+export type PlaceSearchStatus =
+  | "empty"
+  | "error"
+  | "idle"
+  | "loading"
+  | "ready";
+
+export type SearchPlaces = (
+  query: string,
+  options?: PlaceSearchOptions,
+) => Promise<PlaceSearchResult>;
+
 export async function searchPlaces(
   query: string,
   options: PlaceSearchOptions = {},

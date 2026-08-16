@@ -128,7 +128,7 @@ describe("HomeScreen", () => {
 
     expect(map.props).toMatchObject({
       attribution: true,
-      logo: true,
+      logo: false,
       mapStyle: "https://tiles.openfreemap.org/styles/liberty",
     });
     expect(camera.props.initialViewState).toEqual({

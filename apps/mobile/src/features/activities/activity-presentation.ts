@@ -71,6 +71,15 @@ export function getActivityCategoryLabel(
   return t(activityCategoryTranslationKeys[category]);
 }
 
+export function formatActivityStartTime(startDateTime: number, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    month: "short",
+  }).format(new Date(startDateTime));
+}
+
 export function getActivityStatusPresentation(
   status: ActivityStatus,
   t: TFunction,

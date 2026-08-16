@@ -12,18 +12,20 @@ import type {
 } from "@mybeachapp/shared/activities/types";
 import { LocateFixed } from "@tamagui/lucide-icons-2";
 import { useQuery } from "convex/react";
-import * as Location from "expo-location";
 import { Stack } from "expo-router";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { NativeSyntheticEvent } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { YStack } from "tamagui";
+import { formatActivityStartTime } from "@/src/features/activities/activity-presentation";
 import { ActivityCard } from "@/src/features/activities/components/activity-card";
 import { ActivityMapLayer } from "@/src/features/activities/components/activity-map-layer";
 import { GPSPin } from "@/src/features/activities/components/activity-map-pin";
 import { PlaceSearchOverlay } from "@/src/features/map/components/place-search-overlay";
 import type { PlaceCandidate } from "@/src/features/map/place-search";
+import { useForegroundLocation } from "@/src/features/map/use-foreground-location";
+import { useLocale } from "@/src/localization/use-locale";
 import {
   getTabBarBottomOffset,
   TAB_BAR_HEIGHT,
@@ -37,45 +39,16 @@ const OPENFREEMAP_LIBERTY_STYLE =
 const PILOT_ZONE_CENTER: [longitude: number, latitude: number] = [
   -2.3242, 47.2591,
 ];
-const DEVICE_LOCATION_TIMEOUT_MS = 10_000;
 const VIEWPORT_DEBOUNCE_MS = 300;
-
-async function getCurrentDevicePosition() {
-  let timeoutId: ReturnType<typeof setTimeout> | undefined;
-
-  try {
-    return await Promise.race([
-      Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
-      }),
-      new Promise<never>((_, reject) => {
-        timeoutId = setTimeout(reject, DEVICE_LOCATION_TIMEOUT_MS);
-      }),
-    ]);
-  } finally {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-  }
-}
-
-const activityTimeFormatter = new Intl.DateTimeFormat("fr-FR", {
-  day: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-  month: "short",
-});
 
 export default function HomeScreen() {
   const cameraRef = useRef<CameraRef>(null);
   const provisionalPinId = useId();
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
-  const [devicePosition, setDevicePosition] = useState<
-    [longitude: number, latitude: number] | null
-  >(null);
-  const [isLocating, setIsLocating] = useState(false);
-  const [locationFeedback, setLocationFeedback] = useState<string | null>(null);
+  const { currentLocale } = useLocale();
+  const { devicePosition, isLocating, locateDevice, locationFeedback } =
+    useForegroundLocation();
   const [selectedPlace, setSelectedPlace] = useState<PlaceCandidate | null>(
     null,
   );
@@ -130,32 +103,6 @@ export default function HomeScreen() {
     });
   }
 
-  async function locateDevice() {
-    setIsLocating(true);
-    setLocationFeedback(null);
-
-    try {
-      let permission = await Location.getForegroundPermissionsAsync();
-
-      if (permission.status === Location.PermissionStatus.UNDETERMINED) {
-        permission = await Location.requestForegroundPermissionsAsync();
-      }
-
-      if (!permission.granted) {
-        setLocationFeedback(t("activities.home.locationDenied"));
-        return;
-      }
-
-      const position = await getCurrentDevicePosition();
-      setDevicePosition([position.coords.longitude, position.coords.latitude]);
-      setLocationFeedback(t("activities.home.locationFound"));
-    } catch {
-      setLocationFeedback(t("activities.home.locationUnavailable"));
-    } finally {
-      setIsLocating(false);
-    }
-  }
-
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -165,8 +112,7 @@ export default function HomeScreen() {
           attributionPosition={{ bottom: ornamentBottom, right: 12 }}
           compass
           compassPosition={{ right: 12, top: insets.top + 76 }}
-          logo
-          logoPosition={{ bottom: ornamentBottom, left: 12 }}
+          logo={false}
           mapStyle={OPENFREEMAP_LIBERTY_STYLE}
           onPress={handleMapPress}
           onRegionDidChange={handleRegionDidChange}
@@ -266,8 +212,9 @@ export default function HomeScreen() {
               }
               participants={`${selectedActivity.currentParticipantsCount} / ${selectedActivity.maxParticipants}`}
               status={selectedActivity.status}
-              time={activityTimeFormatter.format(
-                new Date(selectedActivity.startDateTime),
+              time={formatActivityStartTime(
+                selectedActivity.startDateTime,
+                currentLocale,
               )}
               title={selectedActivity.title}
             />

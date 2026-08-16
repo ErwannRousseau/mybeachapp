@@ -1,5 +1,8 @@
 import type { ExpoConfig } from "expo/config";
 
+const locationWhenInUsePermission =
+  "Autorise My Beach App à utiliser ta position pour centrer la carte.";
+
 const config: ExpoConfig = {
   android: {
     adaptiveIcon: {
@@ -21,6 +24,13 @@ const config: ExpoConfig = {
     supportsTablet: true,
     usesAppleSignIn: true,
   },
+  locales: {
+    fr: {
+      ios: {
+        NSLocationWhenInUseUsageDescription: locationWhenInUsePermission,
+      },
+    },
+  },
   name: "My Beach App",
   orientation: "portrait",
   platforms: ["ios", "android"],
@@ -35,8 +45,7 @@ const config: ExpoConfig = {
         isIosBackgroundLocationEnabled: false,
         locationAlwaysAndWhenInUsePermission: false,
         locationAlwaysPermission: false,
-        locationWhenInUsePermission:
-          "Autorise My Beach App à utiliser ta position pour centrer la carte.",
+        locationWhenInUsePermission,
         motionUsagePermission: false,
       },
     ],

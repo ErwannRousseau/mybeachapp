@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { i18n } from "@/src/localization/i18n";
 
 import {
+  formatActivityStartTime,
   getActivityCategoryLabel,
   getActivityStatusPresentation,
 } from "../activity-presentation";
@@ -10,6 +11,13 @@ import {
 const t = i18n.getFixedT("fr");
 
 describe("activity presentation", () => {
+  it("formats activity times with the selected locale", () => {
+    const startDateTime = new Date(2026, 7, 16, 14, 5).getTime();
+
+    expect(formatActivityStartTime(startDateTime, "fr")).toContain("août");
+    expect(formatActivityStartTime(startDateTime, "en")).toContain("Aug");
+  });
+
   it.each([
     ["ball_sport", "Sports de ballon"],
     ["water_sport", "Sports nautiques"],
