@@ -4,13 +4,12 @@ import { describe, expect, test } from "vitest";
 
 import { api } from "../_generated/api";
 import schema from "../schema";
+import { modules } from "../test.setup";
 import {
   addBeachProfile,
   addSignedInUser,
   beachActivityArgs,
 } from "./permission.fixtures";
-
-const modules = import.meta.glob("../**/*.ts");
 
 function createTest() {
   const t = convexTest(schema, modules);

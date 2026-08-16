@@ -10,6 +10,7 @@
 
 import type * as adapter from "../adapter.js";
 import type * as auth from "../auth.js";
+import type * as component from "../component.js";
 import type * as emailOtp from "../emailOtp.js";
 import type * as emailOtpRenderer from "../emailOtpRenderer.js";
 import type * as emailOtpTemplate from "../emailOtpTemplate.js";
@@ -24,6 +25,7 @@ import { anyApi, componentsGeneric } from "convex/server";
 const fullApi: ApiFromModules<{
   adapter: typeof adapter;
   auth: typeof auth;
+  component: typeof component;
   emailOtp: typeof emailOtp;
   emailOtpRenderer: typeof emailOtpRenderer;
   emailOtpTemplate: typeof emailOtpTemplate;
