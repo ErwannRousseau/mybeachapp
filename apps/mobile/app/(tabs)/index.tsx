@@ -10,6 +10,7 @@ import type {
   ActivitySummary,
   ViewportBounds,
 } from "@mybeachapp/shared/activities/types";
+import { LocateFixed } from "@tamagui/lucide-icons-2";
 import { useQuery } from "convex/react";
 import { Stack } from "expo-router";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
@@ -17,15 +18,21 @@ import { useTranslation } from "react-i18next";
 import type { NativeSyntheticEvent } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { YStack } from "tamagui";
+import { formatActivityStartTime } from "@/src/features/activities/activity-presentation";
 import { ActivityCard } from "@/src/features/activities/components/activity-card";
 import { ActivityMapLayer } from "@/src/features/activities/components/activity-map-layer";
 import { GPSPin } from "@/src/features/activities/components/activity-map-pin";
 import { PlaceSearchOverlay } from "@/src/features/map/components/place-search-overlay";
-import type { PlaceCandidate } from "@/src/features/map/place-search";
+import { useForegroundLocation } from "@/src/features/map/use-foreground-location";
+import { usePlaceSelection } from "@/src/features/map/use-place-selection";
+import { useLocale } from "@/src/localization/use-locale";
 import {
   getTabBarBottomOffset,
   TAB_BAR_HEIGHT,
 } from "@/src/navigation/layout/tab-bar-metrics";
+import { Button } from "@/ui/button";
+import { FloatingSurface } from "@/ui/surface";
+import { Text } from "@/ui/typography";
 
 const OPENFREEMAP_LIBERTY_STYLE =
   "https://tiles.openfreemap.org/styles/liberty";
@@ -33,21 +40,16 @@ const PILOT_ZONE_CENTER: [longitude: number, latitude: number] = [
   -2.3242, 47.2591,
 ];
 const VIEWPORT_DEBOUNCE_MS = 300;
-const activityTimeFormatter = new Intl.DateTimeFormat("fr-FR", {
-  day: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-  month: "short",
-});
 
 export default function HomeScreen() {
   const cameraRef = useRef<CameraRef>(null);
   const provisionalPinId = useId();
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
-  const [selectedPlace, setSelectedPlace] = useState<PlaceCandidate | null>(
-    null,
-  );
+  const { currentLocale } = useLocale();
+  const { devicePosition, isLocating, locateDevice, locationFeedback } =
+    useForegroundLocation();
+  const { selectedPlace, selectPlace } = usePlaceSelection(cameraRef);
   const viewportDebounceRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [selectedActivityId, setSelectedActivityId] = useState<string>();
   const [viewport, setViewport] = useState<ViewportBounds>();
@@ -90,15 +92,6 @@ export default function HomeScreen() {
     }, VIEWPORT_DEBOUNCE_MS);
   }
 
-  function selectPlace(candidate: PlaceCandidate) {
-    setSelectedPlace(candidate);
-    cameraRef.current?.easeTo({
-      center: candidate.coordinates,
-      duration: 600,
-      zoom: 14,
-    });
-  }
-
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -108,24 +101,41 @@ export default function HomeScreen() {
           attributionPosition={{ bottom: ornamentBottom, right: 12 }}
           compass
           compassPosition={{ right: 12, top: insets.top + 76 }}
-          logo
-          logoPosition={{ bottom: ornamentBottom, left: 12 }}
+          logo={false}
           mapStyle={OPENFREEMAP_LIBERTY_STYLE}
           onPress={handleMapPress}
           onRegionDidChange={handleRegionDidChange}
         >
           <Camera
+            center={devicePosition ?? undefined}
+            duration={devicePosition ? 600 : undefined}
             initialViewState={{
               center: PILOT_ZONE_CENTER,
               zoom: 11.5,
             }}
             ref={cameraRef}
+            zoom={devicePosition ? 14 : undefined}
           />
           <ActivityMapLayer
             activities={activities ?? []}
             cameraRef={cameraRef}
             onActivityPress={handleActivityPress}
           />
+          {devicePosition ? (
+            <Marker lngLat={devicePosition}>
+              <YStack
+                accessibilityLabel={t("activities.home.devicePosition")}
+                accessibilityRole="image"
+                bg="$surface"
+                borderColor="$accent"
+                borderWidth={2}
+                p="$xs"
+                rounded="$full"
+              >
+                <YStack bg="$accent" height="$2" rounded="$full" width="$2" />
+              </YStack>
+            </Marker>
+          ) : null}
           {selectedPlace ? (
             <Marker
               anchor="bottom"
@@ -147,14 +157,42 @@ export default function HomeScreen() {
           <PlaceSearchOverlay onSelect={selectPlace} />
         </YStack>
 
-        {selectedActivity ? (
-          <YStack
-            b={ornamentBottom + 24}
-            l="$md"
-            position="absolute"
-            r="$md"
-            z={10}
-          >
+        <YStack
+          b={ornamentBottom}
+          gap="$md"
+          l="$md"
+          mb="$3.5"
+          position="absolute"
+          r="$md"
+          z={10}
+        >
+          <YStack items="flex-end" self="flex-end">
+            {locationFeedback ? (
+              <FloatingSurface maxW={280} mb="$sm" p="$sm">
+                <Text
+                  accessibilityLiveRegion="polite"
+                  accessibilityRole="alert"
+                  size="md"
+                >
+                  {locationFeedback}
+                </Text>
+              </FloatingSurface>
+            ) : null}
+            <Button
+              accessibilityLabel={t("activities.home.locate")}
+              fullWidth={false}
+              icon={LocateFixed}
+              loading={isLocating}
+              loadingLabel={t("activities.home.locating")}
+              onPress={locateDevice}
+              size="sm"
+              variant="surface"
+            >
+              {t("activities.home.locate")}
+            </Button>
+          </YStack>
+
+          {selectedActivity ? (
             <ActivityCard
               category={selectedActivity.category}
               distance={
@@ -163,13 +201,14 @@ export default function HomeScreen() {
               }
               participants={`${selectedActivity.currentParticipantsCount} / ${selectedActivity.maxParticipants}`}
               status={selectedActivity.status}
-              time={activityTimeFormatter.format(
-                new Date(selectedActivity.startDateTime),
+              time={formatActivityStartTime(
+                selectedActivity.startDateTime,
+                currentLocale,
               )}
               title={selectedActivity.title}
             />
-          </YStack>
-        ) : null}
+          ) : null}
+        </YStack>
       </YStack>
     </>
   );

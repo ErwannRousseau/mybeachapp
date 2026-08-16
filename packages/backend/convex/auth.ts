@@ -1,5 +1,6 @@
 import { query } from "./_generated/server";
-import { authComponent, getSocialProviders } from "./betterAuth/auth";
+import { getSocialProviders } from "./betterAuth/auth";
+import { authComponent } from "./betterAuth/component";
 
 export const getCapabilities = query({
   args: {},

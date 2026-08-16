@@ -6,9 +6,8 @@ import { describe, expect, test } from "vitest";
 
 import { api, components, internal } from "../_generated/api";
 import schema from "../schema";
+import { modules } from "../test.setup";
 import { addSignedInUser, beachActivityArgs } from "./permission.fixtures";
-
-const modules = import.meta.glob("../**/*.ts");
 
 type ActivityFixture = {
   latitude?: number;

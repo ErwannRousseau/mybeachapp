@@ -1,5 +1,4 @@
 import { expo } from "@better-auth/expo";
-import { createClient } from "@convex-dev/better-auth";
 import { convex, crossDomain } from "@convex-dev/better-auth/plugins";
 import type { GenericCtx } from "@convex-dev/better-auth/utils";
 import {
@@ -11,21 +10,12 @@ import type { BetterAuthOptions } from "better-auth";
 import { betterAuth } from "better-auth";
 import { emailOTP } from "better-auth/plugins/email-otp";
 
-import { components } from "../_generated/api";
 import type { DataModel } from "../_generated/dataModel";
 import authConfig from "../auth.config";
 import { env } from "../config/env";
 import { getAppleUserInfoFromIdToken, providerClientId } from "../lib/oauth";
+import { authComponent } from "./component";
 import { sendAuthEmailOtp } from "./emailOtp";
-import schema from "./schema";
-
-export const authComponent = createClient<DataModel, typeof schema>(
-  components.betterAuth,
-  {
-    local: { schema },
-    verbose: false,
-  },
-);
 
 export function getSocialProviders(): BetterAuthOptions["socialProviders"] {
   const socialProviders: BetterAuthOptions["socialProviders"] = {};
