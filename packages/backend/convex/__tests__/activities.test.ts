@@ -1,3 +1,4 @@
+import { register as registerBetterAuth } from "@convex-dev/better-auth/test";
 import { register as registerGeospatial } from "@convex-dev/geospatial/test";
 import type { ActivityStatus } from "@mybeachapp/shared/activities/types";
 import { convexTest, type TestConvex } from "convex-test";
@@ -5,8 +6,13 @@ import { describe, expect, test } from "vitest";
 
 import { api, components, internal } from "../_generated/api";
 import schema from "../schema";
+import { addSignedInUser, beachActivityArgs } from "./permission.fixtures";
 
-const modules = import.meta.glob("../**/*.ts");
+const modules = import.meta.glob([
+  "../**/*.{ts,tsx,js}",
+  "!../**/__tests__/**",
+  "!../**/*.config.ts",
+]);
 
 type ActivityFixture = {
   latitude?: number;
@@ -62,6 +68,12 @@ async function addActivity(
 function createTest() {
   const t = convexTest(schema, modules);
   registerGeospatial(t);
+  return t;
+}
+
+function createAuthenticatedTest() {
+  const t = createTest();
+  registerBetterAuth(t);
   return t;
 }
 
@@ -212,5 +224,26 @@ describe("open Beach Activity viewport discovery", () => {
     );
 
     expect(activities.map(({ id }) => id)).toEqual([visibleId]);
+  });
+});
+
+describe("activity permissions", () => {
+  test("allows an ordinary active signed-in user to create a beach activity", async () => {
+    // Given
+    const t = createAuthenticatedTest();
+    const user = await addSignedInUser(t, {
+      email: "active@example.com",
+      role: "user",
+      status: "active",
+    });
+
+    // When
+    const activityId = await user.mutation(
+      api.activities.createActivity,
+      beachActivityArgs(Date.now() + 60_000),
+    );
+
+    // Then
+    expect(activityId).toBeDefined();
   });
 });

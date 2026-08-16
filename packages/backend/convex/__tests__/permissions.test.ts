@@ -1,127 +1,28 @@
 import { register as registerBetterAuth } from "@convex-dev/better-auth/test";
-import { register as registerGeospatial } from "@convex-dev/geospatial/test";
-import type { UserRole, UserStatus } from "@mybeachapp/shared/users/types";
-import type { FunctionArgs } from "convex/server";
-import { convexTest, type TestConvex } from "convex-test";
+import { convexTest } from "convex-test";
 import { describe, expect, test } from "vitest";
 
-import { api, components } from "../_generated/api";
+import { api } from "../_generated/api";
 import schema from "../schema";
+import {
+  addBeachProfile,
+  addSignedInUser,
+  beachActivityArgs,
+} from "./permission.fixtures";
 
-const modules = import.meta.glob("../**/*.ts");
-const BEACH_ACTIVITY_CATEGORY = "ball_sport";
+const modules = import.meta.glob([
+  "../**/*.{ts,tsx,js}",
+  "!../**/__tests__/**",
+  "!../**/*.config.ts",
+]);
 
 function createTest() {
   const t = convexTest(schema, modules);
   registerBetterAuth(t);
-  registerGeospatial(t);
   return t;
 }
 
-type ProfileFixture = {
-  readonly email: string;
-  readonly role: UserRole;
-  readonly status: UserStatus;
-};
-
-async function addSignedInUser(
-  t: TestConvex<typeof schema>,
-  profile: ProfileFixture,
-) {
-  const now = Date.now();
-  const authUser = await t.mutation(components.betterAuth.adapter.create, {
-    input: {
-      data: {
-        createdAt: now,
-        email: profile.email,
-        emailVerified: true,
-        name: profile.email,
-        updatedAt: now,
-      },
-      model: "user",
-    },
-  });
-  const session = await t.mutation(components.betterAuth.adapter.create, {
-    input: {
-      data: {
-        createdAt: now,
-        expiresAt: now + 60_000,
-        token: `${profile.email}-session`,
-        updatedAt: now,
-        userId: authUser._id,
-      },
-      model: "session",
-    },
-  });
-  await t.run(async (ctx) => {
-    await ctx.db.insert("userProfiles", {
-      createdAt: now,
-      email: profile.email,
-      role: profile.role,
-      status: profile.status,
-      updatedAt: now,
-      userId: authUser._id,
-    });
-  });
-
-  return t.withIdentity({
-    email: profile.email,
-    sessionId: session._id,
-    subject: authUser._id,
-  });
-}
-
-function beachActivityArgs(
-  startDateTime: number,
-): FunctionArgs<typeof api.activities.createActivity> {
-  return {
-    addressLabel: "Plage de Pornichet",
-    category: BEACH_ACTIVITY_CATEGORY,
-    latitude: 47.264,
-    longitude: -2.344,
-    maxParticipants: 8,
-    startDateTime,
-    title: "Volley",
-  };
-}
-
-async function addBeachProfile(
-  t: TestConvex<typeof schema>,
-  profile: ProfileFixture,
-) {
-  return await t.run(async (ctx) => {
-    const now = Date.now();
-    return await ctx.db.insert("userProfiles", {
-      createdAt: now,
-      email: profile.email,
-      role: profile.role,
-      status: profile.status,
-      updatedAt: now,
-      userId: profile.email,
-    });
-  });
-}
-
 describe("activity permissions", () => {
-  test("allows an ordinary active signed-in user to create a beach activity", async () => {
-    // Given
-    const t = createTest();
-    const user = await addSignedInUser(t, {
-      email: "active@example.com",
-      role: "user",
-      status: "active",
-    });
-
-    // When
-    const activityId = await user.mutation(
-      api.activities.createActivity,
-      beachActivityArgs(Date.now() + 60_000),
-    );
-
-    // Then
-    expect(activityId).toBeDefined();
-  });
-
   test("rejects activity creation for a disabled profile", async () => {
     // Given
     const t = createTest();
@@ -298,7 +199,7 @@ describe("admin permissions", () => {
 
   test("rejects initial super admin seeding when identity email differs", async () => {
     // Given
-    const t = createTest();
+    const t = convexTest(schema, modules);
     const intruder = t.withIdentity({ email: "intruder@example.com" });
 
     // When
