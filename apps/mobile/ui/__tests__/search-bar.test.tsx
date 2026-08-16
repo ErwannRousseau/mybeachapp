@@ -1,7 +1,17 @@
-import { describe, expect, it } from "vitest";
+import { createElement } from "react";
+import { describe, expect, it, vi } from "vitest";
 
-import { findByProp, renderWithTamagui } from "../../test/render-with-tamagui";
+import {
+  findByProp,
+  findByType,
+  renderWithTamagui,
+} from "../../test/render-with-tamagui";
 import { SearchBar } from "../search-bar";
+
+vi.mock("@/ui/surface", () => ({
+  FloatingSurface: ({ children, ...props }: React.PropsWithChildren) =>
+    createElement("FloatingSurface", props, children),
+}));
 
 function handleSearch() {
   return undefined;
@@ -16,5 +26,6 @@ describe("SearchBar", () => {
     expect(findByProp(root, "placeholder").props.placeholder).toBe(
       "Chercher une plage",
     );
+    expect(findByType(root, "FloatingSurface")).toBeDefined();
   });
 });

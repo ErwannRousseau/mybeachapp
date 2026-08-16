@@ -29,14 +29,7 @@
       "mvp": "Filtres"
     },
     "home": {
-      "create": "Créer une activité",
-      "headline": "Trouve une activité sur la plage",
-      "mapProvider": "Carte prête",
-      "mapReady": "Explore les activités proches et prépare ta prochaine sortie.",
-      "nearYou": "Autour de toi",
-      "providerReady": "Autour de toi",
-      "searchPlaceholder": "Pornichet, La Baule...",
-      "searchStatus": "Recherche: {{query}}"
+      "searchPlaceholder": "Ville, plage ou adresse"
     },
     "list": {
       "create": "Créer une activité",
