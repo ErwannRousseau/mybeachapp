@@ -23,8 +23,8 @@ import { ActivityCard } from "@/src/features/activities/components/activity-card
 import { ActivityMapLayer } from "@/src/features/activities/components/activity-map-layer";
 import { GPSPin } from "@/src/features/activities/components/activity-map-pin";
 import { PlaceSearchOverlay } from "@/src/features/map/components/place-search-overlay";
-import type { PlaceCandidate } from "@/src/features/map/place-search";
 import { useForegroundLocation } from "@/src/features/map/use-foreground-location";
+import { usePlaceSelection } from "@/src/features/map/use-place-selection";
 import { useLocale } from "@/src/localization/use-locale";
 import {
   getTabBarBottomOffset,
@@ -49,9 +49,7 @@ export default function HomeScreen() {
   const { currentLocale } = useLocale();
   const { devicePosition, isLocating, locateDevice, locationFeedback } =
     useForegroundLocation();
-  const [selectedPlace, setSelectedPlace] = useState<PlaceCandidate | null>(
-    null,
-  );
+  const { selectedPlace, selectPlace } = usePlaceSelection(cameraRef);
   const viewportDebounceRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [selectedActivityId, setSelectedActivityId] = useState<string>();
   const [viewport, setViewport] = useState<ViewportBounds>();
@@ -92,15 +90,6 @@ export default function HomeScreen() {
     viewportDebounceRef.current = setTimeout(() => {
       setViewport({ east, north, south, west });
     }, VIEWPORT_DEBOUNCE_MS);
-  }
-
-  function selectPlace(candidate: PlaceCandidate) {
-    setSelectedPlace(candidate);
-    cameraRef.current?.easeTo({
-      center: candidate.coordinates,
-      duration: 600,
-      zoom: 14,
-    });
   }
 
   return (
