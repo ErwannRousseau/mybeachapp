@@ -35,6 +35,16 @@
       "locationDenied": "Localisation refusée. Recherche un lieu.",
       "locationFound": "Position affichée sur la carte.",
       "locationUnavailable": "Position indisponible. Recherche un lieu.",
+      "placeSearch": {
+        "accessibilityLabel": "Rechercher un lieu",
+        "attribution": "Sources : IGN et API Découpage administratif",
+        "empty": "Aucun lieu trouvé.",
+        "error": "Recherche indisponible. Appuie sur rechercher pour réessayer.",
+        "loading": "Recherche en cours.",
+        "partial": "Certains résultats sont momentanément indisponibles.",
+        "provisionalPin": "Point GPS provisoire",
+        "select": "Choisir {{label}}"
+      },
       "searchPlaceholder": "Ville, plage ou adresse"
     },
     "list": {

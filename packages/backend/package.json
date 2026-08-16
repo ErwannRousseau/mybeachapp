@@ -2,6 +2,7 @@
   "dependencies": {
     "@better-auth/expo": "catalog:",
     "@convex-dev/better-auth": "catalog:",
+    "@convex-dev/geospatial": "^0.2.1",
     "@edge-runtime/vm": "^5.0.0",
     "@mybeachapp/shared": "workspace:*",
     "better-auth": "catalog:",
