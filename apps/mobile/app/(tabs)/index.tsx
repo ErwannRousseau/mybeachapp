@@ -1,4 +1,10 @@
-import { Camera, Map as MapView } from "@maplibre/maplibre-react-native";
+import {
+  Camera,
+  Map as MapView,
+  Marker,
+} from "@maplibre/maplibre-react-native";
+import { LocateFixed } from "@tamagui/lucide-icons-2";
+import * as Location from "expo-location";
 import { Stack } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,20 +15,74 @@ import {
   getTabBarBottomOffset,
   TAB_BAR_HEIGHT,
 } from "@/src/navigation/layout/tab-bar-metrics";
+import { Button } from "@/ui/button";
 import { SearchBar } from "@/ui/search-bar";
+import { FloatingSurface } from "@/ui/surface";
+import { Text } from "@/ui/typography";
 
 const OPENFREEMAP_LIBERTY_STYLE =
   "https://tiles.openfreemap.org/styles/liberty";
 const PILOT_ZONE_CENTER: [longitude: number, latitude: number] = [
   -2.3242, 47.2591,
 ];
+const DEVICE_LOCATION_TIMEOUT_MS = 10_000;
+
+async function getCurrentDevicePosition() {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    return await Promise.race([
+      Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+      }),
+      new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(reject, DEVICE_LOCATION_TIMEOUT_MS);
+      }),
+    ]);
+  } finally {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  }
+}
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
+  const [devicePosition, setDevicePosition] = useState<
+    [longitude: number, latitude: number] | null
+  >(null);
+  const [isLocating, setIsLocating] = useState(false);
+  const [locationFeedback, setLocationFeedback] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const ornamentBottom =
     getTabBarBottomOffset(insets.bottom) + TAB_BAR_HEIGHT + 12;
+
+  async function locateDevice() {
+    setIsLocating(true);
+    setLocationFeedback(null);
+
+    try {
+      let permission = await Location.getForegroundPermissionsAsync();
+
+      if (permission.status === Location.PermissionStatus.UNDETERMINED) {
+        permission = await Location.requestForegroundPermissionsAsync();
+      }
+
+      if (!permission.granted) {
+        setLocationFeedback(t("activities.home.locationDenied"));
+        return;
+      }
+
+      const position = await getCurrentDevicePosition();
+      setDevicePosition([position.coords.longitude, position.coords.latitude]);
+      setLocationFeedback(t("activities.home.locationFound"));
+    } catch {
+      setLocationFeedback(t("activities.home.locationUnavailable"));
+    } finally {
+      setIsLocating(false);
+    }
+  }
 
   return (
     <>
@@ -38,11 +98,29 @@ export default function HomeScreen() {
           mapStyle={OPENFREEMAP_LIBERTY_STYLE}
         >
           <Camera
+            center={devicePosition ?? undefined}
+            duration={devicePosition ? 600 : undefined}
             initialViewState={{
               center: PILOT_ZONE_CENTER,
               zoom: 11.5,
             }}
+            zoom={devicePosition ? 14 : undefined}
           />
+          {devicePosition ? (
+            <Marker lngLat={devicePosition}>
+              <YStack
+                accessibilityLabel={t("activities.home.devicePosition")}
+                accessibilityRole="image"
+                bg="$surface"
+                borderColor="$accent"
+                borderWidth={2}
+                p="$xs"
+                rounded="$full"
+              >
+                <YStack bg="$accent" height="$2" rounded="$full" width="$2" />
+              </YStack>
+            </Marker>
+          ) : null}
         </MapView>
 
         <YStack l="$md" position="absolute" r="$md" t={insets.top + 12} z={10}>
@@ -52,6 +130,32 @@ export default function HomeScreen() {
             placeholder={t("activities.home.searchPlaceholder")}
             value={searchQuery}
           />
+        </YStack>
+
+        <YStack b={ornamentBottom + 40} position="absolute" r="$md" z={10}>
+          {locationFeedback ? (
+            <FloatingSurface maxW={280} mb="$sm" p="$sm">
+              <Text
+                accessibilityLiveRegion="polite"
+                accessibilityRole="alert"
+                size="sm"
+              >
+                {locationFeedback}
+              </Text>
+            </FloatingSurface>
+          ) : null}
+          <Button
+            accessibilityLabel={t("activities.home.locate")}
+            fullWidth={false}
+            icon={LocateFixed}
+            loading={isLocating}
+            loadingLabel={t("activities.home.locating")}
+            onPress={locateDevice}
+            size="sm"
+            variant="surface"
+          >
+            {t("activities.home.locate")}
+          </Button>
         </YStack>
       </YStack>
     </>

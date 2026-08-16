@@ -29,6 +29,12 @@
       "mvp": "Filtres"
     },
     "home": {
+      "devicePosition": "Ta position actuelle",
+      "locate": "Me localiser",
+      "locating": "Localisation…",
+      "locationDenied": "Localisation refusée. Recherche un lieu.",
+      "locationFound": "Position affichée sur la carte.",
+      "locationUnavailable": "Position indisponible. Recherche un lieu.",
       "searchPlaceholder": "Ville, plage ou adresse"
     },
     "list": {

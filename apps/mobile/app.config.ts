@@ -27,6 +27,19 @@ const config: ExpoConfig = {
   plugins: [
     "expo-router",
     "@maplibre/maplibre-react-native",
+    [
+      "expo-location",
+      {
+        isAndroidBackgroundLocationEnabled: false,
+        isAndroidForegroundServiceEnabled: false,
+        isIosBackgroundLocationEnabled: false,
+        locationAlwaysAndWhenInUsePermission: false,
+        locationAlwaysPermission: false,
+        locationWhenInUsePermission:
+          "Autorise My Beach App à utiliser ta position pour centrer la carte.",
+        motionUsagePermission: false,
+      },
+    ],
     "expo-web-browser",
     "expo-apple-authentication",
     [
