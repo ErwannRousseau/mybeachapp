@@ -2,16 +2,14 @@ import { Search } from "@tamagui/lucide-icons-2";
 import { useCallback } from "react";
 import { type GetProps, styled, Input as TamaguiInput, XStack } from "tamagui";
 
+import { FloatingSurface } from "@/ui/surface";
+
 const SearchBarFrame = styled(XStack, {
-  bg: "$surface",
-  borderColor: "$border",
-  borderWidth: 1,
   gap: "$sm",
   items: "center",
   minH: 52,
   name: "BeachSearchBar",
   px: "$md",
-  rounded: "$xl",
 });
 
 const SearchInput = styled(TamaguiInput, {
@@ -45,14 +43,16 @@ export function SearchBar({
   );
 
   return (
-    <SearchBarFrame>
-      <Search color="$mutedForeground" size={18} />
-      <SearchInput
-        placeholder={placeholder}
-        returnKeyType="search"
-        {...props}
-        onSubmitEditing={handleSubmitEditing}
-      />
-    </SearchBarFrame>
+    <FloatingSurface p={0}>
+      <SearchBarFrame>
+        <Search color="$mutedForeground" size={18} />
+        <SearchInput
+          placeholder={placeholder}
+          returnKeyType="search"
+          {...props}
+          onSubmitEditing={handleSubmitEditing}
+        />
+      </SearchBarFrame>
+    </FloatingSurface>
   );
 }
