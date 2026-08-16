@@ -8,11 +8,7 @@ import { api, components, internal } from "../_generated/api";
 import schema from "../schema";
 import { addSignedInUser, beachActivityArgs } from "./permission.fixtures";
 
-const modules = import.meta.glob([
-  "../**/*.{ts,tsx,js}",
-  "!../**/__tests__/**",
-  "!../**/*.config.ts",
-]);
+const modules = import.meta.glob("../**/*.ts");
 
 type ActivityFixture = {
   latitude?: number;

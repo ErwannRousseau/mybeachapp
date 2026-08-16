@@ -10,11 +10,7 @@ import {
   beachActivityArgs,
 } from "./permission.fixtures";
 
-const modules = import.meta.glob([
-  "../**/*.{ts,tsx,js}",
-  "!../**/__tests__/**",
-  "!../**/*.config.ts",
-]);
+const modules = import.meta.glob("../**/*.ts");
 
 function createTest() {
   const t = convexTest(schema, modules);

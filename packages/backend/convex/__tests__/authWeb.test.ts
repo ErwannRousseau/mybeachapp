@@ -5,11 +5,7 @@ import { afterEach, describe, expect, test, vi } from "vitest";
 import { createSchemaAuthOptions, getTrustedOrigins } from "../betterAuth/auth";
 import schema from "../schema";
 
-const modules = import.meta.glob([
-  "../**/*.{ts,tsx,js}",
-  "!../**/__tests__/**",
-  "!../**/*.config.ts",
-]);
+const modules = import.meta.glob("../**/*.ts");
 
 afterEach(() => {
   vi.unstubAllEnvs();
